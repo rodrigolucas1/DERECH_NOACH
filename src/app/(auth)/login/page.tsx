@@ -1,7 +1,6 @@
 "use client";
 
 import { Suspense, useState } from "react";
-import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -25,18 +24,26 @@ function LoginForm() {
     setErrorMessage("");
 
     try {
-      const result = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
+      const csrfRes = await fetch("/api/auth/csrf");
+      const { csrfToken } = await csrfRes.json();
+
+      const formData = new FormData();
+      formData.append("csrfToken", csrfToken);
+      formData.append("email", email);
+      formData.append("password", password);
+
+      const res = await fetch("/api/auth/callback/credentials", {
+        method: "POST",
+        body: formData,
       });
 
-      if (result?.error) {
+      if (res.url.includes("error") || res.status === 401) {
         setErrorMessage("E-mail ou senha incorretos.");
         setIsLoading(false);
-      } else {
-        window.location.href = callbackUrl;
+        return;
       }
+
+      window.location.href = callbackUrl;
     } catch {
       setErrorMessage("Erro ao fazer login. Tente novamente.");
       setIsLoading(false);
