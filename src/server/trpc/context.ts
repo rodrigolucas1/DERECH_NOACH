@@ -3,7 +3,7 @@ import superjson from "superjson";
 import { z } from "zod";
 import { db } from "@/server/db/client";
 import { resolveTenant } from "@/server/utils/tenant-resolver";
-import { auth } from "@/app/api/auth/[...nextauth]/route";
+import { auth } from "@/server/auth";
 
 export type Context = {
   tenantId: string | null;
