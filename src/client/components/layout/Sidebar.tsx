@@ -18,6 +18,7 @@ import {
   MessageCircleQuestion,
   Library,
   FileText,
+  Shield,
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -34,6 +35,7 @@ const navigation = [
   { name: "Tzedaká", href: "/admin/tzedaka", icon: HandHeart },
   { name: "Pergunte ao Rabino", href: "/admin/rabbi", icon: MessageCircleQuestion },
   { name: "Páginas (CMS)", href: "/admin/pages", icon: FileText },
+  { name: "Auditoria", href: "/admin/audit", icon: Shield },
   { name: "Configurações", href: "/admin/settings", icon: Settings },
 ];
 

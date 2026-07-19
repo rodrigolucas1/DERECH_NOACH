@@ -12,6 +12,7 @@ import { forumRouter } from "./routers/forum";
 import { rabbiRouter } from "./routers/rabbi";
 import { cmsRouter } from "./routers/cms";
 import { bannerRouter } from "./routers/banner";
+import { auditRouter } from "./routers/audit";
 
 export const appRouter = router({
   tenant: tenantRouter,
@@ -27,6 +28,7 @@ export const appRouter = router({
   rabbi: rabbiRouter,
   cms: cmsRouter,
   banner: bannerRouter,
+  audit: auditRouter,
 });
 
 export type AppRouter = typeof appRouter;

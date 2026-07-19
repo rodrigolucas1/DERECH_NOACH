@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 /**
- * Middleware para resolver tenant por subdomínio.
+ * Middleware para resolver tenant por subdomínio e proteger rotas admin.
  *
  * Em desenvolvimento, aceita o header x-tenant-id para testes.
  * Exemplo: "mg" no header x-tenant-id direciona para o tenant MG.
@@ -17,7 +17,21 @@ export function middleware(request: NextRequest) {
     pathname.startsWith("/favicon") ||
     (pathname.startsWith("/api") && !pathname.startsWith("/api/trpc"))
   ) {
-    return NextResponse.next();
+    return addSecurityHeaders(NextResponse.next());
+  }
+
+  // Admin route protection: check for session cookie
+  if (pathname.startsWith("/admin")) {
+    const sessionToken =
+      request.cookies.get("next-auth.session-token")?.value ??
+      request.cookies.get("__Secure-next-auth.session-token")?.value;
+
+    if (!sessionToken) {
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = "/login";
+      loginUrl.searchParams.set("callbackUrl", pathname);
+      return addSecurityHeaders(NextResponse.redirect(loginUrl));
+    }
   }
 
   const hostname = host.split(":")[0];
@@ -41,7 +55,7 @@ export function middleware(request: NextRequest) {
     if (!pathname.startsWith(`/${tenantSlug}`)) {
       const url = request.nextUrl.clone();
       url.pathname = `/${tenantSlug}${pathname}`;
-      return NextResponse.rewrite(url, {
+      const response = NextResponse.rewrite(url, {
         request: {
           headers: new Headers({
             ...Object.fromEntries(request.headers.entries()),
@@ -49,10 +63,22 @@ export function middleware(request: NextRequest) {
           }),
         },
       });
+      return addSecurityHeaders(response);
     }
   }
 
-  return NextResponse.next();
+  return addSecurityHeaders(NextResponse.next());
+}
+
+function addSecurityHeaders(response: NextResponse): NextResponse {
+  response.headers.set("X-Content-Type-Options", "nosniff");
+  response.headers.set("X-Frame-Options", "DENY");
+  response.headers.set("X-XSS-Protection", "1; mode=block");
+  response.headers.set(
+    "Referrer-Policy",
+    "strict-origin-when-cross-origin"
+  );
+  return response;
 }
 
 export const config = {
