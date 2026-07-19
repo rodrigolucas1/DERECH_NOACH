@@ -23,6 +23,8 @@ export function middleware(request: NextRequest) {
   // Admin route protection: check for session cookie
   if (pathname.startsWith("/admin")) {
     const sessionToken =
+      request.cookies.get("authjs.session-token")?.value ??
+      request.cookies.get("__Secure-authjs.session-token")?.value ??
       request.cookies.get("next-auth.session-token")?.value ??
       request.cookies.get("__Secure-next-auth.session-token")?.value;
 

@@ -2,7 +2,7 @@
 
 import { Suspense, useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,7 +10,6 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 function LoginForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/";
   const error = searchParams.get("error");
@@ -26,21 +25,13 @@ function LoginForm() {
     setErrorMessage("");
 
     try {
-      const result = await signIn("credentials", {
+      await signIn("credentials", {
         email,
         password,
-        redirect: false,
+        redirectTo: callbackUrl,
       });
-
-      if (result?.error) {
-        setErrorMessage("E-mail ou senha incorretos.");
-      } else {
-        router.push(callbackUrl);
-        router.refresh();
-      }
     } catch {
       setErrorMessage("Erro ao fazer login. Tente novamente.");
-    } finally {
       setIsLoading(false);
     }
   }
