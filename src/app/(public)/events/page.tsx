@@ -1,10 +1,27 @@
 "use client";
 
+import { Suspense } from "react";
 import Link from "next/link";
 import { trpc } from "@/client/lib/trpc";
 import { Calendar, MapPin, Video, Users } from "lucide-react";
 
-export default function EventsPage() {
+function EventsSkeleton() {
+  return (
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 animate-pulse">
+      <div className="mb-8 space-y-2">
+        <div className="h-8 w-28 rounded bg-gray-200" />
+        <div className="h-4 w-48 rounded bg-gray-200" />
+      </div>
+      <div className="space-y-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="h-32 rounded-lg bg-gray-200" />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function EventsContent() {
   const { data, isLoading } = trpc.event.list.useQuery({ upcoming: true, limit: 30 });
 
   return (
@@ -57,5 +74,13 @@ export default function EventsPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function EventsPage() {
+  return (
+    <Suspense fallback={<EventsSkeleton />}>
+      <EventsContent />
+    </Suspense>
   );
 }

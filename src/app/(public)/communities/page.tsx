@@ -1,10 +1,27 @@
 "use client";
 
+import { Suspense } from "react";
 import Link from "next/link";
 import { trpc } from "@/client/lib/trpc";
 import { MapPin, Users, Calendar } from "lucide-react";
 
-export default function CommunitiesPage() {
+function CommunitiesSkeleton() {
+  return (
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 animate-pulse">
+      <div className="mb-8 space-y-2">
+        <div className="h-8 w-40 rounded bg-gray-200" />
+        <div className="h-4 w-64 rounded bg-gray-200" />
+      </div>
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="h-48 rounded-lg bg-gray-200" />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CommunitiesContent() {
   const { data: communities, isLoading } = trpc.community.list.useQuery();
 
   return (
@@ -50,5 +67,13 @@ export default function CommunitiesPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function CommunitiesPage() {
+  return (
+    <Suspense fallback={<CommunitiesSkeleton />}>
+      <CommunitiesContent />
+    </Suspense>
   );
 }

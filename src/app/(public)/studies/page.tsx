@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { trpc } from "@/client/lib/trpc";
 import { BookOpen, FileText, Video, Headphones, ExternalLink, Download } from "lucide-react";
 import Link from "next/link";
@@ -11,7 +12,23 @@ const typeIcons: Record<string, typeof BookOpen> = {
   LINK: ExternalLink,
 };
 
-export default function StudiesPage() {
+function StudiesSkeleton() {
+  return (
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 animate-pulse">
+      <div className="mb-8 space-y-2">
+        <div className="h-8 w-32 rounded bg-gray-200" />
+        <div className="h-4 w-64 rounded bg-gray-200" />
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="h-40 rounded-lg bg-gray-200" />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function StudiesContent() {
   const { data: categories } = trpc.study.categories.useQuery();
   const { data: materials, isLoading } = trpc.study.list.useQuery({ limit: 50 });
 
@@ -67,5 +84,13 @@ export default function StudiesPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function StudiesPage() {
+  return (
+    <Suspense fallback={<StudiesSkeleton />}>
+      <StudiesContent />
+    </Suspense>
   );
 }

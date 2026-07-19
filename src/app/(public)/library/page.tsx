@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { trpc } from "@/client/lib/trpc";
 import { Library, FileText, Video, Headphones, ExternalLink, Download, Search } from "lucide-react";
 import { useState } from "react";
@@ -11,7 +12,24 @@ const typeIcons: Record<string, typeof Library> = {
   LINK: ExternalLink,
 };
 
-export default function LibraryPage() {
+function LibrarySkeleton() {
+  return (
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 animate-pulse">
+      <div className="mb-8 space-y-2">
+        <div className="h-8 w-40 rounded bg-gray-200" />
+        <div className="h-4 w-56 rounded bg-gray-200" />
+      </div>
+      <div className="mb-6 h-10 w-full max-w-md rounded-lg bg-gray-200" />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="h-36 rounded-lg bg-gray-200" />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function LibraryContent() {
   const [search, setSearch] = useState("");
   const { data: categories } = trpc.library.categories.useQuery();
   const { data: authors } = trpc.library.authors.useQuery();
@@ -89,5 +107,13 @@ export default function LibraryPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function LibraryPage() {
+  return (
+    <Suspense fallback={<LibrarySkeleton />}>
+      <LibraryContent />
+    </Suspense>
   );
 }

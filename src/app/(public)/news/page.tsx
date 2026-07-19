@@ -1,10 +1,27 @@
 "use client";
 
+import { Suspense } from "react";
 import Link from "next/link";
 import { trpc } from "@/client/lib/trpc";
 import { Newspaper, Tag } from "lucide-react";
 
-export default function NewsPage() {
+function NewsSkeleton() {
+  return (
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 animate-pulse">
+      <div className="mb-8 space-y-2">
+        <div className="h-8 w-28 rounded bg-gray-200" />
+        <div className="h-4 w-56 rounded bg-gray-200" />
+      </div>
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="h-64 rounded-lg bg-gray-200" />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function NewsContent() {
   const { data, isLoading } = trpc.news.list.useQuery({ limit: 30 });
   const { data: categories } = trpc.news.categories.useQuery();
 
@@ -74,5 +91,13 @@ export default function NewsPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function NewsPage() {
+  return (
+    <Suspense fallback={<NewsSkeleton />}>
+      <NewsContent />
+    </Suspense>
   );
 }
