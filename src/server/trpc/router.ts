@@ -17,6 +17,7 @@ import { analyticsRouter } from "./routers/analytics";
 import { notificationRouter } from "./routers/notification";
 import { certificateRouter } from "./routers/certificate";
 import { aiRouter } from "./routers/ai";
+import { integrationRouter } from "./routers/integration";
 
 export const appRouter = router({
   tenant: tenantRouter,
@@ -37,6 +38,7 @@ export const appRouter = router({
   notification: notificationRouter,
   certificate: certificateRouter,
   ai: aiRouter,
+  integration: integrationRouter,
 });
 
 export type AppRouter = typeof appRouter;

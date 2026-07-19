@@ -23,6 +23,7 @@ import {
   BarChart3,
   Award,
   Brain,
+  Plug,
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -40,6 +41,7 @@ const navigation = [
   { name: "Pergunte ao Rabino", href: "/admin/rabbi", icon: MessageCircleQuestion },
   { name: "Páginas (CMS)", href: "/admin/pages", icon: FileText },
   { name: "Assistente IA", href: "/ai", icon: Brain },
+  { name: "Integrações", href: "/admin/integrations", icon: Plug },
   { name: "Auditoria", href: "/admin/audit", icon: Shield },
   { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
   { name: "Certificados", href: "/admin/certificates", icon: Award },
