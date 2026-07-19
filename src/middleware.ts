@@ -49,15 +49,13 @@ export function middleware(request: NextRequest) {
       ? parts[0]
       : null;
 
-  const tenantSlug = devTenant ?? subdomainTenant;
+  const tenantSlug = devTenant ?? subdomainTenant ?? (isDev ? "mg" : null);
 
   // Rewrite to include tenant in the URL path for internal routing
   if (tenantSlug) {
     // Don't rewrite if already has tenant prefix
     if (!pathname.startsWith(`/${tenantSlug}`)) {
-      const url = request.nextUrl.clone();
-      url.pathname = `/${tenantSlug}${pathname}`;
-      const response = NextResponse.rewrite(url, {
+      const response = NextResponse.next({
         request: {
           headers: new Headers({
             ...Object.fromEntries(request.headers.entries()),
