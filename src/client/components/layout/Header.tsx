@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogOut, User, Settings } from "lucide-react";
+import { NotificationBell } from "@/client/components/NotificationBell";
 
 export function Header() {
   const { data: session, status } = useSession();
@@ -56,7 +57,9 @@ export function Header() {
           {status === "loading" ? (
             <div className="h-8 w-8 animate-pulse rounded-full bg-gray-200" />
           ) : session?.user ? (
-            <DropdownMenu>
+            <>
+              <NotificationBell />
+              <DropdownMenu>
               <DropdownMenuTrigger className="relative flex h-8 w-8 items-center justify-center rounded-full outline-none">
                 <Avatar className="h-8 w-8">
                   <AvatarImage src={session.user.image ?? ""} alt={session.user.name ?? ""} />
@@ -102,6 +105,7 @@ export function Header() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            </>
           ) : (
             <div className="flex items-center gap-2">
               <Link href="/login">

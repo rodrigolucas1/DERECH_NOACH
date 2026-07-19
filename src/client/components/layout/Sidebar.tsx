@@ -19,6 +19,8 @@ import {
   Library,
   FileText,
   Shield,
+  Bell,
+  BarChart3,
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -36,6 +38,8 @@ const navigation = [
   { name: "Pergunte ao Rabino", href: "/admin/rabbi", icon: MessageCircleQuestion },
   { name: "Páginas (CMS)", href: "/admin/pages", icon: FileText },
   { name: "Auditoria", href: "/admin/audit", icon: Shield },
+  { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
+  { name: "Notificações", href: "/admin/notifications", icon: Bell },
   { name: "Configurações", href: "/admin/settings", icon: Settings },
 ];
 

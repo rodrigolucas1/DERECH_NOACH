@@ -1,6 +1,7 @@
 "use client";
 
-import { Users, MapPin, Calendar, BookOpen } from "lucide-react";
+import { Users, MapPin, Calendar, BookOpen, BarChart3 } from "lucide-react";
+import Link from "next/link";
 import { trpc } from "@/client/lib/trpc";
 
 const statIcons = [
@@ -43,6 +44,25 @@ export default function AdminDashboardPage() {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="rounded-lg border bg-white p-6 shadow-sm">
+        <Link
+          href="/admin/analytics"
+          className="group flex items-center gap-4 rounded-lg border border-dashed border-gray-300 p-4 transition-colors hover:border-blue-400 hover:bg-blue-50"
+        >
+          <div className="rounded-lg bg-blue-50 p-3 group-hover:bg-blue-100">
+            <BarChart3 className="h-6 w-6 text-blue-600" />
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-gray-900 group-hover:text-blue-700">
+              Analytics
+            </p>
+            <p className="text-xs text-gray-500">
+              Métricas detalhadas e crescimento da plataforma
+            </p>
+          </div>
+        </Link>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
