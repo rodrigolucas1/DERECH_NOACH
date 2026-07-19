@@ -21,9 +21,6 @@
     "docker:down": "docker compose down",
     "docker:logs": "docker compose logs -f"
   },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
-  },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.2",
     "@base-ui/react": "^1.6.0",
