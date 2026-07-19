@@ -25,11 +25,18 @@ function LoginForm() {
     setErrorMessage("");
 
     try {
-      await signIn("credentials", {
+      const result = await signIn("credentials", {
         email,
         password,
-        redirectTo: callbackUrl,
+        redirect: false,
       });
+
+      if (result?.error) {
+        setErrorMessage("E-mail ou senha incorretos.");
+        setIsLoading(false);
+      } else {
+        window.location.href = callbackUrl;
+      }
     } catch {
       setErrorMessage("Erro ao fazer login. Tente novamente.");
       setIsLoading(false);
