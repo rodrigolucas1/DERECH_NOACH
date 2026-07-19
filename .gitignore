@@ -46,3 +46,16 @@ yarn-error.log*
 next-env.d.ts
 
 /src/generated/prisma
+
+# uploads (dados do usuário)
+/public/uploads/*
+!/public/uploads/.gitkeep
+
+# backups
+/backups/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
