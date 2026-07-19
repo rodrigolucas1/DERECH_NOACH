@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LogOut, User, Settings } from "lucide-react";
+import { LogOut, User, Settings, Brain } from "lucide-react";
 import { NotificationBell } from "@/client/components/NotificationBell";
 
 export function Header() {
@@ -50,6 +50,13 @@ export function Header() {
             className="text-sm text-gray-600 hover:text-gray-900"
           >
             Estudos
+          </Link>
+          <Link
+            href="/ai"
+            className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900"
+          >
+            <Brain className="h-4 w-4" />
+            Assistente IA
           </Link>
         </nav>
 

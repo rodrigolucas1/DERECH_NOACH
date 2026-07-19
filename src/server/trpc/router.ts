@@ -15,6 +15,8 @@ import { bannerRouter } from "./routers/banner";
 import { auditRouter } from "./routers/audit";
 import { analyticsRouter } from "./routers/analytics";
 import { notificationRouter } from "./routers/notification";
+import { certificateRouter } from "./routers/certificate";
+import { aiRouter } from "./routers/ai";
 
 export const appRouter = router({
   tenant: tenantRouter,
@@ -33,6 +35,8 @@ export const appRouter = router({
   audit: auditRouter,
   analytics: analyticsRouter,
   notification: notificationRouter,
+  certificate: certificateRouter,
+  ai: aiRouter,
 });
 
 export type AppRouter = typeof appRouter;
