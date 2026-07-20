@@ -4,14 +4,14 @@ import { useSession, signIn, signOut } from "next-auth/react";
 
 export function useAuth() {
   const { data: session, status } = useSession();
-  const user = session?.user ?? null;
+  const user = session?.user as Record<string, unknown> | undefined;
 
   return {
-    user,
+    user: user ?? null,
     isLoading: status === "loading",
     isAuthenticated: status === "authenticated",
-    role: user?.role ?? null,
-    tenantId: user?.tenantId ?? null,
+    role: (user?.role as string | null) ?? null,
+    tenantId: (user?.tenantId as string | null) ?? null,
     isAdmin: user?.role === "ADMIN",
     isLeader: user?.role === "LEADER",
     isMember: user?.role === "MEMBER",

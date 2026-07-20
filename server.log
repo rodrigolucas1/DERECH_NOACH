@@ -120,3 +120,52 @@ prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"
  GET /admin/certificates 200 in 68ms (next.js: 4ms, proxy.ts: 3ms, application-code: 61ms)
 prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE "public"."TenantMember"."userId" = $1 LIMIT $2 OFFSET $3
  GET /admin/notifications 200 in 76ms (next.js: 4ms, proxy.ts: 3ms, application-code: 69ms)
+ GET / 200 in 411ms (next.js: 123ms, proxy.ts: 49ms, application-code: 239ms)
+ GET /login 200 in 139ms (next.js: 45ms, proxy.ts: 4ms, application-code: 89ms)
+ GET /about 200 in 772ms (next.js: 681ms, proxy.ts: 2ms, application-code: 88ms)
+ GET /communities 200 in 89ms (next.js: 31ms, proxy.ts: 3ms, application-code: 55ms)
+ GET /events 200 in 81ms (next.js: 31ms, proxy.ts: 3ms, application-code: 48ms)
+ GET /news 200 in 98ms (next.js: 31ms, proxy.ts: 3ms, application-code: 64ms)
+ GET /studies 200 in 91ms (next.js: 31ms, proxy.ts: 4ms, application-code: 56ms)
+ GET /library 200 in 122ms (next.js: 39ms, proxy.ts: 5ms, application-code: 78ms)
+ GET /forum 200 in 566ms (next.js: 508ms, proxy.ts: 2ms, application-code: 55ms)
+ GET /tzedaka 200 in 509ms (next.js: 452ms, proxy.ts: 3ms, application-code: 55ms)
+ GET /contact 200 in 560ms (next.js: 485ms, proxy.ts: 4ms, application-code: 72ms)
+ GET /privacy 200 in 520ms (next.js: 439ms, proxy.ts: 3ms, application-code: 79ms)
+ GET /certificates/verify 200 in 103ms (next.js: 41ms, proxy.ts: 3ms, application-code: 60ms)
+ GET /api/auth/csrf 200 in 112ms (next.js: 94ms, proxy.ts: 3ms, application-code: 15ms)
+prisma:query SELECT "public"."User"."id", "public"."User"."name", "public"."User"."email", "public"."User"."emailVerified", "public"."User"."image", "public"."User"."phone", "public"."User"."bio", "public"."User"."passwordHash", "public"."User"."isActive", "public"."User"."lastLoginAt", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query UPDATE "public"."User" SET "lastLoginAt" = $1, "updatedAt" = $2 WHERE ("public"."User"."id" = $3 AND 1=1) RETURNING "public"."User"."id", "public"."User"."name", "public"."User"."email", "public"."User"."emailVerified", "public"."User"."image", "public"."User"."phone", "public"."User"."bio", "public"."User"."passwordHash", "public"."User"."isActive", "public"."User"."lastLoginAt", "public"."User"."createdAt", "public"."User"."updatedAt"
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text, "public"."TenantMember"."tenantId" FROM "public"."TenantMember" WHERE "public"."TenantMember"."userId" = $1 LIMIT $2 OFFSET $3
+ POST /api/auth/callback/credentials 302 in 430ms (next.js: 6ms, proxy.ts: 5ms, application-code: 420ms)
+ GET / 200 in 56ms (next.js: 6ms, proxy.ts: 2ms, application-code: 47ms)
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE "public"."TenantMember"."userId" = $1 LIMIT $2 OFFSET $3
+ GET /admin/dashboard 200 in 236ms (next.js: 46ms, proxy.ts: 6ms, application-code: 185ms)
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE "public"."TenantMember"."userId" = $1 LIMIT $2 OFFSET $3
+ GET /admin/users 200 in 117ms (next.js: 22ms, proxy.ts: 3ms, application-code: 92ms)
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE "public"."TenantMember"."userId" = $1 LIMIT $2 OFFSET $3
+ GET /admin/communities 200 in 125ms (next.js: 23ms, proxy.ts: 3ms, application-code: 99ms)
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE "public"."TenantMember"."userId" = $1 LIMIT $2 OFFSET $3
+ GET /admin/events 200 in 129ms (next.js: 21ms, proxy.ts: 3ms, application-code: 105ms)
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE "public"."TenantMember"."userId" = $1 LIMIT $2 OFFSET $3
+ GET /admin/studies 200 in 124ms (next.js: 18ms, proxy.ts: 4ms, application-code: 102ms)
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE "public"."TenantMember"."userId" = $1 LIMIT $2 OFFSET $3
+ GET /admin/library 200 in 131ms (next.js: 19ms, proxy.ts: 3ms, application-code: 109ms)
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE "public"."TenantMember"."userId" = $1 LIMIT $2 OFFSET $3
+ GET /admin/news 200 in 103ms (next.js: 17ms, proxy.ts: 3ms, application-code: 83ms)
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE "public"."TenantMember"."userId" = $1 LIMIT $2 OFFSET $3
+ GET /admin/tzedaka 200 in 123ms (next.js: 35ms, proxy.ts: 3ms, application-code: 85ms)
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE "public"."TenantMember"."userId" = $1 LIMIT $2 OFFSET $3
+ GET /admin/pages 200 in 108ms (next.js: 17ms, proxy.ts: 4ms, application-code: 86ms)
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE "public"."TenantMember"."userId" = $1 LIMIT $2 OFFSET $3
+ GET /admin/analytics 200 in 112ms (next.js: 22ms, proxy.ts: 3ms, application-code: 87ms)
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE "public"."TenantMember"."userId" = $1 LIMIT $2 OFFSET $3
+ GET /admin/notifications 200 in 99ms (next.js: 17ms, proxy.ts: 3ms, application-code: 78ms)
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE "public"."TenantMember"."userId" = $1 LIMIT $2 OFFSET $3
+ GET /admin/certificates 200 in 104ms (next.js: 17ms, proxy.ts: 3ms, application-code: 84ms)
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE "public"."TenantMember"."userId" = $1 LIMIT $2 OFFSET $3
+ GET /admin/integrations 200 in 115ms (next.js: 17ms, proxy.ts: 3ms, application-code: 95ms)
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE "public"."TenantMember"."userId" = $1 LIMIT $2 OFFSET $3
+ GET /admin/audit 200 in 98ms (next.js: 18ms, proxy.ts: 3ms, application-code: 77ms)
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE "public"."TenantMember"."userId" = $1 LIMIT $2 OFFSET $3
+ GET /admin/forum 200 in 638ms (next.js: 551ms, proxy.ts: 4ms, application-code: 83ms)
