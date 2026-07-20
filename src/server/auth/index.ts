@@ -37,11 +37,18 @@ const nextAuth = NextAuth({
           data: { lastLoginAt: new Date() },
         });
 
+        const tenantMember = await db.tenantMember.findFirst({
+          where: { userId: user.id },
+          select: { role: true, tenantId: true },
+        });
+
         return {
           id: user.id,
           email: user.email,
           name: user.name,
           image: user.image,
+          role: tenantMember?.role ?? null,
+          tenantId: tenantMember?.tenantId ?? null,
         };
       },
     }),
@@ -49,13 +56,17 @@ const nextAuth = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
+        token.id = user.id as string;
+        token.role = (user as any).role ?? null;
+        token.tenantId = (user as any).tenantId ?? null;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
+        (session.user as any).role = token.role ?? null;
+        (session.user as any).tenantId = token.tenantId ?? null;
       }
       return session;
     },

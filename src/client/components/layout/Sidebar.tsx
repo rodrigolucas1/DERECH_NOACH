@@ -28,30 +28,43 @@ import {
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
-const navigation = [
-  { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
-  { name: "Usuários", href: "/admin/users", icon: Users },
-  { name: "Comunidades", href: "/admin/communities", icon: MapPin },
-  { name: "Eventos", href: "/admin/events", icon: Calendar },
-  { name: "Estudos", href: "/admin/studies", icon: BookOpen },
-  { name: "Biblioteca", href: "/admin/library", icon: Library },
-  { name: "Notícias", href: "/admin/news", icon: Newspaper },
-  { name: "Banners", href: "/admin/banners", icon: Megaphone },
-  { name: "Tzedaká", href: "/admin/tzedaka", icon: HandHeart },
-  { name: "Pergunte ao Rabino", href: "/admin/rabbi", icon: MessageCircleQuestion },
-  { name: "Páginas (CMS)", href: "/admin/pages", icon: FileText },
-  { name: "Assistente IA", href: "/ai", icon: Brain },
-  { name: "Integrações", href: "/admin/integrations", icon: Plug },
-  { name: "Auditoria", href: "/admin/audit", icon: Shield },
-  { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
-  { name: "Certificados", href: "/admin/certificates", icon: Award },
-  { name: "Notificações", href: "/admin/notifications", icon: Bell },
-  { name: "Configurações", href: "/admin/settings", icon: Settings },
+interface NavigationItem {
+  name: string;
+  href: string;
+  icon: any;
+  roles: string[];
+}
+
+const navigation: NavigationItem[] = [
+  { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard, roles: ["ADMIN", "LEADER"] },
+  { name: "Usuários", href: "/admin/users", icon: Users, roles: ["ADMIN"] },
+  { name: "Comunidades", href: "/admin/communities", icon: MapPin, roles: ["ADMIN", "LEADER"] },
+  { name: "Eventos", href: "/admin/events", icon: Calendar, roles: ["ADMIN", "LEADER"] },
+  { name: "Estudos", href: "/admin/studies", icon: BookOpen, roles: ["ADMIN", "LEADER"] },
+  { name: "Biblioteca", href: "/admin/library", icon: Library, roles: ["ADMIN", "LEADER"] },
+  { name: "Notícias", href: "/admin/news", icon: Newspaper, roles: ["ADMIN"] },
+  { name: "Banners", href: "/admin/banners", icon: Megaphone, roles: ["ADMIN"] },
+  { name: "Tzedaká", href: "/admin/tzedaka", icon: HandHeart, roles: ["ADMIN", "LEADER"] },
+  { name: "Pergunte ao Rabino", href: "/admin/rabbi", icon: MessageCircleQuestion, roles: ["ADMIN"] },
+  { name: "Páginas (CMS)", href: "/admin/pages", icon: FileText, roles: ["ADMIN"] },
+  { name: "Assistente IA", href: "/ai", icon: Brain, roles: ["ADMIN", "LEADER"] },
+  { name: "Integrações", href: "/admin/integrations", icon: Plug, roles: ["ADMIN"] },
+  { name: "Auditoria", href: "/admin/audit", icon: Shield, roles: ["ADMIN"] },
+  { name: "Analytics", href: "/admin/analytics", icon: BarChart3, roles: ["ADMIN"] },
+  { name: "Certificados", href: "/admin/certificates", icon: Award, roles: ["ADMIN"] },
+  { name: "Notificações", href: "/admin/notifications", icon: Bell, roles: ["ADMIN", "LEADER"] },
+  { name: "Configurações", href: "/admin/settings", icon: Settings, roles: ["ADMIN"] },
 ];
 
-export function Sidebar() {
+interface SidebarProps {
+  role: string;
+}
+
+export function Sidebar({ role }: SidebarProps) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
+
+  const filteredNav = navigation.filter((item) => item.roles.includes(role));
 
   return (
     <aside
@@ -76,7 +89,7 @@ export function Sidebar() {
       </div>
 
       <nav className="flex-1 space-y-1 px-2">
-        {navigation.map((item) => {
+        {filteredNav.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
           return (
             <Link
