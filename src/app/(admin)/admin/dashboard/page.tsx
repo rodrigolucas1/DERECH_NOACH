@@ -99,10 +99,10 @@ export default function AdminDashboardPage() {
     trpc.analytics.userGrowth.useQuery();
   const { data: activity, isLoading: activityLoading } =
     trpc.analytics.recentActivity.useQuery();
-  const { data: events, isLoading: eventsLoading } =
+  const { data: eventsData, isLoading: eventsLoading } =
     trpc.event.listAll.useQuery();
 
-  const upcomingEvents = events?.filter(
+  const upcomingEvents = eventsData?.items?.filter(
     (e) => e.isActive && new Date(e.dateTime) >= new Date()
   );
 

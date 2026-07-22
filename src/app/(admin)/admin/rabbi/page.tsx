@@ -17,7 +17,8 @@ import { ConfirmDialog } from "@/client/components/ui/ConfirmDialog";
 export default function AdminRabbiPage() {
   const utils = trpc.useUtils();
   const { data: rabbis } = trpc.rabbi.listAll.useQuery();
-  const { data: questions } = trpc.rabbi.listQuestions.useQuery();
+  const { data: questionsData } = trpc.rabbi.listQuestions.useQuery();
+  const questions = questionsData?.items;
 
   const [tab, setTab] = useState<"profiles" | "questions">("profiles");
   const [showForm, setShowForm] = useState(false);

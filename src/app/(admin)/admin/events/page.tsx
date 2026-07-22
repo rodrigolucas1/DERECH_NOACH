@@ -15,8 +15,10 @@ import { Plus, Pencil, Trash2, Calendar, Power, PowerOff } from "lucide-react";
 
 export default function AdminEventsPage() {
   const utils = trpc.useUtils();
-  const { data: events, isLoading } = trpc.event.listAll.useQuery();
-  const { data: communities } = trpc.community.listAll.useQuery();
+  const { data: eventsData, isLoading } = trpc.event.listAll.useQuery();
+  const events = eventsData?.items;
+  const { data: communitiesData } = trpc.community.listAll.useQuery();
+  const communities = communitiesData?.items;
 
   const broadcast = trpc.notification.broadcast.useMutation();
 

@@ -44,24 +44,39 @@ export const communityRouter = router({
     });
   }),
 
-  listAll: tenantProcedure.query(async ({ ctx }) => {
-    if (!ctx.tenantId) return [];
+  listAll: tenantProcedure
+    .input(z.object({ limit: z.number().min(1).max(100).default(50), cursor: z.string().optional() }).optional())
+    .query(async ({ ctx, input }) => {
+      if (!ctx.tenantId) return { items: [], nextCursor: null as string | null };
 
-    return db.community.findMany({
-      where: { tenantId: ctx.tenantId },
-      select: {
-        id: true,
-        name: true,
-        slug: true,
-        city: true,
-        state: true,
-        isActive: true,
-        logoUrl: true,
-        _count: { select: { members: true, events: true } },
-      },
-      orderBy: { name: "asc" },
-    });
-  }),
+      const take = input?.limit ?? 50;
+      const cursor = input?.cursor;
+
+      const items = await db.community.findMany({
+        where: { tenantId: ctx.tenantId },
+        take: take + 1,
+        cursor: cursor ? { id: cursor } : undefined,
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          city: true,
+          state: true,
+          isActive: true,
+          logoUrl: true,
+          _count: { select: { members: true, events: true } },
+        },
+        orderBy: { name: "asc" },
+      });
+
+      let nextCursor: string | null = null;
+      if (items.length > take) {
+        const nextItem = items.pop();
+        nextCursor = nextItem?.id ?? null;
+      }
+
+      return { items, nextCursor };
+    }),
 
   getBySlug: tenantProcedure
     .input(z.object({ slug: z.string() }))

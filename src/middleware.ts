@@ -20,7 +20,10 @@ export function middleware(request: NextRequest) {
     return addSecurityHeaders(NextResponse.next());
   }
 
-  // Admin route protection: check for session cookie
+  // Defense-in-depth check for admin routes: verify a session cookie is present.
+  // This is NOT a substitute for real authentication — actual auth happens in
+  // tRPC context and the admin layout. This only prevents unauthenticated
+  // browsers from reaching the admin pages at all.
   if (pathname.startsWith("/admin")) {
     const sessionToken =
       request.cookies.get("authjs.session-token")?.value ??

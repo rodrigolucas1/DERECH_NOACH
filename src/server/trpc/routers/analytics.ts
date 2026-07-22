@@ -41,43 +41,39 @@ export const analyticsRouter = router({
     const tenantId = ctx.tenantId;
 
     const now = new Date();
-    const months: { label: string; startDate: Date; endDate: Date }[] = [];
+    const sixMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 5, 1);
+
+    const rawResults = await db.$queryRaw<{ month: string; eventcount: bigint; totalregistrations: bigint }[]>`
+      SELECT
+        TO_CHAR(e."dateTime", 'YYYY-MM') AS month,
+        COUNT(DISTINCT e.id) AS eventcount,
+        COALESCE(SUM(reg_counts.cnt), 0) AS totalregistrations
+      FROM "Event" e
+      LEFT JOIN LATERAL (
+        SELECT COUNT(*)::bigint AS cnt
+        FROM "EventRegistration" er
+        WHERE er."eventId" = e.id
+      ) reg_counts ON true
+      WHERE e."tenantId" = ${tenantId}
+        AND e."dateTime" >= ${sixMonthsAgo}
+      GROUP BY TO_CHAR(e."dateTime", 'YYYY-MM')
+      ORDER BY month ASC
+    `;
+
+    const months: { label: string; key: string }[] = [];
     for (let i = 5; i >= 0; i--) {
       const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      const start = new Date(d.getFullYear(), d.getMonth(), 1);
-      const end = new Date(d.getFullYear(), d.getMonth() + 1, 0, 23, 59, 59);
-      months.push({ label: formatMonth(d), startDate: start, endDate: end });
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+      months.push({ label: formatMonth(d), key });
     }
 
-    const results = await Promise.all(
-      months.map(async ({ label, startDate, endDate }) => {
-        const eventCount = await db.event.count({
-          where: {
-            tenantId,
-            dateTime: { gte: startDate, lte: endDate },
-          },
-        });
+    const resultMap = new Map(rawResults.map(r => [r.month, { eventCount: Number(r.eventcount), totalRegistrations: Number(r.totalregistrations) }]));
 
-        const eventIds = await db.event.findMany({
-          where: {
-            tenantId,
-            dateTime: { gte: startDate, lte: endDate },
-          },
-          select: { id: true },
-        });
-
-        const totalRegistrations =
-          eventIds.length > 0
-            ? await db.eventRegistration.count({
-                where: { eventId: { in: eventIds.map((e) => e.id) } },
-              })
-            : 0;
-
-        return { month: label, eventCount, totalRegistrations };
-      })
-    );
-
-    return results;
+    return months.map(({ label, key }) => ({
+      month: label,
+      eventCount: resultMap.get(key)?.eventCount ?? 0,
+      totalRegistrations: resultMap.get(key)?.totalRegistrations ?? 0,
+    }));
   }),
 
   libraryTopItems: adminProcedure(["ADMIN"]).query(async ({ ctx }) => {
@@ -242,36 +238,32 @@ export const analyticsRouter = router({
     if (!ctx.tenantId) return [];
     const tenantId = ctx.tenantId;
 
-    const months: { month: string; startDate: Date }[] = [];
     const now = new Date();
+    const twelveMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 11, 1);
+
+    const rawResults = await db.$queryRaw<{ month: string; count: bigint }[]>`
+      SELECT
+        TO_CHAR("joinedAt", 'YYYY-MM') AS month,
+        COUNT(*)::int AS count
+      FROM "TenantMember"
+      WHERE "tenantId" = ${tenantId}
+        AND "joinedAt" >= ${twelveMonthsAgo}
+      GROUP BY TO_CHAR("joinedAt", 'YYYY-MM')
+      ORDER BY month ASC
+    `;
+
+    const months: { label: string; key: string }[] = [];
     for (let i = 11; i >= 0; i--) {
-      const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      months.push({
-        month: formatMonth(date),
-        startDate: new Date(date.getFullYear(), date.getMonth(), 1),
-      });
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+      months.push({ label: formatMonth(d), key });
     }
 
-    const results = await Promise.all(
-      months.map(async ({ month, startDate }) => {
-        const endDate = new Date(
-          startDate.getFullYear(),
-          startDate.getMonth() + 1,
-          0,
-          23,
-          59,
-          59
-        );
-        const count = await db.tenantMember.count({
-          where: {
-            tenantId,
-            joinedAt: { gte: startDate, lte: endDate },
-          },
-        });
-        return { month, count };
-      })
-    );
+    const resultMap = new Map(rawResults.map(r => [r.month, Number(r.count)]));
 
-    return results;
+    return months.map(({ label, key }) => ({
+      month: label,
+      count: resultMap.get(key) ?? 0,
+    }));
   }),
 });

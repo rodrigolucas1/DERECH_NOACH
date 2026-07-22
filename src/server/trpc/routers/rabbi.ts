@@ -48,32 +48,47 @@ export const rabbiRouter = router({
     });
   }),
 
-  listQuestions: tenantProcedure.query(async ({ ctx }) => {
-    if (!ctx.tenantId) return [];
+  listQuestions: tenantProcedure
+    .input(z.object({ limit: z.number().min(1).max(100).default(50), cursor: z.string().optional() }).optional())
+    .query(async ({ ctx, input }) => {
+      if (!ctx.tenantId) return { items: [], nextCursor: null as string | null };
 
-    return db.rabbiQuestion.findMany({
-      where: { tenantId: ctx.tenantId },
-      orderBy: { createdAt: "desc" },
-      select: {
-        id: true,
-        title: true,
-        question: true,
-        category: true,
-        status: true,
-        isPublic: true,
-        createdAt: true,
-        user: { select: { name: true } },
-        answers: {
-          select: {
-            id: true,
-            answer: true,
-            createdAt: true,
-            rabbi: { select: { name: true } },
+      const take = input?.limit ?? 50;
+      const cursor = input?.cursor;
+
+      const items = await db.rabbiQuestion.findMany({
+        where: { tenantId: ctx.tenantId },
+        take: take + 1,
+        cursor: cursor ? { id: cursor } : undefined,
+        orderBy: { createdAt: "desc" },
+        select: {
+          id: true,
+          title: true,
+          question: true,
+          category: true,
+          status: true,
+          isPublic: true,
+          createdAt: true,
+          user: { select: { name: true } },
+          answers: {
+            select: {
+              id: true,
+              answer: true,
+              createdAt: true,
+              rabbi: { select: { name: true } },
+            },
           },
         },
-      },
-    });
-  }),
+      });
+
+      let nextCursor: string | null = null;
+      if (items.length > take) {
+        const nextItem = items.pop();
+        nextCursor = nextItem?.id ?? null;
+      }
+
+      return { items, nextCursor };
+    }),
 
   publicQuestions: tenantProcedure.query(async ({ ctx }) => {
     if (!ctx.tenantId) return [];

@@ -62,24 +62,39 @@ export const eventRouter = router({
       return { items, nextCursor };
     }),
 
-  listAll: tenantProcedure.query(async ({ ctx }) => {
-    if (!ctx.tenantId) return [];
+  listAll: tenantProcedure
+    .input(z.object({ limit: z.number().min(1).max(100).default(50), cursor: z.string().optional() }).optional())
+    .query(async ({ ctx, input }) => {
+      if (!ctx.tenantId) return { items: [], nextCursor: null as string | null };
 
-    return db.event.findMany({
-      where: { tenantId: ctx.tenantId },
-      orderBy: { dateTime: "desc" },
-      select: {
-        id: true,
-        title: true,
-        dateTime: true,
-        imageUrl: true,
-        eventType: true,
-        isActive: true,
-        community: { select: { name: true } },
-        _count: { select: { registrations: true } },
-      },
-    });
-  }),
+      const take = input?.limit ?? 50;
+      const cursor = input?.cursor;
+
+      const items = await db.event.findMany({
+        where: { tenantId: ctx.tenantId },
+        take: take + 1,
+        cursor: cursor ? { id: cursor } : undefined,
+        orderBy: { dateTime: "desc" },
+        select: {
+          id: true,
+          title: true,
+          dateTime: true,
+          imageUrl: true,
+          eventType: true,
+          isActive: true,
+          community: { select: { name: true } },
+          _count: { select: { registrations: true } },
+        },
+      });
+
+      let nextCursor: string | null = null;
+      if (items.length > take) {
+        const nextItem = items.pop();
+        nextCursor = nextItem?.id ?? null;
+      }
+
+      return { items, nextCursor };
+    }),
 
   getById: tenantProcedure
     .input(z.object({ id: z.string() }))

@@ -20,3 +20,5 @@
 ✓ Compiled in 426ms
   Reload env: .env
 ✓ Finished filesystem cache database compaction in 20.3s
+✓ Compiled in 117ms
+  Reload env: .env

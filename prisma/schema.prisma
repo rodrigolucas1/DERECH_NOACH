@@ -652,6 +652,7 @@ model ForumReaction {
   user User      @relation(fields: [userId], references: [id])
 
   @@unique([postId, userId, type])
+  @@index([postId])
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -843,6 +844,7 @@ model NewsCategory {
   articles NewsArticle[]
 
   @@unique([tenantId, slug])
+  @@index([tenantId])
 }
 
 model NewsArticle {

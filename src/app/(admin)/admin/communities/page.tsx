@@ -15,7 +15,8 @@ import { Plus, Pencil, Trash2, MapPin, Power, PowerOff } from "lucide-react";
 
 export default function AdminCommunitiesPage() {
   const utils = trpc.useUtils();
-  const { data: communities, isLoading } = trpc.community.listAll.useQuery();
+  const { data: communitiesData, isLoading } = trpc.community.listAll.useQuery();
+  const communities = communitiesData?.items;
   const broadcast = trpc.notification.broadcast.useMutation();
 
   const [showForm, setShowForm] = useState(false);
