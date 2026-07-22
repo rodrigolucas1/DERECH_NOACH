@@ -59,6 +59,7 @@ export default function AdminIntegrationsPage() {
       toast.success("Status atualizado!");
       utils.integration.list.invalidate();
     },
+    onError: (e) => toast.error(e.message),
   });
 
   const deleteIntegration = trpc.integration.delete.useMutation({

@@ -9,6 +9,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ImageUpload } from "@/client/components/ImageUpload";
 import { toast } from "sonner";
 import { Plus, Pencil, Trash2, MessageCircleQuestion, Eye, EyeOff } from "lucide-react";
+import { PageHeader } from "@/client/components/ui/PageHeader";
+import { TabSelector } from "@/client/components/ui/TabSelector";
+import { DataTable } from "@/client/components/ui/DataTable";
+import { ConfirmDialog } from "@/client/components/ui/ConfirmDialog";
 
 export default function AdminRabbiPage() {
   const utils = trpc.useUtils();
@@ -19,6 +23,10 @@ export default function AdminRabbiPage() {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState({ name: "", title: "", bio: "", photoUrl: "", email: "" });
+  const [deleteProfileId, setDeleteProfileId] = useState<string | null>(null);
+  const [profileConfirmOpen, setProfileConfirmOpen] = useState(false);
+  const [deleteQuestionId, setDeleteQuestionId] = useState<string | null>(null);
+  const [questionConfirmOpen, setQuestionConfirmOpen] = useState(false);
 
   const createProfile = trpc.rabbi.createProfile.useMutation({
     onSuccess: () => { toast.success("Rabino criado!"); utils.rabbi.listAll.invalidate(); setShowForm(false); resetForm(); },
@@ -34,12 +42,15 @@ export default function AdminRabbiPage() {
   });
   const toggleProfile = trpc.rabbi.toggleProfilePublic.useMutation({
     onSuccess: () => { utils.rabbi.listAll.invalidate(); },
+    onError: (e) => toast.error(e.message),
   });
   const updateQuestionStatus = trpc.rabbi.updateQuestionStatus.useMutation({
     onSuccess: () => { toast.success("Status alterado!"); utils.rabbi.listQuestions.invalidate(); },
+    onError: (e) => toast.error(e.message),
   });
   const deleteQuestion = trpc.rabbi.deleteQuestion.useMutation({
     onSuccess: () => { toast.success("Removida!"); utils.rabbi.listQuestions.invalidate(); },
+    onError: (e) => toast.error(e.message),
   });
 
   function resetForm() {
@@ -64,15 +75,19 @@ export default function AdminRabbiPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Pergunte ao Rabino</h1>
-        <p className="text-sm text-gray-500">Gerencie rabinos e perguntas/respostas</p>
-      </div>
+      <PageHeader
+        title="Pergunte ao Rabino"
+        description="Gerencie rabinos e perguntas/respostas"
+      />
 
-      <div className="flex gap-2">
-        <Button variant={tab === "profiles" ? "default" : "outline"} size="sm" onClick={() => setTab("profiles")}>Rabinos</Button>
-        <Button variant={tab === "questions" ? "default" : "outline"} size="sm" onClick={() => setTab("questions")}>Perguntas</Button>
-      </div>
+      <TabSelector
+        tabs={[
+          { key: "profiles", label: "Rabinos" },
+          { key: "questions", label: "Perguntas" },
+        ]}
+        active={tab}
+        onChange={(key: any) => setTab(key as "profiles" | "questions")}
+      />
 
       {tab === "profiles" && (
         <>
@@ -116,106 +131,119 @@ export default function AdminRabbiPage() {
               </CardContent>
             </Card>
           )}
-          <div className="rounded-lg border bg-white shadow-sm">
-            <table className="w-full text-left text-sm">
-              <thead className="border-b bg-gray-50">
-                <tr>
-                  <th className="px-4 py-3 font-medium text-gray-500">Rabino</th>
-                  <th className="px-4 py-3 font-medium text-gray-500">Título</th>
-                  <th className="px-4 py-3 font-medium text-gray-500">Respostas</th>
-                  <th className="px-4 py-3 font-medium text-gray-500">Visível</th>
-                  <th className="px-4 py-3 font-medium text-gray-500">Ações</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                {!rabbis?.length ? (
-                  <tr><td colSpan={5} className="px-4 py-12 text-center text-gray-500">
-                    <MessageCircleQuestion className="mx-auto h-10 w-10 text-gray-300" />
-                    <p className="mt-2">Nenhum rabino cadastrado.</p>
-                  </td></tr>
-                ) : rabbis.map((r) => (
-                  <tr key={r.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 font-medium">
-                      <div className="flex items-center gap-2">
-                        {r.photoUrl && <img src={r.photoUrl} alt="" className="h-8 w-8 rounded-full object-cover" />}
-                        {r.name}
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 text-gray-500">{r.title ?? "—"}</td>
-                    <td className="px-4 py-3 text-gray-500">{r._count.answers}</td>
-                    <td className="px-4 py-3">
-                      <Button variant="ghost" size="sm" onClick={() => toggleProfile.mutate({ id: r.id })}>
-                        {r.isPublic ? <Eye className="h-4 w-4 text-green-500" /> : <EyeOff className="h-4 w-4 text-gray-400" />}
-                      </Button>
-                    </td>
-                    <td className="px-4 py-3 flex gap-1">
-                      <Button variant="ghost" size="sm" onClick={() => handleEdit(r)}><Pencil className="h-4 w-4" /></Button>
-                      <Button variant="ghost" size="sm" onClick={() => { if (confirm("Remover?")) deleteProfile.mutate({ id: r.id }); }}>
-                        <Trash2 className="h-4 w-4 text-red-500" />
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <DataTable
+            data={(rabbis as any) ?? []}
+            isLoading={false}
+            columns={[
+              {
+                key: "name",
+                header: "Rabino",
+                render: (item: any) => (
+                  <div className="flex items-center gap-2 font-medium">
+                    {item.photoUrl && <img src={item.photoUrl} alt="" className="h-8 w-8 rounded-full object-cover" />}
+                    {item.name}
+                  </div>
+                ),
+              },
+              { key: "title", header: "Título", render: (item: any) => item.title ?? "—" },
+              { key: "answers", header: "Respostas", render: (item: any) => item._count.answers },
+              {
+                key: "isPublic",
+                header: "Visível",
+                render: (item: any) => (
+                  <Button variant="ghost" size="sm" onClick={() => toggleProfile.mutate({ id: item.id })}>
+                    {item.isPublic ? <Eye className="h-4 w-4 text-green-500" /> : <EyeOff className="h-4 w-4 text-gray-400" />}
+                  </Button>
+                ),
+              },
+            ]}
+            emptyIcon={<MessageCircleQuestion className="mx-auto h-10 w-10 text-gray-300" />}
+            emptyTitle="Nenhum rabino cadastrado."
+            keyExtractor={(item: any) => item.id}
+            actions={(item: any) => (
+              <>
+                <Button variant="ghost" size="sm" onClick={() => handleEdit(item)}>
+                  <Pencil className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => { setDeleteProfileId(item.id); setProfileConfirmOpen(true); }}>
+                  <Trash2 className="h-4 w-4 text-red-500" />
+                </Button>
+              </>
+            )}
+          />
         </>
       )}
 
       {tab === "questions" && (
-        <div className="rounded-lg border bg-white shadow-sm">
-          <table className="w-full text-left text-sm">
-            <thead className="border-b bg-gray-50">
-              <tr>
-                <th className="px-4 py-3 font-medium text-gray-500">Pergunta</th>
-                <th className="px-4 py-3 font-medium text-gray-500">Usuário</th>
-                <th className="px-4 py-3 font-medium text-gray-500">Categoria</th>
-                <th className="px-4 py-3 font-medium text-gray-500">Status</th>
-                <th className="px-4 py-3 font-medium text-gray-500">Respostas</th>
-                <th className="px-4 py-3 font-medium text-gray-500">Ações</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y">
-              {!questions?.length ? (
-                <tr><td colSpan={6} className="px-4 py-12 text-center text-gray-500">
-                  <MessageCircleQuestion className="mx-auto h-10 w-10 text-gray-300" />
-                  <p className="mt-2">Nenhuma pergunta.</p>
-                </td></tr>
-              ) : questions.map((q) => (
-                <tr key={q.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3">
-                    <div className="font-medium">{q.title}</div>
-                    <div className="max-w-xs truncate text-xs text-gray-400">{q.question}</div>
-                  </td>
-                  <td className="px-4 py-3 text-gray-500">{q.user?.name ?? "—"}</td>
-                  <td className="px-4 py-3 text-gray-500">{q.category ?? "—"}</td>
-                  <td className="px-4 py-3">
-                    <span className={`text-xs font-medium ${q.status === "PUBLISHED" ? "text-green-600" : q.status === "REJECTED" ? "text-red-600" : "text-yellow-600"}`}>
-                      {q.status === "PUBLISHED" ? "Publicada" : q.status === "REJECTED" ? "Rejeitada" : "Pendente"}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-gray-500">{q.answers.length}</td>
-                  <td className="px-4 py-3 flex gap-1">
-                    {q.status !== "PUBLISHED" && (
-                      <Button variant="ghost" size="sm" onClick={() => updateQuestionStatus.mutate({ id: q.id, status: "PUBLISHED", isPublic: true })}>
-                        <Eye className="h-4 w-4 text-green-500" />
-                      </Button>
-                    )}
-                    {q.status !== "REJECTED" && (
-                      <Button variant="ghost" size="sm" onClick={() => updateQuestionStatus.mutate({ id: q.id, status: "REJECTED" })}>
-                        <EyeOff className="h-4 w-4 text-orange-500" />
-                      </Button>
-                    )}
-                    <Button variant="ghost" size="sm" onClick={() => { if (confirm("Remover?")) deleteQuestion.mutate({ id: q.id }); }}>
-                      <Trash2 className="h-4 w-4 text-red-500" />
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <DataTable
+          data={(questions as any) ?? []}
+          isLoading={false}
+          columns={[
+            {
+              key: "title",
+              header: "Pergunta",
+              render: (item: any) => (
+                <div>
+                  <div className="font-medium">{item.title}</div>
+                  <div className="max-w-xs truncate text-xs text-gray-400">{item.question}</div>
+                </div>
+              ),
+            },
+            { key: "user", header: "Usuário", render: (item: any) => item.user?.name ?? "—" },
+            { key: "category", header: "Categoria", render: (item: any) => item.category ?? "—" },
+            {
+              key: "status",
+              header: "Status",
+              render: (item: any) => (
+                <span className={`text-xs font-medium ${item.status === "PUBLISHED" ? "text-green-600" : item.status === "REJECTED" ? "text-red-600" : "text-yellow-600"}`}>
+                  {item.status === "PUBLISHED" ? "Publicada" : item.status === "REJECTED" ? "Rejeitada" : "Pendente"}
+                </span>
+              ),
+            },
+            { key: "answers", header: "Respostas", render: (item: any) => item.answers.length },
+          ]}
+            emptyIcon={<MessageCircleQuestion className="mx-auto h-10 w-10 text-gray-300" />}
+            emptyTitle="Nenhuma pergunta."
+            keyExtractor={(item: any) => item.id}
+            actions={(item: any) => (
+              <>
+                {item.status !== "PUBLISHED" && (
+                  <Button variant="ghost" size="sm" onClick={() => updateQuestionStatus.mutate({ id: item.id, status: "PUBLISHED", isPublic: true })}>
+                    <Eye className="h-4 w-4 text-green-500" />
+                  </Button>
+                )}
+                {item.status !== "REJECTED" && (
+                  <Button variant="ghost" size="sm" onClick={() => updateQuestionStatus.mutate({ id: item.id, status: "REJECTED" })}>
+                    <EyeOff className="h-4 w-4 text-orange-500" />
+                  </Button>
+                )}
+                <Button variant="ghost" size="sm" onClick={() => { setDeleteQuestionId(item.id); setQuestionConfirmOpen(true); }}>
+                  <Trash2 className="h-4 w-4 text-red-500" />
+                </Button>
+              </>
+            )}
+          />
       )}
+
+      <ConfirmDialog
+        open={profileConfirmOpen}
+        onOpenChange={setProfileConfirmOpen}
+        title="Remover rabino"
+        description="Tem certeza que deseja remover este rabino?"
+        onConfirm={() => { if (deleteProfileId) deleteProfile.mutate({ id: deleteProfileId }); }}
+        confirmLabel="Remover"
+        variant="destructive"
+      />
+
+      <ConfirmDialog
+        open={questionConfirmOpen}
+        onOpenChange={setQuestionConfirmOpen}
+        title="Remover pergunta"
+        description="Tem certeza que deseja remover esta pergunta?"
+        onConfirm={() => { if (deleteQuestionId) deleteQuestion.mutate({ id: deleteQuestionId }); }}
+        confirmLabel="Remover"
+        variant="destructive"
+      />
     </div>
   );
 }

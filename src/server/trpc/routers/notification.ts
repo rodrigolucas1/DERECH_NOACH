@@ -107,4 +107,94 @@ export const notificationRouter = router({
         },
       });
     }),
+
+  update: adminProcedure(["ADMIN"])
+    .input(
+      z.object({
+        id: z.string(),
+        type: z
+          .enum([
+            "GENERAL",
+            "EVENT",
+            "STUDY",
+            "COMMUNITY",
+            "TZEDAKA",
+            "FORUM",
+            "RABBI",
+            "NEWS",
+            "PRAYER",
+          ])
+          .optional(),
+        title: z.string().min(1).optional(),
+        message: z.string().min(1).optional(),
+        link: z.string().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (!ctx.tenantId) throw new Error("Tenant não encontrado.");
+
+      const notification = await db.notification.findUnique({ where: { id: input.id } });
+      if (!notification) throw new Error("Notificação não encontrada.");
+      if (notification.tenantId !== ctx.tenantId) throw new Error("Acesso negado.");
+
+      const { id, ...data } = input;
+      return db.notification.update({ where: { id }, data });
+    }),
+
+  delete: adminProcedure(["ADMIN"])
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      if (!ctx.tenantId) throw new Error("Tenant não encontrado.");
+
+      const notification = await db.notification.findUnique({ where: { id: input.id } });
+      if (!notification) throw new Error("Notificação não encontrada.");
+      if (notification.tenantId !== ctx.tenantId) throw new Error("Acesso negado.");
+
+      return db.notification.delete({ where: { id: input.id } });
+    }),
+
+  broadcast: adminProcedure(["ADMIN"])
+    .input(
+      z.object({
+        type: z
+          .enum([
+            "GENERAL",
+            "EVENT",
+            "STUDY",
+            "COMMUNITY",
+            "TZEDAKA",
+            "FORUM",
+            "RABBI",
+            "NEWS",
+            "PRAYER",
+          ])
+          .default("GENERAL"),
+        title: z.string().min(1),
+        message: z.string().min(1),
+        link: z.string().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (!ctx.tenantId) return { count: 0 };
+
+      const users = await db.tenantMember.findMany({
+        where: { tenantId: ctx.tenantId },
+        select: { userId: true },
+      });
+
+      if (users.length === 0) return { count: 0 };
+
+      await db.notification.createMany({
+        data: users.map((u) => ({
+          tenantId: ctx.tenantId!,
+          userId: u.userId,
+          type: input.type,
+          title: input.title,
+          message: input.message,
+          link: input.link,
+        })),
+      });
+
+      return { count: users.length };
+    }),
 });

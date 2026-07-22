@@ -7,6 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ImageUpload } from "@/client/components/ImageUpload";
+import { PageHeader } from "@/client/components/ui/PageHeader";
+import { DataTable } from "@/client/components/ui/DataTable";
+import { ConfirmDialog } from "@/client/components/ui/ConfirmDialog";
 import { toast } from "sonner";
 import { Plus, Pencil, Trash2, HandHeart, Power } from "lucide-react";
 
@@ -21,18 +24,21 @@ export default function AdminTzedakaPage() {
   const utils = trpc.useUtils();
   const { data: campaigns, isLoading } = trpc.tzedaka.list.useQuery();
 
+  const broadcast = trpc.notification.broadcast.useMutation();
+
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
   const [form, setForm] = useState({
     title: "", description: "", goalAmount: "", coverUrl: "", isPublic: true,
   });
 
   const createMutation = trpc.tzedaka.create.useMutation({
-    onSuccess: () => { toast.success("Campanha criada!"); utils.tzedaka.list.invalidate(); setShowForm(false); resetForm(); },
+    onSuccess: () => { toast.success("Campanha criada!"); utils.tzedaka.list.invalidate(); setShowForm(false); resetForm(); broadcast.mutate({ type: "TZEDAKA", title: "Nova campanha de Tzedaká", message: "Uma nova campanha de Tzedaká foi criada.", link: "/tzedaka" }); },
     onError: (e) => toast.error(e.message),
   });
   const updateMutation = trpc.tzedaka.update.useMutation({
-    onSuccess: () => { toast.success("Campanha atualizada!"); utils.tzedaka.list.invalidate(); setEditingId(null); resetForm(); },
+    onSuccess: () => { toast.success("Campanha atualizada!"); utils.tzedaka.list.invalidate(); setEditingId(null); resetForm(); broadcast.mutate({ type: "TZEDAKA", title: "Campanha de Tzedaká atualizada", message: "Uma campanha de Tzedaká foi atualizada.", link: "/tzedaka" }); },
     onError: (e) => toast.error(e.message),
   });
   const deleteMutation = trpc.tzedaka.delete.useMutation({
@@ -41,9 +47,11 @@ export default function AdminTzedakaPage() {
   });
   const togglePublic = trpc.tzedaka.togglePublic.useMutation({
     onSuccess: () => { toast.success("Visibilidade alterada!"); utils.tzedaka.list.invalidate(); },
+    onError: (e) => toast.error(e.message),
   });
   const updateStatus = trpc.tzedaka.updateStatus.useMutation({
     onSuccess: () => { toast.success("Status alterado!"); utils.tzedaka.list.invalidate(); },
+    onError: (e) => toast.error(e.message),
   });
 
   function resetForm() {
@@ -75,17 +83,19 @@ export default function AdminTzedakaPage() {
     }
   }
 
+  const deleteCampaign = campaigns?.find((c) => c.id === deleteId);
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Tzedaká</h1>
-          <p className="text-sm text-gray-500">Gerencie campanhas de Tzedaká e doações</p>
-        </div>
-        <Button onClick={() => { resetForm(); setEditingId(null); setShowForm(!showForm); }}>
-          <Plus className="mr-2 h-4 w-4" />{showForm ? "Cancelar" : "Nova Campanha"}
-        </Button>
-      </div>
+      <PageHeader
+        title="Tzedaká"
+        description="Gerencie campanhas de Tzedaká e doações"
+        action={
+          <Button onClick={() => { resetForm(); setEditingId(null); setShowForm(!showForm); }}>
+            <Plus className="mr-2 h-4 w-4" />{showForm ? "Cancelar" : "Nova Campanha"}
+          </Button>
+        }
+      />
 
       {showForm && (
         <Card>
@@ -123,62 +133,77 @@ export default function AdminTzedakaPage() {
         </Card>
       )}
 
-      <div className="rounded-lg border bg-white shadow-sm">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead className="border-b bg-gray-50">
-              <tr>
-                <th className="px-4 py-3 font-medium text-gray-500">Campanha</th>
-                <th className="px-4 py-3 font-medium text-gray-500">Meta</th>
-                <th className="px-4 py-3 font-medium text-gray-500">Arrecadado</th>
-                <th className="px-4 py-3 font-medium text-gray-500">Doações</th>
-                <th className="px-4 py-3 font-medium text-gray-500">Status</th>
-                <th className="px-4 py-3 font-medium text-gray-500">Ações</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y">
-              {isLoading ? (
-                <tr><td colSpan={6} className="px-4 py-8 text-center text-gray-500">Carregando...</td></tr>
-              ) : !campaigns?.length ? (
-                <tr><td colSpan={6} className="px-4 py-12 text-center text-gray-500">
-                  <HandHeart className="mx-auto h-10 w-10 text-gray-300" />
-                  <p className="mt-2">Nenhuma campanha de Tzedaká.</p>
-                </td></tr>
-              ) : campaigns.map((c) => (
-                <tr key={c.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3 font-medium">
-                    <div className="flex items-center gap-2">
-                      {c.coverUrl && <img src={c.coverUrl} alt="" className="h-8 w-8 rounded object-cover" />}
-                      {c.title}
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-gray-500">R$ {c.goalAmount?.toString() ?? "—"}</td>
-                  <td className="px-4 py-3 text-gray-500">R$ {c.currentAmount.toString()}</td>
-                  <td className="px-4 py-3 text-gray-500">{c._count.donations}</td>
-                  <td className="px-4 py-3">
-                    <select
-                      value={c.status}
-                      onChange={(e) => updateStatus.mutate({ id: c.id, status: e.target.value as any })}
-                      className="rounded border px-2 py-1 text-xs"
-                    >
-                      {Object.entries(statusLabels).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-                    </select>
-                  </td>
-                  <td className="px-4 py-3 flex gap-1">
-                    <Button variant="ghost" size="sm" onClick={() => handleEdit(c)}><Pencil className="h-4 w-4" /></Button>
-                    <Button variant="ghost" size="sm" onClick={() => togglePublic.mutate({ id: c.id })}>
-                      <Power className={`h-4 w-4 ${c.isPublic ? "text-green-500" : "text-gray-400"}`} />
-                    </Button>
-                    <Button variant="ghost" size="sm" onClick={() => { if (confirm("Remover?")) deleteMutation.mutate({ id: c.id }); }}>
-                      <Trash2 className="h-4 w-4 text-red-500" />
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <DataTable
+        data={campaigns}
+        isLoading={isLoading}
+        emptyIcon={<HandHeart className="h-10 w-10" />}
+        emptyTitle="Nenhuma campanha de Tzedaká"
+        keyExtractor={(c: any) => c.id}
+        columns={[
+          {
+            key: "title",
+            header: "Campanha",
+            render: (c: any) => (
+              <div className="flex items-center gap-2 font-medium">
+                {c.coverUrl && <img src={c.coverUrl} alt="" className="h-8 w-8 rounded object-cover" />}
+                {c.title}
+              </div>
+            ),
+          },
+          {
+            key: "goalAmount",
+            header: "Meta",
+            render: (c: any) => <span className="text-gray-500">R$ {c.goalAmount?.toString() ?? "—"}</span>,
+          },
+          {
+            key: "currentAmount",
+            header: "Arrecadado",
+            render: (c: any) => <span className="text-gray-500">R$ {c.currentAmount.toString()}</span>,
+          },
+          {
+            key: "donations",
+            header: "Doações",
+            render: (c: any) => <span className="text-gray-500">{c._count.donations}</span>,
+          },
+          {
+            key: "status",
+            header: "Status",
+            render: (c: any) => (
+              <select
+                value={c.status}
+                onChange={(e) => updateStatus.mutate({ id: c.id, status: e.target.value as any })}
+                className="rounded border px-2 py-1 text-xs"
+              >
+                {Object.entries(statusLabels).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+              </select>
+            ),
+          },
+        ]}
+        actions={(c: any) => (
+          <>
+            <Button variant="ghost" size="sm" onClick={() => handleEdit(c)}><Pencil className="h-4 w-4" /></Button>
+            <Button variant="ghost" size="sm" onClick={() => togglePublic.mutate({ id: c.id })}>
+              <Power className={`h-4 w-4 ${c.isPublic ? "text-green-500" : "text-gray-400"}`} />
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => setDeleteId(c.id)}>
+              <Trash2 className="h-4 w-4 text-red-500" />
+            </Button>
+          </>
+        )}
+      />
+
+      <ConfirmDialog
+        open={deleteId !== null}
+        onOpenChange={(open) => { if (!open) setDeleteId(null); }}
+        title="Remover campanha"
+        description={`Tem certeza que deseja remover a campanha "${deleteCampaign?.title ?? ""}"? Esta ação não pode ser desfeita.`}
+        confirmLabel="Remover"
+        variant="destructive"
+        onConfirm={() => {
+          if (deleteId) deleteMutation.mutate({ id: deleteId });
+          setDeleteId(null);
+        }}
+      />
     </div>
   );
 }

@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Plus, Trash2, Award, Copy, CheckCircle } from "lucide-react";
+import { Plus, Trash2, Award, Copy, CheckCircle, Pencil, Power } from "lucide-react";
 
 type Tab = "templates" | "certificates";
 
@@ -50,22 +50,24 @@ function TemplatesTab() {
   const utils = trpc.useUtils();
   const { data: templates, isLoading } = trpc.certificate.listTemplates.useQuery();
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({
-    name: "",
-    title: "",
-    subtitle: "",
-    borderStyle: "classic",
-    fontFamily: "serif",
-    primaryColor: "#1a56db",
-    accentColor: "#f59e0b",
-  });
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const emptyForm = { name: "", title: "", subtitle: "", borderStyle: "classic", fontFamily: "serif", primaryColor: "#1a56db", accentColor: "#f59e0b" };
+  const [form, setForm] = useState(emptyForm);
 
   const createMutation = trpc.certificate.createTemplate.useMutation({
     onSuccess: () => {
       toast.success("Template criado!");
       utils.certificate.listTemplates.invalidate();
-      setShowForm(false);
-      setForm({ name: "", title: "", subtitle: "", borderStyle: "classic", fontFamily: "serif", primaryColor: "#1a56db", accentColor: "#f59e0b" });
+      resetForm();
+    },
+    onError: (e) => toast.error(e.message),
+  });
+
+  const updateMutation = trpc.certificate.updateTemplate.useMutation({
+    onSuccess: () => {
+      toast.success("Template atualizado!");
+      utils.certificate.listTemplates.invalidate();
+      resetForm();
     },
     onError: (e) => toast.error(e.message),
   });
@@ -78,22 +80,46 @@ function TemplatesTab() {
     onError: (e) => toast.error(e.message),
   });
 
+  function resetForm() {
+    setForm(emptyForm);
+    setEditingId(null);
+    setShowForm(false);
+  }
+
+  function handleEdit(t: { id: string; name: string; title: string; subtitle: string | null; borderStyle: string; fontFamily: string; primaryColor: string; accentColor: string }) {
+    setEditingId(t.id);
+    setForm({
+      name: t.name,
+      title: t.title,
+      subtitle: t.subtitle ?? "",
+      borderStyle: t.borderStyle,
+      fontFamily: t.fontFamily,
+      primaryColor: t.primaryColor,
+      accentColor: t.accentColor,
+    });
+    setShowForm(true);
+  }
+
   function handleSubmit(ev: React.FormEvent) {
     ev.preventDefault();
-    createMutation.mutate(form);
+    if (editingId) {
+      updateMutation.mutate({ id: editingId, ...form });
+    } else {
+      createMutation.mutate(form);
+    }
   }
 
   return (
     <div className="space-y-4">
       <div className="flex justify-end">
-        <Button onClick={() => setShowForm(!showForm)}>
+        <Button onClick={() => { if (showForm) resetForm(); else setShowForm(true); }}>
           <Plus className="mr-2 h-4 w-4" />{showForm ? "Cancelar" : "Novo Template"}
         </Button>
       </div>
 
       {showForm && (
         <Card>
-          <CardHeader><CardTitle>Novo Template de Certificado</CardTitle></CardHeader>
+          <CardHeader><CardTitle>{editingId ? "Editar" : "Novo"} Template de Certificado</CardTitle></CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
@@ -158,8 +184,8 @@ function TemplatesTab() {
                 </div>
               </div>
               <div className="sm:col-span-2">
-                <Button type="submit" disabled={createMutation.isPending}>
-                  {createMutation.isPending ? "Salvando..." : "Criar Template"}
+                <Button type="submit" disabled={createMutation.isPending || updateMutation.isPending}>
+                  {createMutation.isPending || updateMutation.isPending ? "Salvando..." : editingId ? "Atualizar" : "Criar Template"}
                 </Button>
               </div>
             </form>
@@ -197,7 +223,8 @@ function TemplatesTab() {
                   <td className="px-4 py-3">
                     {t.isActive ? <span className="text-green-600 text-xs font-medium">Ativo</span> : <span className="text-red-600 text-xs font-medium">Inativo</span>}
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 flex gap-1">
+                    <Button variant="ghost" size="sm" onClick={() => handleEdit(t)}><Pencil className="h-4 w-4 text-blue-500" /></Button>
                     <Button variant="ghost" size="sm" onClick={() => { if (confirm("Remover este template?")) deleteMutation.mutate({ id: t.id }); }}>
                       <Trash2 className="h-4 w-4 text-red-500" />
                     </Button>
@@ -232,6 +259,14 @@ function CertificatesTab() {
       utils.certificate.listCertificates.invalidate();
       setShowForm(false);
       setForm({ templateId: "", userId: "", recipientName: "", completionDate: "" });
+    },
+    onError: (e) => toast.error(e.message),
+  });
+
+  const revokeMutation = trpc.certificate.revokeCertificate.useMutation({
+    onSuccess: () => {
+      toast.success("Status do certificado alterado!");
+      utils.certificate.listCertificates.invalidate();
     },
     onError: (e) => toast.error(e.message),
   });
@@ -317,13 +352,14 @@ function CertificatesTab() {
                 <th className="px-4 py-3 font-medium text-gray-500">Nº Certificado</th>
                 <th className="px-4 py-3 font-medium text-gray-500">Data Emissão</th>
                 <th className="px-4 py-3 font-medium text-gray-500">Status</th>
+                <th className="px-4 py-3 font-medium text-gray-500">Ações</th>
               </tr>
             </thead>
             <tbody className="divide-y">
               {isLoading ? (
-                <tr><td colSpan={5} className="px-4 py-8 text-center text-gray-500">Carregando...</td></tr>
+                <tr><td colSpan={6} className="px-4 py-8 text-center text-gray-500">Carregando...</td></tr>
               ) : !certificates?.length ? (
-                <tr><td colSpan={5} className="px-4 py-12 text-center text-gray-500">
+                <tr><td colSpan={6} className="px-4 py-12 text-center text-gray-500">
                   <Award className="mx-auto h-10 w-10 text-gray-300" />
                   <p className="mt-2">Nenhum certificado emitido.</p>
                 </td></tr>
@@ -348,6 +384,11 @@ function CertificatesTab() {
                     <span className={`text-xs font-medium ${c.status === "ACTIVE" ? "text-green-600" : c.status === "REVOKED" ? "text-red-600" : "text-yellow-600"}`}>
                       {c.status === "ACTIVE" ? "Ativo" : c.status === "REVOKED" ? "Revogado" : "Expirado"}
                     </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <Button variant="ghost" size="sm" onClick={() => revokeMutation.mutate({ id: c.id })} title={c.status === "REVOKED" ? "Reativar" : "Revogar"}>
+                      <Power className={`h-4 w-4 ${c.status === "REVOKED" ? "text-green-500" : "text-orange-500"}`} />
+                    </Button>
                   </td>
                 </tr>
               ))}

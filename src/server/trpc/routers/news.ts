@@ -111,6 +111,32 @@ export const newsRouter = router({
       });
     }),
 
+  getById: adminProcedure(["ADMIN"])
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const article = await db.newsArticle.findUnique({
+        where: { id: input.id },
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          excerpt: true,
+          body: true,
+          coverUrl: true,
+          isFeatured: true,
+          categoryId: true,
+          tenantId: true,
+          tags: { select: { tag: { select: { name: true } } } },
+        },
+      });
+      if (!article) throw new Error("Artigo não encontrado.");
+      if (article.tenantId !== ctx.tenantId) throw new Error("Acesso negado.");
+      return {
+        ...article,
+        tagNames: article.tags.map((t) => t.tag.name),
+      };
+    }),
+
   categories: tenantProcedure.query(async ({ ctx }) => {
     if (!ctx.tenantId) return [];
 

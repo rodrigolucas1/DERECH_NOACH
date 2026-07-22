@@ -62,6 +62,42 @@ export const certificateRouter = router({
       return db.certificateTemplate.delete({ where: { id: input.id } });
     }),
 
+  updateTemplate: adminProcedure(["ADMIN"])
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string().min(1).optional(),
+        title: z.string().min(1).optional(),
+        subtitle: z.string().optional(),
+        borderStyle: z.string().optional(),
+        fontFamily: z.string().optional(),
+        primaryColor: z.string().optional(),
+        accentColor: z.string().optional(),
+        isActive: z.boolean().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const template = await db.certificateTemplate.findUnique({ where: { id: input.id } });
+      if (!template) throw new Error("Template não encontrado.");
+      if (template.tenantId !== ctx.tenantId) throw new Error("Acesso negado.");
+
+      const { id, ...data } = input;
+      return db.certificateTemplate.update({ where: { id }, data });
+    }),
+
+  revokeCertificate: adminProcedure(["ADMIN"])
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const cert = await db.certificate.findUnique({ where: { id: input.id } });
+      if (!cert) throw new Error("Certificado não encontrado.");
+      if (cert.tenantId !== ctx.tenantId) throw new Error("Acesso negado.");
+
+      return db.certificate.update({
+        where: { id: input.id },
+        data: { status: cert.status === "REVOKED" ? "ACTIVE" : "REVOKED" },
+      });
+    }),
+
   listCertificates: adminProcedure(["ADMIN"]).query(async ({ ctx }) => {
     if (!ctx.tenantId) return [];
 

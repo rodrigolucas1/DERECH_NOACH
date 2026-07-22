@@ -82,6 +82,7 @@ export const libraryRouter = router({
         title: true,
         materialType: true,
         isPublic: true,
+        thumbnailUrl: true,
         downloadCount: true,
         createdAt: true,
         author: { select: { name: true } },

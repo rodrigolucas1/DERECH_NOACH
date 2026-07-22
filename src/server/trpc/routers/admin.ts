@@ -63,6 +63,110 @@ export const adminRouter = router({
       });
     }),
 
+  createUser: adminProcedure(["ADMIN"])
+    .input(
+      z.object({
+        name: z.string().min(1, "Nome é obrigatório"),
+        email: z.string().email("E-mail inválido"),
+        password: z.string().min(6, "Senha deve ter no mínimo 6 caracteres"),
+        role: z.enum(["MEMBER", "LEADER", "ADMIN"]).default("MEMBER"),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (!ctx.tenantId) {
+        throw new Error("Tenant não encontrado.");
+      }
+
+      const bcrypt = await import("bcryptjs");
+      const existingUser = await db.user.findUnique({
+        where: { email: input.email },
+      });
+
+      if (existingUser) {
+        throw new Error("E-mail já cadastrado.");
+      }
+
+      const passwordHash = await bcrypt.hash(input.password, 12);
+
+      const user = await db.user.create({
+        data: {
+          name: input.name,
+          email: input.email,
+          passwordHash,
+        },
+      });
+
+      await db.tenantMember.create({
+        data: {
+          tenantId: ctx.tenantId,
+          userId: user.id,
+          role: input.role,
+        },
+      });
+
+      return user;
+    }),
+
+  updateUser: adminProcedure(["ADMIN"])
+    .input(
+      z.object({
+        userId: z.string(),
+        name: z.string().min(1).optional(),
+        email: z.string().email().optional(),
+        isActive: z.boolean().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (!ctx.tenantId) {
+        throw new Error("Tenant não encontrado.");
+      }
+
+      const member = await db.tenantMember.findUnique({
+        where: {
+          tenantId_userId: {
+            tenantId: ctx.tenantId,
+            userId: input.userId,
+          },
+        },
+      });
+
+      if (!member) {
+        throw new Error("Usuário não encontrado neste tenant.");
+      }
+
+      const { userId, ...data } = input;
+      return db.user.update({
+        where: { id: userId },
+        data,
+      });
+    }),
+
+  deactivateUser: adminProcedure(["ADMIN"])
+    .input(z.object({ userId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      if (!ctx.tenantId) {
+        throw new Error("Tenant não encontrado.");
+      }
+
+      const member = await db.tenantMember.findUnique({
+        where: {
+          tenantId_userId: {
+            tenantId: ctx.tenantId,
+            userId: input.userId,
+          },
+        },
+      });
+
+      if (!member) {
+        throw new Error("Usuário não encontrado neste tenant.");
+      }
+
+      return db.user.update({
+        where: { id: input.userId },
+        data: { isActive: false },
+      });
+    }),
+
   getBranding: tenantProcedure.query(async ({ ctx }) => {
     if (!ctx.tenantId) return null;
 

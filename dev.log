@@ -1,0 +1,22 @@
+
+> portal-bneinoach@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.10 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.56.1:3000
+- Environments: .env
+✓ Ready in 722ms
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+ GET / 200 in 838ms (next.js: 406ms, proxy.ts: 87ms, application-code: 345ms)
+ GET / 200 in 65ms (next.js: 6ms, proxy.ts: 6ms, application-code: 53ms)
+ GET /noticias 404 in 85ms (next.js: 44ms, proxy.ts: 4ms, application-code: 37ms)
+ GET /estudos 404 in 43ms (next.js: 10ms, proxy.ts: 3ms, application-code: 29ms)
+ GET /biblioteca 404 in 50ms (next.js: 9ms, proxy.ts: 4ms, application-code: 37ms)
+ GET /news 200 in 114ms (next.js: 46ms, proxy.ts: 3ms, application-code: 64ms)
+ GET /studies 200 in 92ms (next.js: 33ms, proxy.ts: 3ms, application-code: 56ms)
+ GET /library 200 in 95ms (next.js: 40ms, proxy.ts: 4ms, application-code: 51ms)
+✓ Compiled in 426ms
+  Reload env: .env
+✓ Finished filesystem cache database compaction in 20.3s

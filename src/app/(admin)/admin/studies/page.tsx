@@ -6,14 +6,29 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PageHeader } from "@/client/components/ui/PageHeader";
+import { DataTable } from "@/client/components/ui/DataTable";
+import { TabSelector } from "@/client/components/ui/TabSelector";
+import { ConfirmDialog } from "@/client/components/ui/ConfirmDialog";
 import { toast } from "sonner";
-import { Plus, Trash2, BookOpen, FolderPlus } from "lucide-react";
+import { Plus, Trash2, BookOpen, FolderPlus, Pencil, FolderOpen } from "lucide-react";
+import { ImageUpload } from "@/client/components/ImageUpload";
+
+const emptyForm = { title: "", description: "", materialType: "DOCUMENT" as const, externalUrl: "", categoryId: "", isPublic: true, thumbnailUrl: "" };
 
 export default function AdminStudiesPage() {
   const utils = trpc.useUtils();
   const { data: materials } = trpc.study.listAll.useQuery();
   const { data: categories } = trpc.study.categories.useQuery();
   const [tab, setTab] = useState<"materials" | "categories">("materials");
+  const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [deleteCatId, setDeleteCatId] = useState<string | null>(null);
+  const [catForm, setCatForm] = useState({ name: "", slug: "" });
+  const [form, setForm] = useState(emptyForm);
+
+  const broadcast = trpc.notification.broadcast.useMutation();
 
   const createCat = trpc.study.createCategory.useMutation({
     onSuccess: () => { toast.success("Categoria criada!"); utils.study.categories.invalidate(); setCatForm({ name: "", slug: "" }); },
@@ -24,32 +39,63 @@ export default function AdminStudiesPage() {
     onError: (e) => toast.error(e.message),
   });
 
-  const [showForm, setShowForm] = useState(false);
-  const [catForm, setCatForm] = useState({ name: "", slug: "" });
-  const [form, setForm] = useState({ title: "", description: "", materialType: "DOCUMENT" as const, externalUrl: "", categoryId: "", isPublic: true });
-
   const createMat = trpc.study.create.useMutation({
-    onSuccess: () => { toast.success("Material criado!"); utils.study.listAll.invalidate(); setShowForm(false); setForm({ title: "", description: "", materialType: "DOCUMENT", externalUrl: "", categoryId: "", isPublic: true }); },
+    onSuccess: () => { toast.success("Material criado!"); utils.study.listAll.invalidate(); setShowForm(false); setForm(emptyForm); broadcast.mutate({ type: "STUDY", title: "Novo material de estudo", message: "Um novo material foi adicionado à biblioteca de estudos.", link: "/studies" }); },
     onError: (e) => toast.error(e.message),
   });
+
+  const updateMat = trpc.study.update.useMutation({
+    onSuccess: () => { toast.success("Material atualizado!"); utils.study.listAll.invalidate(); setShowForm(false); setEditingId(null); setForm(emptyForm); broadcast.mutate({ type: "STUDY", title: "Material de estudo atualizado", message: "Um material de estudo foi atualizado.", link: "/studies" }); },
+    onError: (e) => toast.error(e.message),
+  });
+
   const deleteMat = trpc.study.delete.useMutation({
     onSuccess: () => { toast.success("Removido!"); utils.study.listAll.invalidate(); },
     onError: (e) => toast.error(e.message),
   });
 
+  function handleEdit(m: Record<string, unknown>) {
+    setEditingId(m.id as string);
+    setForm({
+      title: (m.title as string) ?? "",
+      description: (m.description as string) ?? "",
+      materialType: (m.materialType as typeof emptyForm.materialType) ?? "DOCUMENT",
+      externalUrl: (m.externalUrl as string) ?? "",
+      categoryId: (m.categoryId as string) ?? "",
+      isPublic: (m.isPublic as boolean) ?? true,
+      thumbnailUrl: (m.thumbnailUrl as string) ?? "",
+    });
+    setShowForm(true);
+  }
+
+  function handleCancelEdit() {
+    setEditingId(null);
+    setForm(emptyForm);
+    setShowForm(false);
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const payload = { title: form.title, description: form.description || undefined, materialType: form.materialType, externalUrl: form.externalUrl || undefined, categoryId: form.categoryId || undefined, isPublic: form.isPublic, thumbnailUrl: form.thumbnailUrl || undefined };
+    if (editingId) {
+      updateMat.mutate({ id: editingId, ...payload });
+    } else {
+      createMat.mutate(payload);
+    }
+  }
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Estudos</h1>
-          <p className="text-sm text-gray-500">Gerencie materiais de estudo e categorias</p>
-        </div>
-      </div>
+      <PageHeader title="Estudos" description="Gerencie materiais de estudo e categorias" />
 
-      <div className="flex gap-2">
-        <Button variant={tab === "materials" ? "default" : "outline"} size="sm" onClick={() => setTab("materials")}>Materiais</Button>
-        <Button variant={tab === "categories" ? "default" : "outline"} size="sm" onClick={() => setTab("categories")}>Categorias</Button>
-      </div>
+      <TabSelector
+        tabs={[
+          { key: "materials", label: "Materiais", icon: <BookOpen className="h-4 w-4" /> },
+          { key: "categories", label: "Categorias", icon: <FolderOpen className="h-4 w-4" /> },
+        ]}
+        active={tab}
+        onChange={(k) => setTab(k as "materials" | "categories")}
+      />
 
       {tab === "categories" && (
         <Card>
@@ -63,7 +109,7 @@ export default function AdminStudiesPage() {
               {categories?.map((cat) => (
                 <div key={cat.id} className="flex items-center justify-between rounded border p-3">
                   <span className="text-sm">{cat.name} <span className="text-gray-400">({cat._count.materials})</span></span>
-                  <Button variant="ghost" size="sm" onClick={() => { if (confirm("Remover?")) deleteCat.mutate({ id: cat.id }); }}>
+                  <Button variant="ghost" size="sm" onClick={() => setDeleteCatId(cat.id)}>
                     <Trash2 className="h-4 w-4 text-red-500" />
                   </Button>
                 </div>
@@ -76,16 +122,16 @@ export default function AdminStudiesPage() {
       {tab === "materials" && (
         <>
           <div className="flex justify-end">
-            <Button onClick={() => setShowForm(!showForm)}><Plus className="mr-2 h-4 w-4" />{showForm ? "Cancelar" : "Novo Material"}</Button>
+            <Button onClick={() => { if (showForm) { handleCancelEdit(); } else { setShowForm(true); } }}><Plus className="mr-2 h-4 w-4" />{showForm ? "Cancelar" : "Novo Material"}</Button>
           </div>
           {showForm && (
             <Card>
-              <CardHeader><CardTitle>Novo Material</CardTitle></CardHeader>
+              <CardHeader><CardTitle>{editingId ? "Editar Material" : "Novo Material"}</CardTitle></CardHeader>
               <CardContent>
-                <form onSubmit={(e) => { e.preventDefault(); createMat.mutate({ title: form.title, description: form.description || undefined, materialType: form.materialType, externalUrl: form.externalUrl || undefined, categoryId: form.categoryId || undefined, isPublic: form.isPublic }); }} className="grid gap-4 sm:grid-cols-2">
+                <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-2 sm:col-span-2"><Label>Título *</Label><Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required /></div>
                   <div className="space-y-2"><Label>Tipo</Label>
-                    <select value={form.materialType} onChange={(e) => setForm({ ...form, materialType: e.target.value as any })} className="flex h-8 w-full rounded-md border border-input bg-background px-3 text-sm">
+                    <select value={form.materialType} onChange={(e) => setForm({ ...form, materialType: e.target.value as typeof emptyForm.materialType })} className="flex h-8 w-full rounded-md border border-input bg-background px-3 text-sm">
                       <option value="DOCUMENT">Documento</option><option value="VIDEO">Vídeo</option><option value="AUDIO">Áudio</option><option value="LINK">Link</option>
                     </select>
                   </div>
@@ -97,39 +143,53 @@ export default function AdminStudiesPage() {
                   </div>
                   <div className="space-y-2"><Label>URL Externa</Label><Input value={form.externalUrl} onChange={(e) => setForm({ ...form, externalUrl: e.target.value })} /></div>
                   <div className="space-y-2"><Label>Descrição</Label><Input value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
-                  <div className="sm:col-span-2"><Button type="submit" disabled={createMat.isPending}>{createMat.isPending ? "Criando..." : "Criar Material"}</Button></div>
+                  <div className="sm:col-span-2">
+                    <ImageUpload value={form.thumbnailUrl || undefined} onChange={(url) => setForm({ ...form, thumbnailUrl: url })} label="Capa do Material" />
+                  </div>
+                  <div className="sm:col-span-2"><Button type="submit" disabled={createMat.isPending || updateMat.isPending}>{editingId ? (updateMat.isPending ? "Atualizando..." : "Atualizar Material") : (createMat.isPending ? "Criando..." : "Criar Material")}</Button></div>
                 </form>
               </CardContent>
             </Card>
           )}
-          <div className="rounded-lg border bg-white shadow-sm">
-            <table className="w-full text-left text-sm">
-              <thead className="border-b bg-gray-50">
-                <tr>
-                  <th className="px-4 py-3 font-medium text-gray-500">Título</th>
-                  <th className="px-4 py-3 font-medium text-gray-500">Tipo</th>
-                  <th className="px-4 py-3 font-medium text-gray-500">Categoria</th>
-                  <th className="px-4 py-3 font-medium text-gray-500">Ações</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                {!materials?.length ? (
-                  <tr><td colSpan={4} className="px-4 py-12 text-center text-gray-500"><BookOpen className="mx-auto h-10 w-10 text-gray-300" /><p className="mt-2">Nenhum material.</p></td></tr>
-                ) : materials.map((m) => (
-                  <tr key={m.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 font-medium">{m.title}</td>
-                    <td className="px-4 py-3 text-gray-500">{m.materialType}</td>
-                    <td className="px-4 py-3 text-gray-500">{m.category?.name ?? "—"}</td>
-                    <td className="px-4 py-3">
-                      <Button variant="ghost" size="sm" onClick={() => { if (confirm("Remover?")) deleteMat.mutate({ id: m.id }); }}><Trash2 className="h-4 w-4 text-red-500" /></Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <DataTable
+            data={materials}
+            isLoading={false}
+            emptyIcon={<BookOpen className="h-10 w-10" />}
+            emptyTitle="Nenhum material"
+            keyExtractor={(m: any) => m.id as string}
+            columns={[
+              { key: "title", header: "Título", render: (m: any) => <span className="font-medium">{m.title as string}</span> },
+              { key: "materialType", header: "Tipo", render: (m: any) => <span className="text-gray-500">{m.materialType as string}</span> },
+              { key: "category", header: "Categoria", render: (m: any) => <span className="text-gray-500">{(m.category as Record<string, unknown> | null)?.name as string ?? "—"}</span> },
+            ]}
+            actions={(m: any) => (
+              <>
+                <Button variant="ghost" size="sm" onClick={() => handleEdit(m)}><Pencil className="h-4 w-4 text-blue-500" /></Button>
+                <Button variant="ghost" size="sm" onClick={() => setDeleteId(m.id as string)}><Trash2 className="h-4 w-4 text-red-500" /></Button>
+              </>
+            )}
+          />
         </>
       )}
+
+      <ConfirmDialog
+        open={!!deleteId}
+        onOpenChange={() => setDeleteId(null)}
+        title="Remover material?"
+        description="Esta ação não pode ser desfeita."
+        variant="destructive"
+        confirmLabel="Remover"
+        onConfirm={() => { if (deleteId) deleteMat.mutate({ id: deleteId }); setDeleteId(null); }}
+      />
+      <ConfirmDialog
+        open={!!deleteCatId}
+        onOpenChange={() => setDeleteCatId(null)}
+        title="Remover categoria?"
+        description="Esta ação não pode ser desfeita."
+        variant="destructive"
+        confirmLabel="Remover"
+        onConfirm={() => { if (deleteCatId) deleteCat.mutate({ id: deleteCatId }); setDeleteCatId(null); }}
+      />
     </div>
   );
 }

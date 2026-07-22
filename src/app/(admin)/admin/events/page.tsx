@@ -6,6 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PageHeader } from "@/client/components/ui/PageHeader";
+import { DataTable } from "@/client/components/ui/DataTable";
+import { ConfirmDialog } from "@/client/components/ui/ConfirmDialog";
+import { ImageUpload } from "@/client/components/ImageUpload";
 import { toast } from "sonner";
 import { Plus, Pencil, Trash2, Calendar, Power, PowerOff } from "lucide-react";
 
@@ -13,12 +17,15 @@ export default function AdminEventsPage() {
   const utils = trpc.useUtils();
   const { data: events, isLoading } = trpc.event.listAll.useQuery();
   const { data: communities } = trpc.community.listAll.useQuery();
+
+  const broadcast = trpc.notification.broadcast.useMutation();
+
   const createMutation = trpc.event.create.useMutation({
-    onSuccess: () => { toast.success("Evento criado!"); utils.event.listAll.invalidate(); setShowForm(false); resetForm(); },
+    onSuccess: () => { toast.success("Evento criado!"); utils.event.listAll.invalidate(); setShowForm(false); resetForm(); broadcast.mutate({ type: "EVENT", title: "Novo evento disponível", message: "Um novo evento foi criado no portal.", link: "/events" }); },
     onError: (e) => toast.error(e.message),
   });
   const updateMutation = trpc.event.update.useMutation({
-    onSuccess: () => { toast.success("Evento atualizado!"); utils.event.listAll.invalidate(); setEditingId(null); resetForm(); },
+    onSuccess: () => { toast.success("Evento atualizado!"); utils.event.listAll.invalidate(); setEditingId(null); resetForm(); broadcast.mutate({ type: "EVENT", title: "Evento atualizado", message: "Um evento foi atualizado no portal.", link: "/events" }); },
     onError: (e) => toast.error(e.message),
   });
   const deleteMutation = trpc.event.delete.useMutation({
@@ -27,23 +34,25 @@ export default function AdminEventsPage() {
   });
   const toggleMutation = trpc.event.toggleActive.useMutation({
     onSuccess: () => utils.event.listAll.invalidate(),
+    onError: (e) => toast.error(e.message),
   });
 
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
   const [form, setForm] = useState({
     title: "", description: "", dateTime: "", location: "", eventType: "IN_PERSON" as const,
-    communityId: "", meetingUrl: "",
+    communityId: "", meetingUrl: "", imageUrl: "",
   });
 
   function resetForm() {
-    setForm({ title: "", description: "", dateTime: "", location: "", eventType: "IN_PERSON", communityId: "", meetingUrl: "" });
+    setForm({ title: "", description: "", dateTime: "", location: "", eventType: "IN_PERSON", communityId: "", meetingUrl: "", imageUrl: "" });
   }
 
   function handleEdit(e: any) {
     setForm({
       title: e.title, description: e.description ?? "", dateTime: e.dateTime ? new Date(e.dateTime).toISOString().slice(0, 16) : "",
-      location: e.location ?? "", eventType: e.eventType, communityId: e.communityId ?? "", meetingUrl: e.meetingUrl ?? "",
+      location: e.location ?? "", eventType: e.eventType, communityId: e.communityId ?? "", meetingUrl: e.meetingUrl ?? "", imageUrl: e.imageUrl ?? "",
     });
     setEditingId(e.id);
     setShowForm(true);
@@ -55,7 +64,7 @@ export default function AdminEventsPage() {
       title: form.title, description: form.description || undefined,
       dateTime: new Date(form.dateTime).toISOString(), location: form.location || undefined,
       eventType: form.eventType, communityId: form.communityId || undefined,
-      meetingUrl: form.meetingUrl || undefined,
+      meetingUrl: form.meetingUrl || undefined, imageUrl: form.imageUrl || undefined,
     };
     if (editingId) {
       updateMutation.mutate({ id: editingId, ...payload });
@@ -64,17 +73,19 @@ export default function AdminEventsPage() {
     }
   }
 
+  const eventTypeLabel = (t: string) => t === "IN_PERSON" ? "Presencial" : t === "ONLINE" ? "Online" : "Híbrido";
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Eventos</h1>
-          <p className="text-sm text-gray-500">Gerencie os eventos da plataforma</p>
-        </div>
-        <Button onClick={() => { resetForm(); setEditingId(null); setShowForm(!showForm); }}>
-          <Plus className="mr-2 h-4 w-4" />{showForm ? "Cancelar" : "Novo Evento"}
-        </Button>
-      </div>
+      <PageHeader
+        title="Eventos"
+        description="Gerencie os eventos da plataforma"
+        action={
+          <Button onClick={() => { resetForm(); setEditingId(null); setShowForm(!showForm); }}>
+            <Plus className="mr-2 h-4 w-4" />{showForm ? "Cancelar" : "Novo Evento"}
+          </Button>
+        }
+      />
 
       {showForm && (
         <Card>
@@ -115,6 +126,10 @@ export default function AdminEventsPage() {
                 <Input value={form.meetingUrl} onChange={(e) => setForm({ ...form, meetingUrl: e.target.value })} placeholder="https://..." />
               </div>
               <div className="space-y-2 sm:col-span-2">
+                <Label>Imagem do evento</Label>
+                <ImageUpload value={form.imageUrl} onChange={(url) => setForm({ ...form, imageUrl: url })} label="Imagem do evento" />
+              </div>
+              <div className="space-y-2 sm:col-span-2">
                 <Label>Descrição</Label>
                 <Input value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
               </div>
@@ -128,51 +143,43 @@ export default function AdminEventsPage() {
         </Card>
       )}
 
-      <div className="rounded-lg border bg-white shadow-sm">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead className="border-b bg-gray-50">
-              <tr>
-                <th className="px-4 py-3 font-medium text-gray-500">Título</th>
-                <th className="px-4 py-3 font-medium text-gray-500">Data</th>
-                <th className="px-4 py-3 font-medium text-gray-500">Tipo</th>
-                <th className="px-4 py-3 font-medium text-gray-500">Comunidade</th>
-                <th className="px-4 py-3 font-medium text-gray-500">Status</th>
-                <th className="px-4 py-3 font-medium text-gray-500">Ações</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y">
-              {isLoading ? (
-                <tr><td colSpan={6} className="px-4 py-8 text-center text-gray-500">Carregando...</td></tr>
-              ) : !events?.length ? (
-                <tr><td colSpan={6} className="px-4 py-12 text-center text-gray-500">
-                  <Calendar className="mx-auto h-10 w-10 text-gray-300" />
-                  <p className="mt-2">Nenhum evento cadastrado.</p>
-                </td></tr>
-              ) : events.map((e) => (
-                <tr key={e.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3 font-medium">{e.title}</td>
-                  <td className="px-4 py-3 text-gray-500">{new Date(e.dateTime).toLocaleDateString("pt-BR")}</td>
-                  <td className="px-4 py-3 text-gray-500">{e.eventType === "IN_PERSON" ? "Presencial" : e.eventType === "ONLINE" ? "Online" : "Híbrido"}</td>
-                  <td className="px-4 py-3 text-gray-500">{e.community?.name ?? "—"}</td>
-                  <td className="px-4 py-3">
-                    {e.isActive ? <span className="text-green-600 text-xs font-medium">Ativo</span> : <span className="text-red-600 text-xs font-medium">Inativo</span>}
-                  </td>
-                  <td className="px-4 py-3 flex gap-1">
-                    <Button variant="ghost" size="sm" onClick={() => handleEdit(e)}><Pencil className="h-4 w-4" /></Button>
-                    <Button variant="ghost" size="sm" onClick={() => toggleMutation.mutate({ id: e.id })}>
-                      {e.isActive ? <PowerOff className="h-4 w-4 text-orange-500" /> : <Power className="h-4 w-4 text-green-500" />}
-                    </Button>
-                    <Button variant="ghost" size="sm" onClick={() => { if (confirm("Remover?")) deleteMutation.mutate({ id: e.id }); }}>
-                      <Trash2 className="h-4 w-4 text-red-500" />
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <DataTable
+        data={events}
+        isLoading={isLoading}
+        emptyIcon={<Calendar className="h-10 w-10" />}
+        emptyTitle="Nenhum evento cadastrado"
+        keyExtractor={(e: any) => e.id}
+        columns={[
+          { key: "title", header: "Título" },
+          { key: "dateTime", header: "Data", render: (e: any) => new Date(e.dateTime).toLocaleDateString("pt-BR") },
+          { key: "eventType", header: "Tipo", render: (e: any) => eventTypeLabel(e.eventType as string) },
+          { key: "community", header: "Comunidade", render: (e: any) => (e.community as Record<string, unknown> | null)?.name as string ?? "—" },
+          { key: "isActive", header: "Status", render: (e: any) => (
+            e.isActive ? <span className="text-green-600 text-xs font-medium">Ativo</span> : <span className="text-red-600 text-xs font-medium">Inativo</span>
+          )},
+        ]}
+        actions={(e: any) => (
+          <>
+            <Button variant="ghost" size="sm" onClick={() => handleEdit(e)}><Pencil className="h-4 w-4" /></Button>
+            <Button variant="ghost" size="sm" onClick={() => toggleMutation.mutate({ id: e.id as string })}>
+              {e.isActive ? <PowerOff className="h-4 w-4 text-orange-500" /> : <Power className="h-4 w-4 text-green-500" />}
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => setDeleteId(e.id as string)}>
+              <Trash2 className="h-4 w-4 text-red-500" />
+            </Button>
+          </>
+        )}
+      />
+
+      <ConfirmDialog
+        open={!!deleteId}
+        onOpenChange={() => setDeleteId(null)}
+        title="Remover evento?"
+        description="Esta ação não pode ser desfeita."
+        variant="destructive"
+        confirmLabel="Remover"
+        onConfirm={() => { if (deleteId) deleteMutation.mutate({ id: deleteId }); setDeleteId(null); }}
+      />
     </div>
   );
 }

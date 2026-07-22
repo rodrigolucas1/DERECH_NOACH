@@ -13,17 +13,23 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogOut, User, Settings, Brain } from "lucide-react";
 import { NotificationBell } from "@/client/components/NotificationBell";
+import { useBranding } from "@/client/components/BrandingProvider";
 
 export function Header() {
   const { data: session, status } = useSession();
+  const branding = useBranding();
 
   return (
     <header className="sticky top-0 z-50 border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6">
         <Link href="/" className="flex items-center gap-2">
-          <span className="text-lg font-bold text-blue-900">
-            Bnei Noach
-          </span>
+          {branding.logoUrl ? (
+            <img src={branding.logoUrl} alt={branding.platformName} className="h-8 w-auto" />
+          ) : (
+            <span className="text-lg font-bold text-blue-900">
+              {branding.platformName}
+            </span>
+          )}
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">

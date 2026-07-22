@@ -7,8 +7,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ImageUpload } from "@/client/components/ImageUpload";
+import { PageHeader } from "@/client/components/ui/PageHeader";
+import { DataTable } from "@/client/components/ui/DataTable";
+import { TabSelector } from "@/client/components/ui/TabSelector";
+import { ConfirmDialog } from "@/client/components/ui/ConfirmDialog";
 import { toast } from "sonner";
-import { Plus, Trash2, Newspaper, Eye, EyeOff, Tag } from "lucide-react";
+import { Plus, Trash2, Newspaper, Eye, EyeOff, Tag, Pencil, FolderOpen } from "lucide-react";
+
+const emptyForm = { title: "", slug: "", excerpt: "", body: "", categoryId: "", isFeatured: false, coverUrl: "", tagNames: "" };
 
 export default function AdminNewsPage() {
   const utils = trpc.useUtils();
@@ -16,6 +22,11 @@ export default function AdminNewsPage() {
   const { data: categories } = trpc.news.categories.useQuery();
   const [tab, setTab] = useState<"articles" | "categories">("articles");
   const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [deleteCatId, setDeleteCatId] = useState<string | null>(null);
+
+  const broadcast = trpc.notification.broadcast.useMutation();
 
   const [catForm, setCatForm] = useState({ name: "", slug: "", color: "#1a56db" });
   const createCat = trpc.news.createCategory.useMutation({
@@ -27,32 +38,72 @@ export default function AdminNewsPage() {
     onError: (e) => toast.error(e.message),
   });
 
-  const [form, setForm] = useState({ title: "", slug: "", excerpt: "", body: "", categoryId: "", isFeatured: false, coverUrl: "", tagNames: "" });
+  const [form, setForm] = useState(emptyForm);
   const createArticle = trpc.news.create.useMutation({
-    onSuccess: () => { toast.success("Artigo criado!"); utils.news.listAll.invalidate(); setShowForm(false); setForm({ title: "", slug: "", excerpt: "", body: "", categoryId: "", isFeatured: false, coverUrl: "", tagNames: "" }); },
+    onSuccess: () => { toast.success("Artigo criado!"); utils.news.listAll.invalidate(); resetForm(); broadcast.mutate({ type: "NEWS", title: "Nova notícia publicada", message: "Um novo artigo foi publicado no portal.", link: "/news" }); },
+    onError: (e) => toast.error(e.message),
+  });
+  const updateArticle = trpc.news.update.useMutation({
+    onSuccess: () => { toast.success("Artigo atualizado!"); utils.news.listAll.invalidate(); resetForm(); broadcast.mutate({ type: "NEWS", title: "Notícia atualizada", message: "Um artigo foi atualizado no portal.", link: "/news" }); },
     onError: (e) => toast.error(e.message),
   });
   const publishArticle = trpc.news.publish.useMutation({
     onSuccess: () => { toast.success("Status alterado!"); utils.news.listAll.invalidate(); },
+    onError: (e) => toast.error(e.message),
   });
   const deleteArticle = trpc.news.delete.useMutation({
     onSuccess: () => { toast.success("Removido!"); utils.news.listAll.invalidate(); },
     onError: (e) => toast.error(e.message),
   });
 
+  function resetForm() {
+    setForm(emptyForm);
+    setEditingId(null);
+    setShowForm(false);
+  }
+
+  function handleEdit(article: { id: string }) {
+    setEditingId(article.id);
+    setShowForm(true);
+    utils.news.getById.fetch({ id: article.id }).then((data) => {
+      setForm({
+        title: data.title, slug: data.slug, excerpt: data.excerpt ?? "",
+        body: data.body, categoryId: data.categoryId ?? "",
+        isFeatured: data.isFeatured, coverUrl: data.coverUrl ?? "",
+        tagNames: data.tagNames.join(", "),
+      });
+    }).catch((err: Error) => toast.error(err.message));
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const tags = form.tagNames ? form.tagNames.split(",").map(t => t.trim()).filter(Boolean) : [];
+    const payload = {
+      title: form.title, slug: form.slug, excerpt: form.excerpt || undefined,
+      body: form.body, categoryId: form.categoryId || undefined,
+      coverUrl: form.coverUrl || undefined, isFeatured: form.isFeatured, tagNames: tags.length ? tags : undefined,
+    };
+    if (editingId) {
+      updateArticle.mutate({ id: editingId, ...payload });
+    } else {
+      createArticle.mutate(payload);
+    }
+  }
+
+  const isSubmitting = createArticle.isPending || updateArticle.isPending;
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Notícias</h1>
-          <p className="text-sm text-gray-500">Gerencie notícias e artigos</p>
-        </div>
-      </div>
+      <PageHeader title="Notícias" description="Gerencie notícias e artigos" />
 
-      <div className="flex gap-2">
-        <Button variant={tab === "articles" ? "default" : "outline"} size="sm" onClick={() => setTab("articles")}>Artigos</Button>
-        <Button variant={tab === "categories" ? "default" : "outline"} size="sm" onClick={() => setTab("categories")}>Categorias</Button>
-      </div>
+      <TabSelector
+        tabs={[
+          { key: "articles", label: "Artigos", icon: <Newspaper className="h-4 w-4" /> },
+          { key: "categories", label: "Categorias", icon: <FolderOpen className="h-4 w-4" /> },
+        ]}
+        active={tab}
+        onChange={(k) => setTab(k as "articles" | "categories")}
+      />
 
       {tab === "categories" && (
         <Card>
@@ -70,7 +121,7 @@ export default function AdminNewsPage() {
                     <div className="h-4 w-4 rounded" style={{ backgroundColor: cat.color ?? "#ccc" }} />
                     <span className="text-sm">{cat.name} <span className="text-gray-400">({cat._count.articles})</span></span>
                   </div>
-                  <Button variant="ghost" size="sm" onClick={() => { if (confirm("Remover?")) deleteCat.mutate({ id: cat.id }); }}><Trash2 className="h-4 w-4 text-red-500" /></Button>
+                  <Button variant="ghost" size="sm" onClick={() => setDeleteCatId(cat.id)}><Trash2 className="h-4 w-4 text-red-500" /></Button>
                 </div>
               ))}
             </div>
@@ -81,21 +132,15 @@ export default function AdminNewsPage() {
       {tab === "articles" && (
         <>
           <div className="flex justify-end">
-            <Button onClick={() => setShowForm(!showForm)}><Plus className="mr-2 h-4 w-4" />{showForm ? "Cancelar" : "Novo Artigo"}</Button>
+            <Button onClick={() => showForm ? resetForm() : setShowForm(true)}>
+              <Plus className="mr-2 h-4 w-4" />{showForm ? "Cancelar" : "Novo Artigo"}
+            </Button>
           </div>
           {showForm && (
             <Card>
-              <CardHeader><CardTitle>Novo Artigo</CardTitle></CardHeader>
+              <CardHeader><CardTitle>{editingId ? "Editar Artigo" : "Novo Artigo"}</CardTitle></CardHeader>
               <CardContent>
-                <form onSubmit={(e) => {
-                  e.preventDefault();
-                  const tags = form.tagNames ? form.tagNames.split(",").map(t => t.trim()).filter(Boolean) : [];
-                  createArticle.mutate({
-                    title: form.title, slug: form.slug, excerpt: form.excerpt || undefined,
-                    body: form.body, categoryId: form.categoryId || undefined,
-                    coverUrl: form.coverUrl || undefined, isFeatured: form.isFeatured, tagNames: tags.length ? tags : undefined,
-                  });
-                }} className="grid gap-4">
+                <form onSubmit={handleSubmit} className="grid gap-4">
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2"><Label>Título *</Label><Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-") })} required /></div>
                     <div className="space-y-2"><Label>Slug *</Label><Input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} required /></div>
@@ -124,47 +169,61 @@ export default function AdminNewsPage() {
                       <ImageUpload value={form.coverUrl} onChange={(url) => setForm({ ...form, coverUrl: url })} />
                     </div>
                   </div>
-                  <Button type="submit" disabled={createArticle.isPending}>{createArticle.isPending ? "Criando..." : "Criar Artigo"}</Button>
+                  <Button type="submit" disabled={isSubmitting}>{isSubmitting ? "Salvando..." : editingId ? "Salvar Alterações" : "Criar Artigo"}</Button>
                 </form>
               </CardContent>
             </Card>
           )}
-          <div className="rounded-lg border bg-white shadow-sm">
-            <table className="w-full text-left text-sm">
-              <thead className="border-b bg-gray-50">
-                <tr>
-                  <th className="px-4 py-3 font-medium text-gray-500">Artigo</th>
-                  <th className="px-4 py-3 font-medium text-gray-500">Categoria</th>
-                  <th className="px-4 py-3 font-medium text-gray-500">Status</th>
-                  <th className="px-4 py-3 font-medium text-gray-500">Ações</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                {!articles?.length ? (
-                  <tr><td colSpan={4} className="px-4 py-12 text-center text-gray-500"><Newspaper className="mx-auto h-10 w-10 text-gray-300" /><p className="mt-2">Nenhum artigo.</p></td></tr>
-                ) : articles.map((a) => (
-                  <tr key={a.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3">
-                      <div className="font-medium">{a.title}</div>
-                      {a.isFeatured && <span className="text-xs text-amber-600">Destaque</span>}
-                    </td>
-                    <td className="px-4 py-3 text-gray-500">{a.category?.name ?? "—"}</td>
-                    <td className="px-4 py-3">
-                      {a.status === "PUBLISHED" ? <span className="text-green-600 text-xs font-medium">Publicado</span> : <span className="text-yellow-600 text-xs font-medium">Rascunho</span>}
-                    </td>
-                    <td className="px-4 py-3 flex gap-1">
-                      <Button variant="ghost" size="sm" onClick={() => publishArticle.mutate({ id: a.id })}>
-                        {a.status === "PUBLISHED" ? <EyeOff className="h-4 w-4 text-orange-500" /> : <Eye className="h-4 w-4 text-green-500" />}
-                      </Button>
-                      <Button variant="ghost" size="sm" onClick={() => { if (confirm("Remover?")) deleteArticle.mutate({ id: a.id }); }}><Trash2 className="h-4 w-4 text-red-500" /></Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+
+          <DataTable
+            data={articles}
+            isLoading={false}
+            emptyIcon={<Newspaper className="h-10 w-10" />}
+            emptyTitle="Nenhum artigo"
+            keyExtractor={(a: any) => a.id}
+            columns={[
+              { key: "title", header: "Artigo", render: (a: any) => (
+                <div>
+                  <div className="font-medium">{a.title as string}</div>
+                  {a.isFeatured && <span className="text-xs text-amber-600">Destaque</span>}
+                </div>
+              )},
+              { key: "category", header: "Categoria", render: (a: any) => (a.category as Record<string, unknown> | null)?.name as string ?? "—" },
+              { key: "status", header: "Status", render: (a: any) => (
+                a.status === "PUBLISHED" ? <span className="text-green-600 text-xs font-medium">Publicado</span> : <span className="text-yellow-600 text-xs font-medium">Rascunho</span>
+              )},
+            ]}
+            actions={(a: any) => (
+              <>
+                <Button variant="ghost" size="sm" onClick={() => publishArticle.mutate({ id: a.id as string })}>
+                  {a.status === "PUBLISHED" ? <EyeOff className="h-4 w-4 text-orange-500" /> : <Eye className="h-4 w-4 text-green-500" />}
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => handleEdit(a as { id: string })}><Pencil className="h-4 w-4 text-blue-500" /></Button>
+                <Button variant="ghost" size="sm" onClick={() => setDeleteId(a.id as string)}><Trash2 className="h-4 w-4 text-red-500" /></Button>
+              </>
+            )}
+          />
         </>
       )}
+
+      <ConfirmDialog
+        open={!!deleteId}
+        onOpenChange={() => setDeleteId(null)}
+        title="Remover artigo?"
+        description="Esta ação não pode ser desfeita."
+        variant="destructive"
+        confirmLabel="Remover"
+        onConfirm={() => { if (deleteId) deleteArticle.mutate({ id: deleteId }); setDeleteId(null); }}
+      />
+      <ConfirmDialog
+        open={!!deleteCatId}
+        onOpenChange={() => setDeleteCatId(null)}
+        title="Remover categoria?"
+        description="Esta ação não pode ser desfeita."
+        variant="destructive"
+        confirmLabel="Remover"
+        onConfirm={() => { if (deleteCatId) deleteCat.mutate({ id: deleteCatId }); setDeleteCatId(null); }}
+      />
     </div>
   );
 }

@@ -1,17 +1,26 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { Button } from "@/components/ui/button";
 import { Upload, X, FileText, Film, Music, File } from "lucide-react";
 import { toast } from "sonner";
 
-const DEFAULT_ACCEPT = "image/jpeg,image/png,image/webp,image/gif,application/pdf,video/mp4,video/webm,audio/mpeg,audio/wav,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation";
+const FILE_ICONS: Record<string, React.ReactNode> = {
+  image: null,
+  pdf: <FileText className="h-8 w-8 text-red-500" />,
+  video: <Film className="h-8 w-8 text-purple-500" />,
+  audio: <Music className="h-8 w-8 text-green-500" />,
+  document: <FileText className="h-8 w-8 text-blue-500" />,
+  default: <File className="h-8 w-8 text-gray-400" />,
+};
 
-function getFileCategory(name: string, mimeType: string): string {
-  if (mimeType.startsWith("image/") || /\.(jpe?g|png|webp|gif|svg)$/i.test(name)) return "image";
-  if (mimeType === "application/pdf" || /\.pdf$/i.test(name)) return "pdf";
-  if (mimeType.startsWith("video/") || /\.(mp4|webm|mov)$/i.test(name)) return "video";
-  if (mimeType.startsWith("audio/") || /\.(mp3|wav|ogg|m4a)$/i.test(name)) return "audio";
-  return "document";
+function getFileCategory(mimeType: string): string {
+  if (mimeType.startsWith("image/")) return "image";
+  if (mimeType === "application/pdf") return "pdf";
+  if (mimeType.startsWith("video/")) return "video";
+  if (mimeType.startsWith("audio/")) return "audio";
+  if (mimeType.includes("word") || mimeType.includes("presentation") || mimeType.includes("excel")) return "document";
+  return "default";
 }
 
 function formatFileSize(bytes: number): string {
@@ -20,15 +29,9 @@ function formatFileSize(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-const FILE_ICONS: Record<string, React.ReactNode> = {
-  pdf: <FileText className="h-6 w-6 text-red-500" />,
-  video: <Film className="h-6 w-6 text-purple-500" />,
-  audio: <Music className="h-6 w-6 text-green-500" />,
-  document: <FileText className="h-6 w-6 text-blue-500" />,
-  default: <File className="h-6 w-6 text-gray-400" />,
-};
+const DEFAULT_ACCEPT = "image/jpeg,image/png,image/webp,image/gif,application/pdf,video/mp4,video/webm,audio/mpeg,audio/wav,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation";
 
-interface ImageUploadProps {
+interface FileUploadProps {
   value?: string | null;
   onChange: (url: string) => void;
   onClear?: () => void;
@@ -36,9 +39,10 @@ interface ImageUploadProps {
   accept?: string;
   maxSize?: number;
   className?: string;
+  showPreview?: boolean;
 }
 
-export function ImageUpload({
+export function FileUpload({
   value,
   onChange,
   onClear,
@@ -46,7 +50,8 @@ export function ImageUpload({
   accept = DEFAULT_ACCEPT,
   maxSize = 10 * 1024 * 1024,
   className,
-}: ImageUploadProps) {
+  showPreview = true,
+}: FileUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -85,12 +90,8 @@ export function ImageUpload({
     onClear?.();
   }
 
-  const category = fileName
-    ? getFileCategory(fileName, "")
-    : value
-      ? "image"
-      : "default";
-  const isImage = category === "image" && (!fileName || /\.(jpe?g|png|webp|gif|svg)$/i.test(fileName));
+  const category = value && fileName ? getFileCategory(fileName.split(".").pop() ?? "") : "default";
+  const isImage = category === "image";
 
   return (
     <div className={className}>
@@ -98,7 +99,7 @@ export function ImageUpload({
       <div className="mt-1.5">
         {value ? (
           <div className="relative inline-block">
-            {isImage ? (
+            {showPreview && isImage ? (
               <img src={value} alt="" className="h-24 w-24 rounded border object-cover" />
             ) : (
               <div className="flex h-24 w-24 flex-col items-center justify-center rounded border bg-gray-50">

@@ -286,6 +286,7 @@ model Event {
   endTime        DateTime?
   location       String?
   meetingUrl     String?
+  imageUrl       String?
   eventType      EventType  @default(IN_PERSON)
   isLiveStream   Boolean    @default(false)
   maxAttendees   Int?

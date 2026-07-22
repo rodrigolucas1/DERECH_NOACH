@@ -8,6 +8,9 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { Plus, Trash2, FileText, Eye, EyeOff } from "lucide-react";
+import { PageHeader } from "@/client/components/ui/PageHeader";
+import { DataTable } from "@/client/components/ui/DataTable";
+import { ConfirmDialog } from "@/client/components/ui/ConfirmDialog";
 
 export default function AdminCMSPage() {
   const utils = trpc.useUtils();
@@ -15,6 +18,8 @@ export default function AdminCMSPage() {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState({ slug: "", title: "", body: "", metaTitle: "", metaDescription: "" });
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const createPage = trpc.cms.create.useMutation({
     onSuccess: () => { toast.success("Página criada!"); utils.cms.list.invalidate(); setShowForm(false); resetForm(); },
@@ -26,6 +31,7 @@ export default function AdminCMSPage() {
   });
   const togglePublish = trpc.cms.togglePublish.useMutation({
     onSuccess: () => { toast.success("Status alterado!"); utils.cms.list.invalidate(); },
+    onError: (e) => toast.error(e.message),
   });
   const deletePage = trpc.cms.delete.useMutation({
     onSuccess: () => { toast.success("Removida!"); utils.cms.list.invalidate(); },
@@ -45,15 +51,15 @@ export default function AdminCMSPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">CMS - Páginas</h1>
-          <p className="text-sm text-gray-500">Crie e gerencie páginas estáticas</p>
-        </div>
-        <Button onClick={() => { resetForm(); setEditingId(null); setShowForm(!showForm); }}>
-          <Plus className="mr-2 h-4 w-4" />{showForm ? "Cancelar" : "Nova Página"}
-        </Button>
-      </div>
+      <PageHeader
+        title="CMS - Páginas"
+        description="Crie e gerencie páginas estáticas"
+        action={
+          <Button onClick={() => { resetForm(); setEditingId(null); setShowForm(!showForm); }}>
+            <Plus className="mr-2 h-4 w-4" />{showForm ? "Cancelar" : "Nova Página"}
+          </Button>
+        }
+      />
 
       {showForm && (
         <Card>
@@ -75,29 +81,50 @@ export default function AdminCMSPage() {
         </Card>
       )}
 
-      <div className="rounded-lg border bg-white shadow-sm">
-        <table className="w-full text-left text-sm">
-          <thead className="border-b bg-gray-50">
-            <tr><th className="px-4 py-3 font-medium text-gray-500">Título</th><th className="px-4 py-3 font-medium text-gray-500">Slug</th><th className="px-4 py-3 font-medium text-gray-500">Status</th><th className="px-4 py-3 font-medium text-gray-500">Ações</th></tr>
-          </thead>
-          <tbody className="divide-y">
-            {!pages?.length ? (
-              <tr><td colSpan={4} className="px-4 py-12 text-center text-gray-500"><FileText className="mx-auto h-10 w-10 text-gray-300" /><p className="mt-2">Nenhuma página.</p></td></tr>
-            ) : pages.map((p) => (
-              <tr key={p.id} className="hover:bg-gray-50">
-                <td className="px-4 py-3 font-medium">{p.title}</td>
-                <td className="px-4 py-3 text-gray-500">/{p.slug}</td>
-                <td className="px-4 py-3">{p.isPublished ? <span className="text-green-600 text-xs font-medium">Publicado</span> : <span className="text-yellow-600 text-xs font-medium">Rascunho</span>}</td>
-                <td className="px-4 py-3 flex gap-1">
-                  <Button variant="ghost" size="sm" onClick={() => { setForm({ slug: p.slug, title: p.title, body: "", metaTitle: "", metaDescription: "" }); setEditingId(p.id); setShowForm(true); }}><FileText className="h-4 w-4" /></Button>
-                  <Button variant="ghost" size="sm" onClick={() => togglePublish.mutate({ id: p.id })}>{p.isPublished ? <EyeOff className="h-4 w-4 text-orange-500" /> : <Eye className="h-4 w-4 text-green-500" />}</Button>
-                  <Button variant="ghost" size="sm" onClick={() => { if (confirm("Remover?")) deletePage.mutate({ id: p.id }); }}><Trash2 className="h-4 w-4 text-red-500" /></Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <DataTable
+        data={(pages as any) ?? []}
+        isLoading={false}
+        columns={[
+          { key: "title", header: "Título" },
+          { key: "slug", header: "Slug", render: (item: any) => <span className="text-gray-500">/{item.slug}</span> },
+          {
+            key: "isPublished",
+            header: "Status",
+            render: (item: any) =>
+              item.isPublished ? (
+                <span className="text-xs font-medium text-green-600">Publicado</span>
+              ) : (
+                <span className="text-xs font-medium text-yellow-600">Rascunho</span>
+              ),
+          },
+        ]}
+        emptyIcon={<FileText className="mx-auto h-10 w-10 text-gray-300" />}
+        emptyTitle="Nenhuma página."
+        keyExtractor={(item: any) => item.id}
+        actions={(item: any) => (
+          <>
+            <Button variant="ghost" size="sm" onClick={() => { setForm({ slug: item.slug, title: item.title, body: item.body ?? "", metaTitle: item.metaTitle ?? "", metaDescription: item.metaDescription ?? "" }); setEditingId(item.id); setShowForm(true); }}>
+              <FileText className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => togglePublish.mutate({ id: item.id })}>
+              {item.isPublished ? <EyeOff className="h-4 w-4 text-orange-500" /> : <Eye className="h-4 w-4 text-green-500" />}
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => { setDeleteId(item.id); setConfirmOpen(true); }}>
+              <Trash2 className="h-4 w-4 text-red-500" />
+            </Button>
+          </>
+        )}
+      />
+
+      <ConfirmDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        title="Remover página"
+        description="Tem certeza que deseja remover esta página?"
+        onConfirm={() => { if (deleteId) deletePage.mutate({ id: deleteId }); }}
+        confirmLabel="Remover"
+        variant="destructive"
+      />
     </div>
   );
 }

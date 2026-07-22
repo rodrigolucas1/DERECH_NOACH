@@ -7,42 +7,51 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ImageUpload } from "@/client/components/ImageUpload";
+import { PageHeader } from "@/client/components/ui/PageHeader";
+import { DataTable } from "@/client/components/ui/DataTable";
+import { ConfirmDialog } from "@/client/components/ui/ConfirmDialog";
 import { toast } from "sonner";
 import { Plus, Pencil, Trash2, MapPin, Power, PowerOff } from "lucide-react";
 
 export default function AdminCommunitiesPage() {
   const utils = trpc.useUtils();
   const { data: communities, isLoading } = trpc.community.listAll.useQuery();
+  const broadcast = trpc.notification.broadcast.useMutation();
+
+  const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [form, setForm] = useState({
+    name: "", slug: "", city: "", state: "MG", description: "",
+    address: "", phone: "", email: "", logoUrl: "", coverImageUrl: "",
+  });
+
   const createMutation = trpc.community.create.useMutation({
-    onSuccess: () => { toast.success("Comunidade criada!"); utils.community.listAll.invalidate(); setShowForm(false); resetForm(); },
+    onSuccess: () => { toast.success("Comunidade criada!"); utils.community.listAll.invalidate(); setShowForm(false); resetForm(); broadcast.mutate({ type: "COMMUNITY", title: "Nova comunidade criada", message: "Uma nova comunidade foi adicionada ao portal.", link: "/communities" }); },
     onError: (e) => toast.error(e.message),
   });
   const updateMutation = trpc.community.update.useMutation({
-    onSuccess: () => { toast.success("Comunidade atualizada!"); utils.community.listAll.invalidate(); setEditingId(null); resetForm(); },
+    onSuccess: () => { toast.success("Comunidade atualizada!"); utils.community.listAll.invalidate(); setEditingId(null); resetForm(); broadcast.mutate({ type: "COMMUNITY", title: "Comunidade atualizada", message: "Uma comunidade foi atualizada no portal.", link: "/communities" }); },
     onError: (e) => toast.error(e.message),
   });
   const toggleMutation = trpc.community.toggleActive.useMutation({
-    onSuccess: () => { utils.community.listAll.invalidate(); },
+    onSuccess: () => { toast.success("Status alterado!"); utils.community.listAll.invalidate(); },
+    onError: (e) => toast.error(e.message),
   });
   const deleteMutation = trpc.community.delete.useMutation({
     onSuccess: () => { toast.success("Comunidade removida!"); utils.community.listAll.invalidate(); },
     onError: (e) => toast.error(e.message),
   });
 
-  const [showForm, setShowForm] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [form, setForm] = useState({
-    name: "", slug: "", city: "", state: "MG", description: "",
-    address: "", phone: "", email: "", logoUrl: "", coverImageUrl: "",
-  });
-
   function resetForm() {
     setForm({ name: "", slug: "", city: "", state: "MG", description: "", address: "", phone: "", email: "", logoUrl: "", coverImageUrl: "" });
+    setEditingId(null);
   }
 
   function handleEdit(c: any) {
+    if (!c) return;
     setForm({
-      name: c.name, slug: c.slug, city: c.city, state: c.state,
+      name: c.name ?? "", slug: c.slug ?? "", city: c.city ?? "", state: c.state ?? "MG",
       description: c.description ?? "", address: c.address ?? "",
       phone: c.phone ?? "", email: c.email ?? "",
       logoUrl: c.logoUrl ?? "", coverImageUrl: c.coverImageUrl ?? "",
@@ -63,15 +72,15 @@ export default function AdminCommunitiesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Comunidades</h1>
-          <p className="text-sm text-gray-500">Gerencie as comunidades do tenant</p>
-        </div>
-        <Button onClick={() => { resetForm(); setEditingId(null); setShowForm(!showForm); }}>
-          <Plus className="mr-2 h-4 w-4" />{showForm ? "Cancelar" : "Nova Comunidade"}
-        </Button>
-      </div>
+      <PageHeader
+        title="Comunidades"
+        description="Gerencie as comunidades do tenant"
+        action={
+          <Button onClick={() => { resetForm(); setShowForm(!showForm); }}>
+            <Plus className="mr-2 h-4 w-4" />{showForm ? "Cancelar" : "Nova Comunidade"}
+          </Button>
+        }
+      />
 
       {showForm && (
         <Card>
@@ -128,60 +137,46 @@ export default function AdminCommunitiesPage() {
         </Card>
       )}
 
-      <div className="rounded-lg border bg-white shadow-sm">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead className="border-b bg-gray-50">
-              <tr>
-                <th className="px-4 py-3 font-medium text-gray-500">Comunidade</th>
-                <th className="px-4 py-3 font-medium text-gray-500">Cidade</th>
-                <th className="px-4 py-3 font-medium text-gray-500">UF</th>
-                <th className="px-4 py-3 font-medium text-gray-500">Membros</th>
-                <th className="px-4 py-3 font-medium text-gray-500">Status</th>
-                <th className="px-4 py-3 font-medium text-gray-500">Ações</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y">
-              {isLoading ? (
-                <tr><td colSpan={6} className="px-4 py-8 text-center text-gray-500">Carregando...</td></tr>
-              ) : !communities?.length ? (
-                <tr><td colSpan={6} className="px-4 py-12 text-center text-gray-500">
-                  <MapPin className="mx-auto h-10 w-10 text-gray-300" />
-                  <p className="mt-2">Nenhuma comunidade cadastrada.</p>
-                </td></tr>
-              ) : communities.map((c) => (
-                <tr key={c.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3 font-medium">
-                    <div className="flex items-center gap-2">
-                      {c.logoUrl && <img src={c.logoUrl} alt="" className="h-8 w-8 rounded object-cover" />}
-                      {c.name}
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-gray-500">{c.city}</td>
-                  <td className="px-4 py-3 text-gray-500">{c.state}</td>
-                  <td className="px-4 py-3 text-gray-500">{c._count.members}</td>
-                  <td className="px-4 py-3">
-                    {c.isActive ? (
-                      <span className="text-green-600 text-xs font-medium">Ativo</span>
-                    ) : (
-                      <span className="text-red-600 text-xs font-medium">Inativo</span>
-                    )}
-                  </td>
-                  <td className="px-4 py-3 flex gap-1">
-                    <Button variant="ghost" size="sm" onClick={() => handleEdit(c)}><Pencil className="h-4 w-4" /></Button>
-                    <Button variant="ghost" size="sm" onClick={() => toggleMutation.mutate({ id: c.id })}>
-                      {c.isActive ? <PowerOff className="h-4 w-4 text-orange-500" /> : <Power className="h-4 w-4 text-green-500" />}
-                    </Button>
-                    <Button variant="ghost" size="sm" onClick={() => { if (confirm("Remover esta comunidade?")) deleteMutation.mutate({ id: c.id }); }}>
-                      <Trash2 className="h-4 w-4 text-red-500" />
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <DataTable
+        data={communities}
+        isLoading={isLoading}
+        emptyIcon={<MapPin className="h-10 w-10" />}
+        emptyTitle="Nenhuma comunidade cadastrada"
+        keyExtractor={(c: any) => c.id}
+        columns={[
+          { key: "name", header: "Comunidade", render: (c: any) => (
+            <div className="flex items-center gap-2">
+              {c.logoUrl && <img src={c.logoUrl as string} alt="" className="h-8 w-8 rounded object-cover" />}
+              <span className="font-medium">{c.name as string}</span>
+            </div>
+          )},
+          { key: "city", header: "Cidade", render: (c: any) => c.city as string },
+          { key: "state", header: "UF", render: (c: any) => c.state as string },
+          { key: "members", header: "Membros", render: (c: any) => String(c._count?.members ?? 0) },
+          { key: "isActive", header: "Status", render: (c: any) => (
+            c.isActive ? <span className="text-green-600 text-xs font-medium">Ativo</span> : <span className="text-red-600 text-xs font-medium">Inativo</span>
+          )},
+        ]}
+        actions={(c: any) => (
+          <>
+            <Button variant="ghost" size="sm" onClick={() => handleEdit(c)}><Pencil className="h-4 w-4" /></Button>
+            <Button variant="ghost" size="sm" onClick={() => toggleMutation.mutate({ id: c.id as string })}>
+              {c.isActive ? <PowerOff className="h-4 w-4 text-orange-500" /> : <Power className="h-4 w-4 text-green-500" />}
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => setDeleteId(c.id as string)}><Trash2 className="h-4 w-4 text-red-500" /></Button>
+          </>
+        )}
+      />
+
+      <ConfirmDialog
+        open={!!deleteId}
+        onOpenChange={() => setDeleteId(null)}
+        title="Remover comunidade?"
+        description="Esta ação não pode ser desfeita."
+        variant="destructive"
+        confirmLabel="Remover"
+        onConfirm={() => { if (deleteId) deleteMutation.mutate({ id: deleteId }); setDeleteId(null); }}
+      />
     </div>
   );
 }

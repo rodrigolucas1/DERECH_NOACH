@@ -7,14 +7,23 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ImageUpload } from "@/client/components/ImageUpload";
+import { PageHeader } from "@/client/components/ui/PageHeader";
+import { DataTable } from "@/client/components/ui/DataTable";
+import { ConfirmDialog } from "@/client/components/ui/ConfirmDialog";
 import { toast } from "sonner";
 import { Plus, Trash2, Megaphone, Power, PowerOff, Pencil } from "lucide-react";
+
+const positionLabels: Record<string, string> = {
+  HOME_HERO: "Home Hero", HOME_SIDEBAR: "Home Sidebar", HOME_MID: "Home Meio",
+  COMMUNITY_TOP: "Topo Comunidade", EVENT_TOP: "Topo Evento", GLOBAL: "Global",
+};
 
 export default function AdminBannersPage() {
   const utils = trpc.useUtils();
   const { data: banners } = trpc.banner.list.useQuery();
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
   const [form, setForm] = useState({ title: "", subtitle: "", imageUrl: "", linkUrl: "", position: "HOME_HERO" as const, order: 0 });
 
   const createBanner = trpc.banner.create.useMutation({
@@ -26,7 +35,8 @@ export default function AdminBannersPage() {
     onError: (e) => toast.error(e.message),
   });
   const toggleBanner = trpc.banner.toggleActive.useMutation({
-    onSuccess: () => utils.banner.list.invalidate(),
+    onSuccess: () => { toast.success("Status alterado!"); utils.banner.list.invalidate(); },
+    onError: (e) => toast.error(e.message),
   });
   const deleteBanner = trpc.banner.delete.useMutation({
     onSuccess: () => { toast.success("Removido!"); utils.banner.list.invalidate(); },
@@ -35,6 +45,7 @@ export default function AdminBannersPage() {
 
   function resetForm() {
     setForm({ title: "", subtitle: "", imageUrl: "", linkUrl: "", position: "HOME_HERO", order: 0 });
+    setEditingId(null);
   }
 
   function handleEdit(b: any) {
@@ -53,22 +64,17 @@ export default function AdminBannersPage() {
     }
   }
 
-  const positionLabels: Record<string, string> = {
-    HOME_HERO: "Home Hero", HOME_SIDEBAR: "Home Sidebar", HOME_MID: "Home Meio",
-    COMMUNITY_TOP: "Topo Comunidade", EVENT_TOP: "Topo Evento", GLOBAL: "Global",
-  };
-
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Banners</h1>
-          <p className="text-sm text-gray-500">Gerencie banners e propagandas</p>
-        </div>
-        <Button onClick={() => { resetForm(); setEditingId(null); setShowForm(!showForm); }}>
-          <Plus className="mr-2 h-4 w-4" />{showForm ? "Cancelar" : "Novo Banner"}
-        </Button>
-      </div>
+      <PageHeader
+        title="Banners"
+        description="Gerencie banners e propagandas"
+        action={
+          <Button onClick={() => { resetForm(); setShowForm(!showForm); }}>
+            <Plus className="mr-2 h-4 w-4" />{showForm ? "Cancelar" : "Novo Banner"}
+          </Button>
+        }
+      />
 
       {showForm && (
         <Card>
@@ -96,37 +102,45 @@ export default function AdminBannersPage() {
         </Card>
       )}
 
-      <div className="rounded-lg border bg-white shadow-sm">
-        <table className="w-full text-left text-sm">
-          <thead className="border-b bg-gray-50">
-            <tr><th className="px-4 py-3 font-medium text-gray-500">Banner</th><th className="px-4 py-3 font-medium text-gray-500">Posição</th><th className="px-4 py-3 font-medium text-gray-500">Ordem</th><th className="px-4 py-3 font-medium text-gray-500">Status</th><th className="px-4 py-3 font-medium text-gray-500">Ações</th></tr>
-          </thead>
-          <tbody className="divide-y">
-            {!banners?.length ? (
-              <tr><td colSpan={5} className="px-4 py-12 text-center text-gray-500"><Megaphone className="mx-auto h-10 w-10 text-gray-300" /><p className="mt-2">Nenhum banner.</p></td></tr>
-            ) : banners.map((b) => (
-              <tr key={b.id} className="hover:bg-gray-50">
-                <td className="px-4 py-3">
-                  <div className="flex items-center gap-2">
-                    <img src={b.imageUrl} alt="" className="h-10 w-16 rounded object-cover" />
-                    <span className="font-medium">{b.title}</span>
-                  </div>
-                </td>
-                <td className="px-4 py-3 text-gray-500">{positionLabels[b.position] ?? b.position}</td>
-                <td className="px-4 py-3 text-gray-500">{b.order}</td>
-                <td className="px-4 py-3">{b.isActive ? <span className="text-green-600 text-xs font-medium">Ativo</span> : <span className="text-red-600 text-xs font-medium">Inativo</span>}</td>
-                <td className="px-4 py-3 flex gap-1">
-                  <Button variant="ghost" size="sm" onClick={() => handleEdit(b)}><Pencil className="h-4 w-4" /></Button>
-                  <Button variant="ghost" size="sm" onClick={() => toggleBanner.mutate({ id: b.id })}>
-                    {b.isActive ? <PowerOff className="h-4 w-4 text-orange-500" /> : <Power className="h-4 w-4 text-green-500" />}
-                  </Button>
-                  <Button variant="ghost" size="sm" onClick={() => { if (confirm("Remover?")) deleteBanner.mutate({ id: b.id }); }}><Trash2 className="h-4 w-4 text-red-500" /></Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <DataTable
+        data={banners}
+        isLoading={false}
+        emptyIcon={<Megaphone className="h-10 w-10" />}
+        emptyTitle="Nenhum banner"
+        keyExtractor={(b: any) => b.id}
+        columns={[
+          { key: "title", header: "Banner", render: (b: any) => (
+            <div className="flex items-center gap-2">
+              <img src={b.imageUrl as string} alt="" className="h-10 w-16 rounded object-cover" />
+              <span className="font-medium">{b.title as string}</span>
+            </div>
+          )},
+          { key: "position", header: "Posição", render: (b: any) => positionLabels[b.position as string] ?? (b.position as string) },
+          { key: "order", header: "Ordem", render: (b: any) => String(b.order) },
+          { key: "isActive", header: "Status", render: (b: any) => (
+            b.isActive ? <span className="text-green-600 text-xs font-medium">Ativo</span> : <span className="text-red-600 text-xs font-medium">Inativo</span>
+          )},
+        ]}
+        actions={(b: any) => (
+          <>
+            <Button variant="ghost" size="sm" onClick={() => handleEdit(b)}><Pencil className="h-4 w-4" /></Button>
+            <Button variant="ghost" size="sm" onClick={() => toggleBanner.mutate({ id: b.id as string })}>
+              {b.isActive ? <PowerOff className="h-4 w-4 text-orange-500" /> : <Power className="h-4 w-4 text-green-500" />}
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => setDeleteId(b.id as string)}><Trash2 className="h-4 w-4 text-red-500" /></Button>
+          </>
+        )}
+      />
+
+      <ConfirmDialog
+        open={!!deleteId}
+        onOpenChange={() => setDeleteId(null)}
+        title="Remover banner?"
+        description="Esta ação não pode ser desfeita."
+        variant="destructive"
+        confirmLabel="Remover"
+        onConfirm={() => { if (deleteId) deleteBanner.mutate({ id: deleteId }); setDeleteId(null); }}
+      />
     </div>
   );
 }
