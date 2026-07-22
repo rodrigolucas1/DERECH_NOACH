@@ -48,6 +48,7 @@ const navigation: NavigationItem[] = [
   { name: "Pergunte ao Rabino", href: "/admin/rabbi", icon: MessageCircleQuestion, roles: ["ADMIN"] },
   { name: "Páginas (CMS)", href: "/admin/pages", icon: FileText, roles: ["ADMIN"] },
   { name: "Assistente IA", href: "/ai", icon: Brain, roles: ["ADMIN", "LEADER"] },
+  { name: "Config. IA", href: "/admin/ai", icon: Brain, roles: ["ADMIN"] },
   { name: "Integrações", href: "/admin/integrations", icon: Plug, roles: ["ADMIN"] },
   { name: "Auditoria", href: "/admin/audit", icon: Shield, roles: ["ADMIN"] },
   { name: "Analytics", href: "/admin/analytics", icon: BarChart3, roles: ["ADMIN"] },

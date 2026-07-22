@@ -17,6 +17,7 @@ import { analyticsRouter } from "./routers/analytics";
 import { notificationRouter } from "./routers/notification";
 import { certificateRouter } from "./routers/certificate";
 import { aiRouter } from "./routers/ai";
+import { aiAdminRouter } from "./routers/aiAdmin";
 import { integrationRouter } from "./routers/integration";
 
 export const appRouter = router({
@@ -38,6 +39,7 @@ export const appRouter = router({
   notification: notificationRouter,
   certificate: certificateRouter,
   ai: aiRouter,
+  aiAdmin: aiAdminRouter,
   integration: integrationRouter,
 });
 
