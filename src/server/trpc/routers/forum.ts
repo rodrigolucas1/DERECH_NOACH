@@ -102,17 +102,128 @@ export const forumRouter = router({
 
       return db.forumTopic.findMany({
         where: { tenantId: ctx.tenantId, categoryId: input.categoryId },
-        orderBy: { createdAt: "desc" },
+        orderBy: [{ isPinned: "desc" }, { createdAt: "desc" }],
         select: {
           id: true,
           title: true,
+          slug: true,
           isPinned: true,
           isLocked: true,
+          postCount: true,
           viewCount: true,
           createdAt: true,
           author: { select: { name: true, image: true } },
           _count: { select: { posts: true } },
         },
       });
+    }),
+
+  createTopic: authenticatedProcedure
+    .input(z.object({ categoryId: z.string(), title: z.string().min(3) }))
+    .mutation(async ({ ctx, input }) => {
+      if (!ctx.tenantId) throw new Error("Tenant não encontrado.");
+
+      const slug = toSlug(input.title);
+
+      return db.forumTopic.create({
+        data: {
+          title: input.title,
+          slug,
+          categoryId: input.categoryId,
+          tenantId: ctx.tenantId,
+          authorId: ctx.userId!,
+        },
+      });
+    }),
+
+  posts: tenantProcedure
+    .input(z.object({ topicId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      if (!ctx.tenantId) return [];
+
+      return db.forumPost.findMany({
+        where: { tenantId: ctx.tenantId, topicId: input.topicId },
+        orderBy: { createdAt: "asc" },
+        select: {
+          id: true,
+          content: true,
+          isEdited: true,
+          createdAt: true,
+          updatedAt: true,
+          author: { select: { id: true, name: true, image: true } },
+          _count: { select: { reactions: true } },
+        },
+      });
+    }),
+
+  createPost: authenticatedProcedure
+    .input(z.object({ topicId: z.string(), content: z.string().min(1) }))
+    .mutation(async ({ ctx, input }) => {
+      if (!ctx.tenantId) throw new Error("Tenant não encontrado.");
+
+      const topic = await db.forumTopic.findUnique({ where: { id: input.topicId } });
+      if (!topic) throw new Error("Tópico não encontrado.");
+      if (topic.tenantId !== ctx.tenantId) throw new Error("Acesso negado.");
+      if (topic.isLocked) throw new Error("Este tópico está trancado.");
+
+      const [post] = await db.$transaction([
+        db.forumPost.create({
+          data: {
+            content: input.content,
+            topicId: input.topicId,
+            tenantId: ctx.tenantId,
+            authorId: ctx.userId!,
+          },
+        }),
+        db.forumTopic.update({
+          where: { id: input.topicId },
+          data: { postCount: { increment: 1 } },
+        }),
+      ]);
+
+      return post;
+    }),
+
+  toggleReaction: authenticatedProcedure
+    .input(z.object({ postId: z.string(), type: z.string().default("LIKE") }))
+    .mutation(async ({ ctx, input }) => {
+      const existing = await db.forumReaction.findUnique({
+        where: { postId_userId_type: { postId: input.postId, userId: ctx.userId!, type: input.type } },
+      });
+
+      if (existing) {
+        await db.forumReaction.delete({ where: { id: existing.id } });
+        return { reacted: false };
+      }
+
+      await db.forumReaction.create({
+        data: { postId: input.postId, userId: ctx.userId!, type: input.type },
+      });
+      return { reacted: true };
+    }),
+
+  deleteTopic: adminProcedure(["ADMIN"])
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const topic = await db.forumTopic.findUnique({ where: { id: input.id } });
+      if (!topic || topic.tenantId !== ctx.tenantId) throw new Error("Acesso negado.");
+      return db.forumTopic.delete({ where: { id: input.id } });
+    }),
+
+  deletePost: adminProcedure(["ADMIN"])
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const post = await db.forumPost.findUnique({ where: { id: input.id } });
+      if (!post || post.tenantId !== ctx.tenantId) throw new Error("Acesso negado.");
+
+      await db.$transaction([
+        db.forumPost.delete({ where: { id: input.id } }),
+        db.forumTopic.update({
+          where: { id: post.topicId },
+          data: { postCount: { decrement: 1 } },
+        }),
+      ]);
+
+      return { deleted: true };
     }),
 });

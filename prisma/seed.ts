@@ -442,9 +442,9 @@ async function main() {
   }
 
   const forumTopicsData = [
-    { title: "Bem-vindos ao Fórum!", categoryId: forumCats[0]?.id, isPinned: true },
-    { title: "Qual a melhor tradução das Sete Leis?", categoryId: forumCats[1]?.id },
-    { title: "Material de estudo sobre Shevat HaMishpatim", categoryId: forumCats[2]?.id },
+    { title: "Bem-vindos ao Fórum!", slug: "bem-vindos-ao-forum", categoryId: forumCats[0]?.id, isPinned: true },
+    { title: "Qual a melhor tradução das Sete Leis?", slug: "qual-a-melhor-traducao-das-sete-leis", categoryId: forumCats[1]?.id },
+    { title: "Material de estudo sobre Shevat HaMishpatim", slug: "material-de-estudo-sobre-shevat-hamishpatim", categoryId: forumCats[2]?.id },
   ];
 
   const forumTopics = [];

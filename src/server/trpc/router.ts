@@ -20,6 +20,7 @@ import { aiRouter } from "./routers/ai";
 import { aiAdminRouter } from "./routers/aiAdmin";
 import { integrationRouter } from "./routers/integration";
 import { tenantSettingRouter } from "./routers/tenantSetting";
+import { tzedakaDonationRouter } from "./routers/tzedakaDonation";
 
 export const appRouter = router({
   tenant: tenantRouter,
@@ -43,6 +44,7 @@ export const appRouter = router({
   aiAdmin: aiAdminRouter,
   integration: integrationRouter,
   tenantSetting: tenantSettingRouter,
+  tzedakaDonation: tzedakaDonationRouter,
 });
 
 export type AppRouter = typeof appRouter;

@@ -601,16 +601,18 @@ model ForumCategory {
 }
 
 model ForumTopic {
-  id        String   @id @default(cuid())
-  tenantId  String
+  id         String   @id @default(cuid())
+  tenantId   String
   categoryId String
-  authorId  String
-  title     String
-  isPinned  Boolean  @default(false)
-  isLocked  Boolean  @default(false)
-  viewCount Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  authorId   String
+  title      String
+  slug       String?
+  isPinned   Boolean  @default(false)
+  isLocked   Boolean  @default(false)
+  postCount  Int      @default(0)
+  viewCount  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   tenant   Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   category ForumCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)

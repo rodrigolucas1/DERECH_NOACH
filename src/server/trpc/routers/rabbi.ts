@@ -151,6 +151,29 @@ export const rabbiRouter = router({
       });
     }),
 
+  submitQuestion: authenticatedProcedure
+    .input(
+      z.object({
+        title: z.string().min(3),
+        question: z.string().min(10),
+        category: z.string().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (!ctx.tenantId) throw new Error("Tenant não encontrado.");
+
+      return db.rabbiQuestion.create({
+        data: {
+          tenantId: ctx.tenantId,
+          userId: ctx.userId!,
+          title: input.title,
+          question: input.question,
+          category: input.category ?? null,
+          status: "PENDING",
+        },
+      });
+    }),
+
   deleteQuestion: adminProcedure(["ADMIN"])
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
