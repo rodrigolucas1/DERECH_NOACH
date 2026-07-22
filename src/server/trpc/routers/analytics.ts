@@ -17,6 +17,115 @@ function formatMonth(date: Date): string {
 }
 
 export const analyticsRouter = router({
+  contentByModule: adminProcedure(["ADMIN"]).query(async ({ ctx }) => {
+    if (!ctx.tenantId) {
+      return { news: 0, studies: 0, library: 0, events: 0, communities: 0, forumTopics: 0, rabbiQuestions: 0 };
+    }
+
+    const [news, studies, library, events, communities, forumTopics, rabbiQuestions] =
+      await Promise.all([
+        db.newsArticle.count({ where: { tenantId: ctx.tenantId } }),
+        db.studyMaterial.count({ where: { tenantId: ctx.tenantId } }),
+        db.libraryItem.count({ where: { tenantId: ctx.tenantId } }),
+        db.event.count({ where: { tenantId: ctx.tenantId } }),
+        db.community.count({ where: { tenantId: ctx.tenantId } }),
+        db.forumTopic.count({ where: { tenantId: ctx.tenantId } }),
+        db.rabbiQuestion.count({ where: { tenantId: ctx.tenantId } }),
+      ]);
+
+    return { news, studies, library, events, communities, forumTopics, rabbiQuestions };
+  }),
+
+  eventParticipation: adminProcedure(["ADMIN"]).query(async ({ ctx }) => {
+    if (!ctx.tenantId) return [];
+    const tenantId = ctx.tenantId;
+
+    const now = new Date();
+    const months: { label: string; startDate: Date; endDate: Date }[] = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const start = new Date(d.getFullYear(), d.getMonth(), 1);
+      const end = new Date(d.getFullYear(), d.getMonth() + 1, 0, 23, 59, 59);
+      months.push({ label: formatMonth(d), startDate: start, endDate: end });
+    }
+
+    const results = await Promise.all(
+      months.map(async ({ label, startDate, endDate }) => {
+        const eventCount = await db.event.count({
+          where: {
+            tenantId,
+            dateTime: { gte: startDate, lte: endDate },
+          },
+        });
+
+        const eventIds = await db.event.findMany({
+          where: {
+            tenantId,
+            dateTime: { gte: startDate, lte: endDate },
+          },
+          select: { id: true },
+        });
+
+        const totalRegistrations =
+          eventIds.length > 0
+            ? await db.eventRegistration.count({
+                where: { eventId: { in: eventIds.map((e) => e.id) } },
+              })
+            : 0;
+
+        return { month: label, eventCount, totalRegistrations };
+      })
+    );
+
+    return results;
+  }),
+
+  libraryTopItems: adminProcedure(["ADMIN"]).query(async ({ ctx }) => {
+    if (!ctx.tenantId) return [];
+    const tenantId = ctx.tenantId;
+
+    return db.libraryItem.findMany({
+      where: { tenantId },
+      orderBy: { downloadCount: "desc" },
+      take: 10,
+      select: {
+        title: true,
+        downloadCount: true,
+        materialType: true,
+      },
+    });
+  }),
+
+  activityByDay: adminProcedure(["ADMIN"]).query(async ({ ctx }) => {
+    if (!ctx.tenantId) return [];
+    const tenantId = ctx.tenantId;
+
+    const thirtyDaysAgo = subDays(new Date(), 30);
+
+    const logs = await db.auditLog.findMany({
+      where: {
+        tenantId,
+        createdAt: { gte: thirtyDaysAgo },
+      },
+      select: { createdAt: true },
+    });
+
+    const dayMap: Record<string, number> = {};
+    for (const log of logs) {
+      const key = log.createdAt.toISOString().slice(0, 10);
+      dayMap[key] = (dayMap[key] ?? 0) + 1;
+    }
+
+    const result: { date: string; count: number }[] = [];
+    for (let i = 29; i >= 0; i--) {
+      const d = subDays(new Date(), i);
+      const key = d.toISOString().slice(0, 10);
+      result.push({ date: key, count: dayMap[key] ?? 0 });
+    }
+
+    return result;
+  }),
+
   platformStats: adminProcedure(["ADMIN"]).query(async ({ ctx }) => {
     if (!ctx.tenantId) {
       return {
