@@ -25,6 +25,13 @@ import {
   Brain,
   Plug,
   Home,
+  MessageCircle,
+  Image,
+  GraduationCap,
+  Heart,
+  Building2,
+  Mic,
+  Radio,
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -57,6 +64,16 @@ const navigation: NavigationItem[] = [
   { name: "Certificados", href: "/admin/certificates", icon: Award, roles: ["ADMIN"] },
   { name: "Notificações", href: "/admin/notifications", icon: Bell, roles: ["ADMIN", "LEADER"] },
   { name: "Configurações", href: "/admin/settings", icon: Settings, roles: ["ADMIN"] },
+  { name: "Alocações", href: "/admin/tzedaka-allocations", icon: HandHeart, roles: ["ADMIN"] },
+  { name: "Relatórios Fin.", href: "/admin/tzedaka-reports", icon: BarChart3, roles: ["ADMIN"] },
+  { name: "Comentários", href: "/admin/news-comments", icon: MessageCircle, roles: ["ADMIN"] },
+  { name: "Galeria", href: "/admin/gallery", icon: Image, roles: ["ADMIN", "LEADER"] },
+  { name: "Voluntariado", href: "/admin/volunteer", icon: Users, roles: ["ADMIN", "LEADER"] },
+  { name: "Mentoria", href: "/admin/mentorship", icon: GraduationCap, roles: ["ADMIN", "LEADER"] },
+  { name: "Pedidos Oração", href: "/admin/prayer", icon: Heart, roles: ["ADMIN", "LEADER"] },
+  { name: "Parceiros", href: "/admin/partners", icon: Building2, roles: ["ADMIN"] },
+  { name: "Palestrantes", href: "/admin/speakers", icon: Mic, roles: ["ADMIN"] },
+  { name: "Transmissões", href: "/admin/livestream", icon: Radio, roles: ["ADMIN"] },
 ];
 
 interface SidebarProps {

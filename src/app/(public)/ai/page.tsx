@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { trpc } from "@/client/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Trash2, Send } from "lucide-react";
+import { Plus, Trash2, Send, History } from "lucide-react";
 
 function StarOfDavid({ className }: { className?: string }) {
   return (
@@ -65,10 +66,17 @@ export default function AIChatPage() {
     <div className="flex h-[calc(100vh-3.5rem)]">
       <div className="w-72 flex-shrink-0 border-r bg-white overflow-y-auto">
         <div className="flex h-full flex-col p-3">
-          <Button onClick={handleNewConversation} className="mb-3 w-full" size="sm">
-            <Plus className="mr-2 h-4 w-4" />
-            Nova Conversa
-          </Button>
+          <div className="mb-3 flex gap-2">
+            <Button onClick={handleNewConversation} className="flex-1" size="sm">
+              <Plus className="mr-2 h-4 w-4" />
+              Nova Conversa
+            </Button>
+            <Link href="/ai/history">
+              <Button variant="outline" size="sm">
+                <History className="h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
           <div className="flex-1 overflow-y-auto">
             {loadingConversations ? (
               <div className="space-y-2 p-2">

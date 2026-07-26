@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LogOut, User, Settings, Brain, Home, Shield, LayoutDashboard } from "lucide-react";
+import { LogOut, User, Settings, Brain, Home, Shield, LayoutDashboard, Search, Heart, HelpCircle } from "lucide-react";
 import { NotificationBell } from "@/client/components/NotificationBell";
 import { useBranding } from "@/client/components/BrandingProvider";
 
@@ -52,6 +52,29 @@ export function Header() {
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">
+          <Link
+            href="/search"
+            className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900"
+          >
+            <Search className="h-4 w-4" />
+            Pesquisar
+          </Link>
+          {user && (
+            <Link
+              href="/favorites"
+              className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900"
+            >
+              <Heart className="h-4 w-4" />
+              Favoritos
+            </Link>
+          )}
+          <Link
+            href="/help"
+            className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900"
+          >
+            <HelpCircle className="h-4 w-4" />
+            Ajuda
+          </Link>
           <Link
             href="/"
             className="text-sm text-gray-600 hover:text-gray-900"

@@ -21,6 +21,19 @@ import { aiAdminRouter } from "./routers/aiAdmin";
 import { integrationRouter } from "./routers/integration";
 import { tenantSettingRouter } from "./routers/tenantSetting";
 import { tzedakaDonationRouter } from "./routers/tzedakaDonation";
+import { tzedakaAllocationRouter } from "./routers/tzedakaAllocation";
+import { tzedakaReportRouter } from "./routers/tzedakaReport";
+import { newsCommentRouter } from "./routers/newsComment";
+import { galleryRouter } from "./routers/gallery";
+import { volunteerRouter } from "./routers/volunteer";
+import { mentorshipRouter } from "./routers/mentorship";
+import { prayerRouter } from "./routers/prayer";
+import { partnerRouter } from "./routers/partner";
+import { speakerRouter } from "./routers/speaker";
+import { livestreamRouter } from "./routers/livestream";
+import { favoriteRouter } from "./routers/favorite";
+import { searchRouter } from "./routers/search";
+import { userPreferenceRouter } from "./routers/userPreference";
 
 export const appRouter = router({
   tenant: tenantRouter,
@@ -45,6 +58,19 @@ export const appRouter = router({
   integration: integrationRouter,
   tenantSetting: tenantSettingRouter,
   tzedakaDonation: tzedakaDonationRouter,
+  tzedakaAllocation: tzedakaAllocationRouter,
+  tzedakaReport: tzedakaReportRouter,
+  newsComment: newsCommentRouter,
+  gallery: galleryRouter,
+  volunteer: volunteerRouter,
+  mentorship: mentorshipRouter,
+  prayer: prayerRouter,
+  partner: partnerRouter,
+  speaker: speakerRouter,
+  livestream: livestreamRouter,
+  favorite: favoriteRouter,
+  search: searchRouter,
+  userPreference: userPreferenceRouter,
 });
 
 export type AppRouter = typeof appRouter;

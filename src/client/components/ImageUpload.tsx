@@ -1,17 +1,25 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { Upload, X, FileText, Film, Music, File } from "lucide-react";
+import { Upload, X, FileText, Film, Music, File, FileCode, Archive, Table } from "lucide-react";
 import { toast } from "sonner";
 
-const DEFAULT_ACCEPT = "image/jpeg,image/png,image/webp,image/gif,application/pdf,video/mp4,video/webm,audio/mpeg,audio/wav,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation";
+const DEFAULT_ACCEPT = "*";
 
-function getFileCategory(name: string, mimeType: string): string {
-  if (mimeType.startsWith("image/") || /\.(jpe?g|png|webp|gif|svg)$/i.test(name)) return "image";
-  if (mimeType === "application/pdf" || /\.pdf$/i.test(name)) return "pdf";
-  if (mimeType.startsWith("video/") || /\.(mp4|webm|mov)$/i.test(name)) return "video";
-  if (mimeType.startsWith("audio/") || /\.(mp3|wav|ogg|m4a)$/i.test(name)) return "audio";
-  return "document";
+function getFileCategory(name: string): string {
+  const ext = name.split(".").pop()?.toLowerCase() ?? "";
+
+  if (["jpg", "jpeg", "png", "webp", "gif", "svg", "bmp", "tiff", "ico"].includes(ext)) return "image";
+  if (["mp4", "webm", "mov", "avi", "mkv", "flv", "wmv"].includes(ext)) return "video";
+  if (["mp3", "wav", "ogg", "m4a", "aac", "flac"].includes(ext)) return "audio";
+  if (ext === "pdf") return "pdf";
+  if (["doc", "docx", "odt", "rtf"].includes(ext)) return "document";
+  if (["xls", "xlsx", "csv", "ods"].includes(ext)) return "spreadsheet";
+  if (["ppt", "pptx", "odp"].includes(ext)) return "presentation";
+  if (["js", "ts", "jsx", "tsx", "py", "java", "c", "cpp", "h", "cs", "rb", "go", "rs", "php", "swift", "kt", "html", "css", "scss", "json", "xml", "yaml", "yml", "toml"].includes(ext)) return "code";
+  if (["zip", "rar", "7z", "tar", "gz"].includes(ext)) return "archive";
+
+  return "default";
 }
 
 function formatFileSize(bytes: number): string {
@@ -25,6 +33,10 @@ const FILE_ICONS: Record<string, React.ReactNode> = {
   video: <Film className="h-6 w-6 text-purple-500" />,
   audio: <Music className="h-6 w-6 text-green-500" />,
   document: <FileText className="h-6 w-6 text-blue-500" />,
+  spreadsheet: <Table className="h-6 w-6 text-emerald-500" />,
+  presentation: <FileText className="h-6 w-6 text-orange-500" />,
+  code: <FileCode className="h-6 w-6 text-cyan-500" />,
+  archive: <Archive className="h-6 w-6 text-yellow-600" />,
   default: <File className="h-6 w-6 text-gray-400" />,
 };
 
@@ -44,7 +56,7 @@ export function ImageUpload({
   onClear,
   label = "Arquivo",
   accept = DEFAULT_ACCEPT,
-  maxSize = 10 * 1024 * 1024,
+  maxSize = 50 * 1024 * 1024,
   className,
 }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false);
@@ -86,7 +98,7 @@ export function ImageUpload({
   }
 
   const category = fileName
-    ? getFileCategory(fileName, "")
+    ? getFileCategory(fileName)
     : value
       ? "image"
       : "default";

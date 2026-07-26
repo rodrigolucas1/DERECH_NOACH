@@ -1,6 +1,7 @@
 import { Header } from "@/client/components/layout/Header";
 import { Footer } from "@/client/components/layout/Footer";
 import { ContextBar } from "@/client/components/layout/ContextBar";
+import { ClientExtras } from "@/client/components/ClientExtras";
 
 export default function PublicLayout({
   children,
@@ -13,6 +14,7 @@ export default function PublicLayout({
       <ContextBar />
       <main className="flex-1 bg-gray-50">{children}</main>
       <Footer />
+      <ClientExtras />
     </>
   );
 }

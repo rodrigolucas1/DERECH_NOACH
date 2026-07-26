@@ -8,39 +8,7 @@ import path from "path";
 // - Serve uploads through a CDN with signed URLs and expiry.
 // - Consider virus scanning (e.g., ClamAV) before persisting files.
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
-const MAX_SIZE = 10 * 1024 * 1024; // 10MB
-
-const ALLOWED_TYPES = [
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "image/gif",
-  "application/pdf",
-  "video/mp4",
-  "video/webm",
-  "audio/mpeg",
-  "audio/wav",
-  "application/msword",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  "application/vnd.ms-powerpoint",
-  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-];
-
-const MIME_TO_EXTENSIONS: Record<string, string[]> = {
-  "image/jpeg": ["jpg", "jpeg"],
-  "image/png": ["png"],
-  "image/webp": ["webp"],
-  "image/gif": ["gif"],
-  "application/pdf": ["pdf"],
-  "video/mp4": ["mp4"],
-  "video/webm": ["webm"],
-  "audio/mpeg": ["mp3"],
-  "audio/wav": ["wav"],
-  "application/msword": ["doc"],
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document": ["docx"],
-  "application/vnd.ms-powerpoint": ["ppt"],
-  "application/vnd.openxmlformats-officedocument.presentationml.presentation": ["pptx"],
-};
+const MAX_SIZE = 50 * 1024 * 1024; // 50MB
 
 // Simple in-memory rate limiter: max 10 uploads per user per minute.
 const uploadTimestamps = new Map<string, number[]>();
@@ -72,22 +40,14 @@ export async function POST(request: Request) {
     }
 
     if (file.size > MAX_SIZE) {
-      return NextResponse.json({ error: "Arquivo muito grande (máx. 10MB)." }, { status: 400 });
-    }
-
-    if (!ALLOWED_TYPES.includes(file.type)) {
-      return NextResponse.json({ error: "Tipo de arquivo não permitido." }, { status: 400 });
-    }
-
-    const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
-    const allowedExtensions = MIME_TO_EXTENSIONS[file.type];
-    if (!allowedExtensions || !allowedExtensions.includes(ext)) {
-      return NextResponse.json({ error: "Extensão do arquivo não corresponde ao tipo." }, { status: 400 });
+      return NextResponse.json({ error: "Arquivo muito grande (máx. 50MB)." }, { status: 400 });
     }
 
     if (isRateLimited(session.user.id)) {
       return NextResponse.json({ error: "Limite de uploads atingido. Tente novamente em 1 minuto." }, { status: 429 });
     }
+
+    const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
