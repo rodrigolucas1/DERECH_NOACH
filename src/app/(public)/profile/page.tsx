@@ -382,7 +382,9 @@ export default function ProfilePage() {
                   <option value="pt">Português</option>
                   <option value="en">English</option>
                   <option value="es">Español</option>
-                  <option value="he">עברית</option>
+                  <option value="he">עברית (Hebrew)</option>
+                  <option value="fr">Français</option>
+                  <option value="ru">Русский</option>
                 </select>
               </div>
             </div>

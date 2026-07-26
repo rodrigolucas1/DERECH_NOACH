@@ -470,11 +470,14 @@ export default function SettingsPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {[
                     { value: "pt", label: "Português" },
                     { value: "en", label: "English" },
                     { value: "es", label: "Español" },
+                    { value: "he", label: "עברית" },
+                    { value: "fr", label: "Français" },
+                    { value: "ru", label: "Русский" },
                   ].map((lang) => (
                     <button
                       key={lang.value}
