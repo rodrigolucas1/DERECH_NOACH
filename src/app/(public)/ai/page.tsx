@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { trpc } from "@/client/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Trash2, Send, History } from "lucide-react";
+import { Plus, Trash2, Send, History, MessageSquare, Sparkles } from "lucide-react";
+
+const AI_STORAGE_KEY = "derech-noach-ai-context";
 
 function StarOfDavid({ className }: { className?: string }) {
   return (
@@ -32,6 +34,7 @@ export default function AIChatPage() {
   const createConversation = trpc.ai.createConversation.useMutation({
     onSuccess: (data) => {
       setSelectedConversationId(data.id);
+      saveActiveConversation(data.id);
       utils.ai.listConversations.invalidate();
     },
   });
@@ -39,28 +42,61 @@ export default function AIChatPage() {
   const sendMessage = trpc.ai.sendMessage.useMutation({
     onSuccess: () => {
       utils.ai.getConversation.invalidate({ conversationId: selectedConversationId! });
+      if (selectedConversationId) saveActiveConversation(selectedConversationId);
     },
   });
 
   const deleteConversation = trpc.ai.deleteConversation.useMutation({
     onSuccess: () => {
       setSelectedConversationId(null);
+      clearActiveConversation();
       utils.ai.listConversations.invalidate();
     },
   });
 
-  const handleSend = () => {
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(AI_STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed.activeConversationId) {
+          setSelectedConversationId(parsed.activeConversationId);
+        }
+      }
+    } catch {}
+  }, []);
+
+  function saveActiveConversation(id: string) {
+    try {
+      const stored = localStorage.getItem(AI_STORAGE_KEY);
+      const parsed = stored ? JSON.parse(stored) : {};
+      localStorage.setItem(AI_STORAGE_KEY, JSON.stringify({ ...parsed, activeConversationId: id }));
+    } catch {}
+  }
+
+  function clearActiveConversation() {
+    try {
+      const stored = localStorage.getItem(AI_STORAGE_KEY);
+      const parsed = stored ? JSON.parse(stored) : {};
+      delete parsed.activeConversationId;
+      localStorage.setItem(AI_STORAGE_KEY, JSON.stringify(parsed));
+    } catch {}
+  }
+
+  function handleSend() {
     if (!newMessage.trim() || !selectedConversationId) return;
     sendMessage.mutate({
       conversationId: selectedConversationId,
       content: newMessage.trim(),
     });
     setNewMessage("");
-  };
+  }
 
-  const handleNewConversation = () => {
+  function handleNewConversation() {
     createConversation.mutate({ title: "Nova conversa" });
-  };
+  }
+
+  const messageCount = conversation?.messages?.length ?? 0;
 
   return (
     <div className="flex h-[calc(100vh-3.5rem)]">
@@ -94,7 +130,10 @@ export default function AIChatPage() {
                         ? "bg-blue-50 text-blue-700"
                         : "text-gray-600 hover:bg-gray-50"
                     }`}
-                    onClick={() => setSelectedConversationId(conv.id)}
+                    onClick={() => {
+                      setSelectedConversationId(conv.id);
+                      saveActiveConversation(conv.id);
+                    }}
                   >
                     <span className="truncate">{conv.title || "Sem título"}</span>
                     <Button
@@ -121,6 +160,15 @@ export default function AIChatPage() {
       <div className="flex flex-1 flex-col">
         {selectedConversationId ? (
           <>
+            {messageCount > 0 && (
+              <div className="flex items-center gap-2 border-b bg-gray-50 px-4 py-2">
+                <Sparkles className="h-3.5 w-3.5 text-blue-600" />
+                <span className="text-xs text-gray-500">
+                  <span className="font-medium text-gray-700">{messageCount}</span>
+                  {" "}mensagem{messageCount !== 1 ? "ens" : ""} nesta conversa
+                </span>
+              </div>
+            )}
             <div className="flex-1 overflow-y-auto p-4">
               {loadingConversation ? (
                 <div className="space-y-4">
@@ -149,7 +197,13 @@ export default function AIChatPage() {
                 </div>
               ) : (
                 <div className="flex h-full items-center justify-center">
-                  <p className="text-gray-500">Envie uma mensagem para iniciar a conversa.</p>
+                  <div className="text-center">
+                    <MessageSquare className="mx-auto mb-3 h-10 w-10 text-gray-300" />
+                    <p className="text-gray-500">Envie uma mensagem para iniciar a conversa.</p>
+                    <p className="mt-1 text-xs text-gray-400">
+                      O contexto da conversa é preservado automaticamente.
+                    </p>
+                  </div>
                 </div>
               )}
             </div>
@@ -180,6 +234,9 @@ export default function AIChatPage() {
             <h2 className="text-xl font-semibold text-gray-700">Assistente IA</h2>
             <p className="text-center text-gray-500">
               Crie uma nova conversa ou selecione uma existente para começar.
+            </p>
+            <p className="text-center text-xs text-gray-400">
+              O contexto das conversas é preservado entre sessões.
             </p>
             <Button onClick={handleNewConversation}>
               <Plus className="mr-2 h-4 w-4" />

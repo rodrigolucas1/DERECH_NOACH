@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Bell } from "lucide-react";
+import { Bell, Filter, CheckCheck } from "lucide-react";
 import { trpc } from "@/client/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -18,8 +18,15 @@ const typeLabels: Record<string, string> = {
   PRAYER: "Oração",
 };
 
+const typeFilters = [
+  { value: "all", label: "Todas" },
+  { value: "unread", label: "Não lidas" },
+  ...Object.entries(typeLabels).map(([value, label]) => ({ value, label })),
+];
+
 export function NotificationBell() {
   const [open, setOpen] = useState(false);
+  const [activeFilter, setActiveFilter] = useState("all");
   const ref = useRef<HTMLDivElement>(null);
 
   const utils = trpc.useUtils();
@@ -29,7 +36,7 @@ export function NotificationBell() {
     { refetchInterval: 30000 }
   );
   const { data, isLoading } = trpc.notification.list.useQuery(
-    { page: 1, pageSize: 10 },
+    { page: 1, pageSize: 20 },
     { enabled: open }
   );
 
@@ -59,6 +66,12 @@ export function NotificationBell() {
 
   const unreadCount = unreadData?.count ?? 0;
 
+  const filteredNotifications = data?.notifications?.filter((n) => {
+    if (activeFilter === "all") return true;
+    if (activeFilter === "unread") return !n.isRead;
+    return n.type === activeFilter;
+  }) ?? [];
+
   return (
     <div className="relative" ref={ref}>
       <Button
@@ -76,10 +89,15 @@ export function NotificationBell() {
       </Button>
 
       {open && (
-        <div className="absolute right-0 top-full z-50 mt-2 w-80 rounded-lg border bg-white shadow-lg">
+        <div className="absolute right-0 top-full z-50 mt-2 w-96 rounded-lg border bg-white shadow-lg">
           <div className="flex items-center justify-between border-b px-4 py-3">
             <h3 className="text-sm font-semibold text-gray-900">
               Notificações
+              {unreadCount > 0 && (
+                <span className="ml-2 text-xs font-normal text-gray-500">
+                  ({unreadCount} não lida{unreadCount !== 1 ? "s" : ""})
+                </span>
+              )}
             </h3>
             {unreadCount > 0 && (
               <Button
@@ -89,9 +107,27 @@ export function NotificationBell() {
                 onClick={() => markAllReadMutation.mutate()}
                 disabled={markAllReadMutation.isPending}
               >
+                <CheckCheck className="h-3 w-3 mr-1" />
                 Marcar todas como lidas
               </Button>
             )}
+          </div>
+
+          <div className="flex gap-1 border-b px-3 py-2 overflow-x-auto">
+            {typeFilters.map((f) => (
+              <button
+                key={f.value}
+                onClick={() => setActiveFilter(f.value)}
+                className={cn(
+                  "shrink-0 rounded-full px-2.5 py-1 text-[11px] font-medium transition-colors",
+                  activeFilter === f.value
+                    ? "bg-blue-900 text-white"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                )}
+              >
+                {f.label}
+              </button>
+            ))}
           </div>
 
           <div className="max-h-80 overflow-y-auto">
@@ -104,12 +140,13 @@ export function NotificationBell() {
                   </div>
                 ))}
               </div>
-            ) : !data?.notifications?.length ? (
+            ) : filteredNotifications.length === 0 ? (
               <div className="p-8 text-center text-sm text-gray-500">
-                Nenhuma notificação
+                <Filter className="mx-auto mb-2 h-6 w-6 text-gray-300" />
+                Nenhuma notificação{activeFilter !== "all" ? " neste filtro" : ""}
               </div>
             ) : (
-              data.notifications.map((notification) => (
+              filteredNotifications.map((notification) => (
                 <div
                   key={notification.id}
                   className={cn(
@@ -139,13 +176,11 @@ export function NotificationBell() {
                         {notification.message}
                       </p>
                       <div className="mt-1 flex items-center gap-2">
-                        <span className="text-[10px] text-gray-400">
+                        <span className="inline-block rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-600">
                           {typeLabels[notification.type] ?? notification.type}
                         </span>
                         <span className="text-[10px] text-gray-400">
-                          {new Date(
-                            notification.createdAt
-                          ).toLocaleDateString("pt-BR", {
+                          {new Date(notification.createdAt).toLocaleDateString("pt-BR", {
                             day: "2-digit",
                             month: "2-digit",
                             hour: "2-digit",

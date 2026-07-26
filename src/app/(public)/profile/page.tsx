@@ -21,6 +21,7 @@ import {
 import { trpc } from "@/client/lib/trpc";
 import { FadeIn, SlideUp, StaggerContainer, StaggerItem } from "@/client/components/motion";
 import { ImageUpload } from "@/client/components/ImageUpload";
+import { ImageCropModal } from "@/client/components/ImageCropModal";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -106,6 +107,8 @@ export default function ProfilePage() {
   const { data: session, status } = useSession();
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [cropOpen, setCropOpen] = useState(false);
+  const [pendingImageSrc, setPendingImageSrc] = useState<string | null>(null);
 
   const { data: meData, isLoading: meLoading } = trpc.auth.me.useQuery(undefined, {
     enabled: status === "authenticated",
@@ -228,7 +231,14 @@ export default function ProfilePage() {
               <div className="absolute -bottom-1 -right-1">
                 <ImageUpload
                   value={form.image}
-                  onChange={(url) => updateField("image", url)}
+                  onChange={(url) => {
+                    if (url && url !== form.image) {
+                      setPendingImageSrc(url);
+                      setCropOpen(true);
+                    } else {
+                      updateField("image", url);
+                    }
+                  }}
                   accept="image/*"
                   maxSize={5 * 1024 * 1024}
                   label=""
@@ -422,6 +432,14 @@ export default function ProfilePage() {
           </CardContent>
         </Card>
       </SlideUp>
+
+      <ImageCropModal
+        open={cropOpen}
+        onClose={() => { setCropOpen(false); setPendingImageSrc(null); }}
+        onConfirm={(cropped) => { updateField("image", cropped); setCropOpen(false); setPendingImageSrc(null); }}
+        imageSrc={pendingImageSrc ?? ""}
+        aspectRatio={1}
+      />
     </div>
   );
 }
