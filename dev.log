@@ -22,3 +22,1139 @@
 ✓ Finished filesystem cache database compaction in 20.3s
 ✓ Compiled in 117ms
   Reload env: .env
+ GET / 200 in 576ms (next.js: 161ms, proxy.ts: 62ms, application-code: 352ms)
+ GET / 200 in 106ms (next.js: 14ms, proxy.ts: 11ms, application-code: 81ms)
+ GET /api/branding 200 in 373ms (next.js: 346ms, proxy.ts: 6ms, application-code: 20ms)
+ GET /api/auth/session 200 in 1863ms (next.js: 1833ms, proxy.ts: 8ms, application-code: 22ms)
+ GET /api/auth/session 200 in 35ms (next.js: 14ms, proxy.ts: 6ms, application-code: 15ms)
+ GET /about 200 in 85ms (next.js: 46ms, proxy.ts: 4ms, application-code: 35ms)
+ GET /communities 200 in 99ms (next.js: 61ms, proxy.ts: 10ms, application-code: 28ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."Community"."id", "public"."Community"."name", "public"."Community"."slug", "public"."Community"."description", "public"."Community"."city", "public"."Community"."state", "public"."Community"."logoUrl", "public"."Community"."coverImageUrl", "public"."Community"."phone", "public"."Community"."email", "public"."Community"."whatsappLink", "public"."Community"."meetingSchedule", COALESCE("aggr_selection_0_CommunityMember"."_aggr_count_members", 0) AS "_aggr_count_members", COALESCE("aggr_selection_1_Event"."_aggr_count_events", 0) AS "_aggr_count_events", COALESCE("aggr_selection_2_StudyMaterial"."_aggr_count_studies", 0) AS "_aggr_count_studies" FROM "public"."Community" LEFT JOIN (SELECT "public"."CommunityMember"."communityId", COUNT(*) AS "_aggr_count_members" FROM "public"."CommunityMember" WHERE 1=1 GROUP BY "public"."CommunityMember"."communityId") AS "aggr_selection_0_CommunityMember" ON ("public"."Community"."id" = "aggr_selection_0_CommunityMember"."communityId") LEFT JOIN (SELECT "public"."Event"."communityId", COUNT(*) AS "_aggr_count_events" FROM "public"."Event" WHERE 1=1 GROUP BY "public"."Event"."communityId") AS "aggr_selection_1_Event" ON ("public"."Community"."id" = "aggr_selection_1_Event"."communityId") LEFT JOIN (SELECT "public"."StudyMaterial"."communityId", COUNT(*) AS "_aggr_count_studies" FROM "public"."StudyMaterial" WHERE 1=1 GROUP BY "public"."StudyMaterial"."communityId") AS "aggr_selection_2_StudyMaterial" ON ("public"."Community"."id" = "aggr_selection_2_StudyMaterial"."communityId") WHERE ("public"."Community"."tenantId" = $1 AND "public"."Community"."isActive" = $2) ORDER BY "public"."Community"."name" ASC OFFSET $3
+ GET /api/trpc/community.list?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 1704ms (next.js: 1458ms, proxy.ts: 6ms, application-code: 240ms)
+ GET /communities/uberlandia 404 in 113ms (next.js: 76ms, proxy.ts: 9ms, application-code: 27ms)
+ GET /communities/uberlandia 404 in 54ms (next.js: 13ms, proxy.ts: 3ms, application-code: 38ms)
+ GET /api/branding 200 in 23ms (next.js: 7ms, proxy.ts: 6ms, application-code: 9ms)
+ GET /api/auth/session 200 in 41ms (next.js: 26ms, proxy.ts: 7ms, application-code: 8ms)
+ GET /api/auth/session 200 in 15ms (next.js: 5ms, proxy.ts: 3ms, application-code: 7ms)
+ GET /communities 200 in 116ms (next.js: 11ms, proxy.ts: 10ms, application-code: 95ms)
+ GET /api/branding 200 in 19ms (next.js: 7ms, proxy.ts: 7ms, application-code: 5ms)
+ GET /api/auth/session 200 in 50ms (next.js: 32ms, proxy.ts: 7ms, application-code: 11ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."Community"."id", "public"."Community"."name", "public"."Community"."slug", "public"."Community"."description", "public"."Community"."city", "public"."Community"."state", "public"."Community"."logoUrl", "public"."Community"."coverImageUrl", "public"."Community"."phone", "public"."Community"."email", "public"."Community"."whatsappLink", "public"."Community"."meetingSchedule", COALESCE("aggr_selection_0_CommunityMember"."_aggr_count_members", 0) AS "_aggr_count_members", COALESCE("aggr_selection_1_Event"."_aggr_count_events", 0) AS "_aggr_count_events", COALESCE("aggr_selection_2_StudyMaterial"."_aggr_count_studies", 0) AS "_aggr_count_studies" FROM "public"."Community" LEFT JOIN (SELECT "public"."CommunityMember"."communityId", COUNT(*) AS "_aggr_count_members" FROM "public"."CommunityMember" WHERE 1=1 GROUP BY "public"."CommunityMember"."communityId") AS "aggr_selection_0_CommunityMember" ON ("public"."Community"."id" = "aggr_selection_0_CommunityMember"."communityId") LEFT JOIN (SELECT "public"."Event"."communityId", COUNT(*) AS "_aggr_count_events" FROM "public"."Event" WHERE 1=1 GROUP BY "public"."Event"."communityId") AS "aggr_selection_1_Event" ON ("public"."Community"."id" = "aggr_selection_1_Event"."communityId") LEFT JOIN (SELECT "public"."StudyMaterial"."communityId", COUNT(*) AS "_aggr_count_studies" FROM "public"."StudyMaterial" WHERE 1=1 GROUP BY "public"."StudyMaterial"."communityId") AS "aggr_selection_2_StudyMaterial" ON ("public"."Community"."id" = "aggr_selection_2_StudyMaterial"."communityId") WHERE ("public"."Community"."tenantId" = $1 AND "public"."Community"."isActive" = $2) ORDER BY "public"."Community"."name" ASC OFFSET $3
+ GET /api/trpc/community.list?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 63ms (next.js: 36ms, proxy.ts: 4ms, application-code: 23ms)
+ GET /api/auth/session 200 in 27ms (next.js: 16ms, proxy.ts: 5ms, application-code: 6ms)
+ GET /ai 200 in 82ms (next.js: 53ms, proxy.ts: 8ms, application-code: 21ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+❌ tRPC failed on ai.listConversations: Você precisa estar logado para acessar este recurso.
+ GET /api/trpc/ai.listConversations?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 401 in 38ms (next.js: 14ms, proxy.ts: 7ms, application-code: 17ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+❌ tRPC failed on ai.listConversations: Você precisa estar logado para acessar este recurso.
+ GET /api/trpc/ai.listConversations?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 401 in 32ms (next.js: 7ms, proxy.ts: 5ms, application-code: 21ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+❌ tRPC failed on ai.createConversation: Você precisa estar logado para acessar este recurso.
+ POST /api/trpc/ai.createConversation?batch=1 401 in 44ms (next.js: 19ms, proxy.ts: 12ms, application-code: 12ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+❌ tRPC failed on ai.createConversation: Você precisa estar logado para acessar este recurso.
+ POST /api/trpc/ai.createConversation?batch=1 401 in 48ms (next.js: 16ms, proxy.ts: 8ms, application-code: 25ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+❌ tRPC failed on ai.createConversation: Você precisa estar logado para acessar este recurso.
+ POST /api/trpc/ai.createConversation?batch=1 401 in 34ms (next.js: 6ms, proxy.ts: 3ms, application-code: 25ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+❌ tRPC failed on ai.createConversation: Você precisa estar logado para acessar este recurso.
+ POST /api/trpc/ai.createConversation?batch=1 401 in 50ms (next.js: 13ms, proxy.ts: 8ms, application-code: 29ms)
+ GET /login?callbackUrl=%2Fadmin%2Fdashboard 200 in 218ms (next.js: 91ms, proxy.ts: 4ms, application-code: 123ms)
+ GET /api/branding 200 in 22ms (next.js: 8ms, proxy.ts: 6ms, application-code: 8ms)
+ GET /api/auth/session 200 in 42ms (next.js: 28ms, proxy.ts: 6ms, application-code: 8ms)
+ GET /api/auth/session 200 in 17ms (next.js: 7ms, proxy.ts: 3ms, application-code: 7ms)
+prisma:query SELECT "public"."User"."id", "public"."User"."name", "public"."User"."email", "public"."User"."emailVerified", "public"."User"."image", "public"."User"."phone", "public"."User"."bio", "public"."User"."passwordHash", "public"."User"."isActive", "public"."User"."lastLoginAt", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+[31m[auth][error][0m CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at Module.callback (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:11710:30)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async AuthInternal (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12558:24)
+    at async Auth (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12780:34)
+    at async signIn (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:20999:17)
+    at async loginAction (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__1e019_3._.js:199:9)
+    at async executeActionAndPrepareForRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:5248)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:1986
+    at async handleAction (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:62:25687)
+    at async renderToHTMLOrFlightImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:69:55695)
+    at async doRender (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4537:28)
+    at async AppPageRouteModule.handleResponse (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:71:66429)
+    at async handleResponse (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4848:32)
+    at async Module.handler (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:5254:20)
+    at async DevServer.renderToResponseWithComponentsImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1462:9)
+    at async DevServer.renderPageComponent (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1514:24)
+    at async DevServer.renderToResponseImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1564:32)
+    at async DevServer.pipeImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1044:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\next-server.js:338:17)
+    at async DevServer.handleRequestImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:935:17)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:394:20
+    at async Span.traceAsyncFn (C:\Projetos\DERECH_NOACH\node_modules\next\dist\trace\trace.js:164:20)
+    at async DevServer.handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:390:24)
+    at async invokeRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:266:21)
+    at async handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:465:24)
+    at async requestHandlerImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:514:13)
+    at async Server.requestListener (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\start-server.js:225:13)
+ POST /login?callbackUrl=%2Fadmin%2Fdashboard 200 in 105ms (next.js: 5ms, proxy.ts: 5ms, application-code: 96ms)
+  └─ ƒ loginAction({"error":""}, {}) in 50ms src/app/(auth)/login/actions.ts
+prisma:query SELECT "public"."User"."id", "public"."User"."name", "public"."User"."email", "public"."User"."emailVerified", "public"."User"."image", "public"."User"."phone", "public"."User"."bio", "public"."User"."passwordHash", "public"."User"."isActive", "public"."User"."lastLoginAt", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+[31m[auth][error][0m CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at Module.callback (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:11710:30)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async AuthInternal (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12558:24)
+    at async Auth (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12780:34)
+    at async signIn (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:20999:17)
+    at async loginAction (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__1e019_3._.js:199:9)
+    at async executeActionAndPrepareForRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:5248)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:1986
+    at async handleAction (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:62:25687)
+    at async renderToHTMLOrFlightImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:69:55695)
+    at async doRender (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4537:28)
+    at async AppPageRouteModule.handleResponse (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:71:66429)
+    at async handleResponse (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4848:32)
+    at async Module.handler (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:5254:20)
+    at async DevServer.renderToResponseWithComponentsImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1462:9)
+    at async DevServer.renderPageComponent (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1514:24)
+    at async DevServer.renderToResponseImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1564:32)
+    at async DevServer.pipeImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1044:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\next-server.js:338:17)
+    at async DevServer.handleRequestImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:935:17)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:394:20
+    at async Span.traceAsyncFn (C:\Projetos\DERECH_NOACH\node_modules\next\dist\trace\trace.js:164:20)
+    at async DevServer.handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:390:24)
+    at async invokeRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:266:21)
+    at async handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:465:24)
+    at async requestHandlerImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:514:13)
+    at async Server.requestListener (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\start-server.js:225:13)
+ POST /login?callbackUrl=%2Fadmin%2Fdashboard 200 in 67ms (next.js: 7ms, proxy.ts: 5ms, application-code: 55ms)
+  └─ ƒ loginAction({"error":"E-mail ou senha incorretos."}, {}) in 46ms src/app/(auth)/login/actions.ts
+prisma:query SELECT "public"."User"."id", "public"."User"."name", "public"."User"."email", "public"."User"."emailVerified", "public"."User"."image", "public"."User"."phone", "public"."User"."bio", "public"."User"."passwordHash", "public"."User"."isActive", "public"."User"."lastLoginAt", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+[31m[auth][error][0m CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at Module.callback (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:11710:30)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async AuthInternal (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12558:24)
+    at async Auth (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12780:34)
+    at async signIn (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:20999:17)
+    at async loginAction (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__1e019_3._.js:199:9)
+    at async executeActionAndPrepareForRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:5248)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:1986
+    at async handleAction (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:62:25687)
+    at async renderToHTMLOrFlightImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:69:55695)
+    at async doRender (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4537:28)
+    at async AppPageRouteModule.handleResponse (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:71:66429)
+    at async handleResponse (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4848:32)
+    at async Module.handler (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:5254:20)
+    at async DevServer.renderToResponseWithComponentsImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1462:9)
+    at async DevServer.renderPageComponent (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1514:24)
+    at async DevServer.renderToResponseImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1564:32)
+    at async DevServer.pipeImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1044:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\next-server.js:338:17)
+    at async DevServer.handleRequestImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:935:17)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:394:20
+    at async Span.traceAsyncFn (C:\Projetos\DERECH_NOACH\node_modules\next\dist\trace\trace.js:164:20)
+    at async DevServer.handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:390:24)
+    at async invokeRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:266:21)
+    at async handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:465:24)
+    at async requestHandlerImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:514:13)
+    at async Server.requestListener (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\start-server.js:225:13)
+ POST /login?callbackUrl=%2Fadmin%2Fdashboard 200 in 24ms (next.js: 7ms, proxy.ts: 4ms, application-code: 14ms)
+  └─ ƒ loginAction({"error":"E-mail ou senha incorretos."}, {}) in 5ms src/app/(auth)/login/actions.ts
+prisma:query SELECT "public"."User"."id", "public"."User"."name", "public"."User"."email", "public"."User"."emailVerified", "public"."User"."image", "public"."User"."phone", "public"."User"."bio", "public"."User"."passwordHash", "public"."User"."isActive", "public"."User"."lastLoginAt", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+[31m[auth][error][0m CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at Module.callback (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:11710:30)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async AuthInternal (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12558:24)
+    at async Auth (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12780:34)
+    at async signIn (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:20999:17)
+    at async loginAction (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__1e019_3._.js:199:9)
+    at async executeActionAndPrepareForRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:5248)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:1986
+    at async handleAction (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:62:25687)
+    at async renderToHTMLOrFlightImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:69:55695)
+    at async doRender (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4537:28)
+    at async AppPageRouteModule.handleResponse (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:71:66429)
+    at async handleResponse (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4848:32)
+    at async Module.handler (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:5254:20)
+    at async DevServer.renderToResponseWithComponentsImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1462:9)
+    at async DevServer.renderPageComponent (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1514:24)
+    at async DevServer.renderToResponseImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1564:32)
+    at async DevServer.pipeImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1044:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\next-server.js:338:17)
+    at async DevServer.handleRequestImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:935:17)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:394:20
+    at async Span.traceAsyncFn (C:\Projetos\DERECH_NOACH\node_modules\next\dist\trace\trace.js:164:20)
+    at async DevServer.handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:390:24)
+    at async invokeRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:266:21)
+    at async handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:465:24)
+    at async requestHandlerImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:514:13)
+    at async Server.requestListener (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\start-server.js:225:13)
+ POST /login?callbackUrl=%2Fadmin%2Fdashboard 200 in 33ms (next.js: 10ms, proxy.ts: 7ms, application-code: 16ms)
+  └─ ƒ loginAction({"error":"E-mail ou senha incorretos."}, {}) in 6ms src/app/(auth)/login/actions.ts
+prisma:query SELECT "public"."User"."id", "public"."User"."name", "public"."User"."email", "public"."User"."emailVerified", "public"."User"."image", "public"."User"."phone", "public"."User"."bio", "public"."User"."passwordHash", "public"."User"."isActive", "public"."User"."lastLoginAt", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+[31m[auth][error][0m CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at Module.callback (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:11710:30)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async AuthInternal (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12558:24)
+    at async Auth (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12780:34)
+    at async signIn (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:20999:17)
+    at async loginAction (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__1e019_3._.js:199:9)
+    at async executeActionAndPrepareForRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:5248)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:1986
+    at async handleAction (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:62:25687)
+    at async renderToHTMLOrFlightImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:69:55695)
+    at async doRender (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4537:28)
+    at async AppPageRouteModule.handleResponse (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:71:66429)
+    at async handleResponse (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4848:32)
+    at async Module.handler (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:5254:20)
+    at async DevServer.renderToResponseWithComponentsImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1462:9)
+    at async DevServer.renderPageComponent (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1514:24)
+    at async DevServer.renderToResponseImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1564:32)
+    at async DevServer.pipeImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1044:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\next-server.js:338:17)
+    at async DevServer.handleRequestImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:935:17)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:394:20
+    at async Span.traceAsyncFn (C:\Projetos\DERECH_NOACH\node_modules\next\dist\trace\trace.js:164:20)
+    at async DevServer.handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:390:24)
+    at async invokeRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:266:21)
+    at async handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:465:24)
+    at async requestHandlerImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:514:13)
+    at async Server.requestListener (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\start-server.js:225:13)
+ POST /login?callbackUrl=%2Fadmin%2Fdashboard 200 in 29ms (next.js: 8ms, proxy.ts: 8ms, application-code: 14ms)
+  └─ ƒ loginAction({"error":"E-mail ou senha incorretos."}, {}) in 4ms src/app/(auth)/login/actions.ts
+prisma:query SELECT "public"."User"."id", "public"."User"."name", "public"."User"."email", "public"."User"."emailVerified", "public"."User"."image", "public"."User"."phone", "public"."User"."bio", "public"."User"."passwordHash", "public"."User"."isActive", "public"."User"."lastLoginAt", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+[31m[auth][error][0m CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at Module.callback (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:11710:30)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async AuthInternal (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12558:24)
+    at async Auth (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12780:34)
+    at async signIn (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:20999:17)
+    at async loginAction (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__1e019_3._.js:199:9)
+    at async executeActionAndPrepareForRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:5248)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:1986
+    at async handleAction (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:62:25687)
+    at async renderToHTMLOrFlightImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:69:55695)
+    at async doRender (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4537:28)
+    at async AppPageRouteModule.handleResponse (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:71:66429)
+    at async handleResponse (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4848:32)
+    at async Module.handler (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:5254:20)
+    at async DevServer.renderToResponseWithComponentsImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1462:9)
+    at async DevServer.renderPageComponent (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1514:24)
+    at async DevServer.renderToResponseImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1564:32)
+    at async DevServer.pipeImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1044:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\next-server.js:338:17)
+    at async DevServer.handleRequestImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:935:17)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:394:20
+    at async Span.traceAsyncFn (C:\Projetos\DERECH_NOACH\node_modules\next\dist\trace\trace.js:164:20)
+    at async DevServer.handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:390:24)
+    at async invokeRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:266:21)
+    at async handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:465:24)
+    at async requestHandlerImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:514:13)
+    at async Server.requestListener (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\start-server.js:225:13)
+ POST /login?callbackUrl=%2Fadmin%2Fdashboard 200 in 34ms (next.js: 7ms, proxy.ts: 7ms, application-code: 20ms)
+  └─ ƒ loginAction({"error":"E-mail ou senha incorretos."}, {}) in 10ms src/app/(auth)/login/actions.ts
+prisma:query SELECT "public"."User"."id", "public"."User"."name", "public"."User"."email", "public"."User"."emailVerified", "public"."User"."image", "public"."User"."phone", "public"."User"."bio", "public"."User"."passwordHash", "public"."User"."isActive", "public"."User"."lastLoginAt", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query UPDATE "public"."User" SET "lastLoginAt" = $1, "updatedAt" = $2 WHERE ("public"."User"."id" = $3 AND 1=1) RETURNING "public"."User"."id", "public"."User"."name", "public"."User"."email", "public"."User"."emailVerified", "public"."User"."image", "public"."User"."phone", "public"."User"."bio", "public"."User"."passwordHash", "public"."User"."isActive", "public"."User"."lastLoginAt", "public"."User"."createdAt", "public"."User"."updatedAt"
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text, "public"."TenantMember"."tenantId" FROM "public"."TenantMember" WHERE "public"."TenantMember"."userId" = $1 LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE "public"."TenantMember"."userId" = $1 LIMIT $2 OFFSET $3
+ GET /admin/dashboard 200 in 260ms (next.js: 96ms, proxy.ts: 4ms, application-code: 161ms)
+ POST /login?callbackUrl=%2Fadmin%2Fdashboard 303 in 666ms (next.js: 10ms, proxy.ts: 8ms, application-code: 649ms)
+  └─ ƒ loginAction({"error":"E-mail ou senha incorretos."}, {}) in 362ms src/app/(auth)/login/actions.ts
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."TenantMember"."id" FROM "public"."TenantMember" WHERE "public"."TenantMember"."tenantId" = $1 OFFSET $2) AS "sub"
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."NewsArticle"."id" FROM "public"."NewsArticle" WHERE ("public"."NewsArticle"."tenantId" = $1 AND "public"."NewsArticle"."status" = CAST($2::text AS "public"."PublishStatus")) OFFSET $3) AS "sub"
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."TzedakaCampaign"."id" FROM "public"."TzedakaCampaign" WHERE "public"."TzedakaCampaign"."tenantId" = $1 OFFSET $2) AS "sub"
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."TzedakaCampaign"."id" FROM "public"."TzedakaCampaign" WHERE ("public"."TzedakaCampaign"."tenantId" = $1 AND "public"."TzedakaCampaign"."status" = CAST($2::text AS "public"."CampaignStatus")) OFFSET $3) AS "sub"
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."Certificate"."id" FROM "public"."Certificate" WHERE "public"."Certificate"."tenantId" = $1 OFFSET $2) AS "sub"
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."AuditLog"."id" FROM "public"."AuditLog" WHERE ("public"."AuditLog"."tenantId" = $1 AND "public"."AuditLog"."createdAt" >= $2) OFFSET $3) AS "sub"
+prisma:query 
+      SELECT
+        TO_CHAR("joinedAt", 'YYYY-MM') AS month,
+        COUNT(*)::int AS count
+      FROM "TenantMember"
+      WHERE "tenantId" = $1
+        AND "joinedAt" >= $2
+      GROUP BY TO_CHAR("joinedAt", 'YYYY-MM')
+      ORDER BY month ASC
+    
+prisma:query SELECT "public"."AuditLog"."id", "public"."AuditLog"."tenantId", "public"."AuditLog"."userId", "public"."AuditLog"."action"::text, "public"."AuditLog"."entityType", "public"."AuditLog"."entityId", "public"."AuditLog"."oldValues", "public"."AuditLog"."newValues", "public"."AuditLog"."ipAddress", "public"."AuditLog"."userAgent", "public"."AuditLog"."createdAt" FROM "public"."AuditLog" WHERE "public"."AuditLog"."tenantId" = $1 ORDER BY "public"."AuditLog"."createdAt" DESC LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."Event"."id", "public"."Event"."title", "public"."Event"."dateTime", "public"."Event"."imageUrl", "public"."Event"."eventType"::text, "public"."Event"."isActive", "public"."Event"."communityId", COALESCE("aggr_selection_0_EventRegistration"."_aggr_count_registrations", 0) AS "_aggr_count_registrations" FROM "public"."Event" LEFT JOIN (SELECT "public"."EventRegistration"."eventId", COUNT(*) AS "_aggr_count_registrations" FROM "public"."EventRegistration" WHERE 1=1 GROUP BY "public"."EventRegistration"."eventId") AS "aggr_selection_0_EventRegistration" ON ("public"."Event"."id" = "aggr_selection_0_EventRegistration"."eventId") WHERE "public"."Event"."tenantId" = $1 ORDER BY "public"."Event"."dateTime" DESC LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."User"."id", "public"."User"."name", "public"."User"."email" FROM "public"."User" WHERE "public"."User"."id" IN (NULL) OFFSET $1
+prisma:query SELECT "public"."Community"."id", "public"."Community"."name" FROM "public"."Community" WHERE "public"."Community"."id" IN ($1,$2,$3,$4) OFFSET $5
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."User"."id" FROM "public"."User" WHERE (EXISTS(SELECT "t0"."userId" FROM "public"."TenantMember" AS "t0" WHERE ("t0"."tenantId" = $1 AND ("public"."User"."id") = ("t0"."userId") AND "t0"."userId" IS NOT NULL)) AND "public"."User"."lastLoginAt" >= $2) OFFSET $3) AS "sub"
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."Community"."id" FROM "public"."Community" WHERE ("public"."Community"."tenantId" = $1 AND "public"."Community"."isActive" = $2) OFFSET $3) AS "sub"
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."Community"."id" FROM "public"."Community" WHERE "public"."Community"."tenantId" = $1 OFFSET $2) AS "sub"
+prisma:query SELECT SUM("downloadCount") AS "_sum$downloadCount" FROM (SELECT "public"."LibraryItem"."downloadCount" FROM "public"."LibraryItem" WHERE "public"."LibraryItem"."tenantId" = $1 OFFSET $2) AS "sub"
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."Event"."id" FROM "public"."Event" WHERE "public"."Event"."tenantId" = $1 OFFSET $2) AS "sub"
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."LibraryItem"."id" FROM "public"."LibraryItem" WHERE "public"."LibraryItem"."tenantId" = $1 OFFSET $2) AS "sub"
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."StudyMaterial"."id" FROM "public"."StudyMaterial" WHERE "public"."StudyMaterial"."tenantId" = $1 OFFSET $2) AS "sub"
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."Event"."id" FROM "public"."Event" WHERE ("public"."Event"."tenantId" = $1 AND "public"."Event"."dateTime" >= $2) OFFSET $3) AS "sub"
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."NewsArticle"."id" FROM "public"."NewsArticle" WHERE "public"."NewsArticle"."tenantId" = $1 OFFSET $2) AS "sub"
+ GET /api/trpc/analytics.platformStats,analytics.userGrowth,analytics.recentActivity,event.listAll?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%2C%221%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%2C%222%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%2C%223%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 256ms (next.js: 26ms, proxy.ts: 12ms, application-code: 218ms)
+ GET /admin/dashboard 200 in 36ms (next.js: 10ms, proxy.ts: 10ms, application-code: 16ms)
+ GET /admin/dashboard 200 in 34ms (next.js: 6ms, proxy.ts: 6ms, application-code: 22ms)
+ GET /admin/users 200 in 94ms (next.js: 60ms, proxy.ts: 8ms, application-code: 27ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."tenantId", "public"."TenantMember"."userId", "public"."TenantMember"."role"::text, "public"."TenantMember"."joinedAt" FROM "public"."TenantMember" WHERE "public"."TenantMember"."tenantId" = $1 ORDER BY "public"."TenantMember"."joinedAt" DESC OFFSET $2
+prisma:query SELECT "public"."User"."id", "public"."User"."name", "public"."User"."email", "public"."User"."image", "public"."User"."isActive", "public"."User"."lastLoginAt", "public"."User"."createdAt" FROM "public"."User" WHERE "public"."User"."id" IN ($1,$2,$3) OFFSET $4
+ GET /api/trpc/admin.listUsers?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 109ms (next.js: 14ms, proxy.ts: 12ms, application-code: 84ms)
+✓ Finished filesystem cache database compaction in 15.7s
+✓ Finished filesystem cache database compaction in 18.2s
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."User"."id", "public"."User"."name", "public"."User"."email", "public"."User"."emailVerified", "public"."User"."image", "public"."User"."phone", "public"."User"."bio", "public"."User"."passwordHash", "public"."User"."isActive", "public"."User"."lastLoginAt", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query INSERT INTO "public"."User" ("id","name","email","passwordHash","isActive","createdAt","updatedAt") VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING "public"."User"."id", "public"."User"."name", "public"."User"."email", "public"."User"."emailVerified", "public"."User"."image", "public"."User"."phone", "public"."User"."bio", "public"."User"."passwordHash", "public"."User"."isActive", "public"."User"."lastLoginAt", "public"."User"."createdAt", "public"."User"."updatedAt"
+prisma:query INSERT INTO "public"."TenantMember" ("id","tenantId","userId","role","joinedAt") VALUES ($1,$2,$3,CAST($4::text AS "public"."TenantRole"),$5) RETURNING "public"."TenantMember"."id", "public"."TenantMember"."tenantId", "public"."TenantMember"."userId", "public"."TenantMember"."role"::text, "public"."TenantMember"."joinedAt"
+ POST /api/trpc/admin.createUser?batch=1 200 in 438ms (next.js: 15ms, proxy.ts: 6ms, application-code: 417ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."tenantId", "public"."TenantMember"."userId", "public"."TenantMember"."role"::text, "public"."TenantMember"."joinedAt" FROM "public"."TenantMember" WHERE "public"."TenantMember"."tenantId" = $1 ORDER BY "public"."TenantMember"."joinedAt" DESC OFFSET $2
+prisma:query SELECT "public"."User"."id", "public"."User"."name", "public"."User"."email", "public"."User"."image", "public"."User"."isActive", "public"."User"."lastLoginAt", "public"."User"."createdAt" FROM "public"."User" WHERE "public"."User"."id" IN ($1,$2,$3,$4) OFFSET $5
+ GET /api/trpc/admin.listUsers?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 50ms (next.js: 13ms, proxy.ts: 3ms, application-code: 34ms)
+ GET /admin/communities 200 in 90ms (next.js: 58ms, proxy.ts: 8ms, application-code: 24ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."Community"."id", "public"."Community"."name", "public"."Community"."slug", "public"."Community"."city", "public"."Community"."state", "public"."Community"."isActive", "public"."Community"."logoUrl", COALESCE("aggr_selection_0_CommunityMember"."_aggr_count_members", 0) AS "_aggr_count_members", COALESCE("aggr_selection_1_Event"."_aggr_count_events", 0) AS "_aggr_count_events" FROM "public"."Community" LEFT JOIN (SELECT "public"."CommunityMember"."communityId", COUNT(*) AS "_aggr_count_members" FROM "public"."CommunityMember" WHERE 1=1 GROUP BY "public"."CommunityMember"."communityId") AS "aggr_selection_0_CommunityMember" ON ("public"."Community"."id" = "aggr_selection_0_CommunityMember"."communityId") LEFT JOIN (SELECT "public"."Event"."communityId", COUNT(*) AS "_aggr_count_events" FROM "public"."Event" WHERE 1=1 GROUP BY "public"."Event"."communityId") AS "aggr_selection_1_Event" ON ("public"."Community"."id" = "aggr_selection_1_Event"."communityId") WHERE "public"."Community"."tenantId" = $1 ORDER BY "public"."Community"."name" ASC LIMIT $2 OFFSET $3
+ GET /api/trpc/community.listAll?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 120ms (next.js: 22ms, proxy.ts: 11ms, application-code: 87ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+❌ tRPC failed on community.create: [
+  {
+    "origin": "string",
+    "code": "invalid_format",
+    "format": "email",
+    "pattern": "/^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$/",
+    "path": [
+      "email"
+    ],
+    "message": "Invalid email address"
+  }
+]
+ POST /api/trpc/community.create?batch=1 400 in 100ms (next.js: 18ms, proxy.ts: 5ms, application-code: 76ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+❌ tRPC failed on community.create: [
+  {
+    "origin": "string",
+    "code": "invalid_format",
+    "format": "email",
+    "pattern": "/^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$/",
+    "path": [
+      "email"
+    ],
+    "message": "Invalid email address"
+  }
+]
+ POST /api/trpc/community.create?batch=1 400 in 83ms (next.js: 13ms, proxy.ts: 5ms, application-code: 65ms)
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE "public"."TenantMember"."userId" = $1 LIMIT $2 OFFSET $3
+ GET /admin/communities 200 in 377ms (next.js: 140ms, proxy.ts: 74ms, application-code: 164ms)
+ GET /admin/events 200 in 96ms (next.js: 64ms, proxy.ts: 10ms, application-code: 22ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."Event"."id", "public"."Event"."title", "public"."Event"."dateTime", "public"."Event"."imageUrl", "public"."Event"."eventType"::text, "public"."Event"."isActive", "public"."Event"."communityId", COALESCE("aggr_selection_0_EventRegistration"."_aggr_count_registrations", 0) AS "_aggr_count_registrations" FROM "public"."Event" LEFT JOIN (SELECT "public"."EventRegistration"."eventId", COUNT(*) AS "_aggr_count_registrations" FROM "public"."EventRegistration" WHERE 1=1 GROUP BY "public"."EventRegistration"."eventId") AS "aggr_selection_0_EventRegistration" ON ("public"."Event"."id" = "aggr_selection_0_EventRegistration"."eventId") WHERE "public"."Event"."tenantId" = $1 ORDER BY "public"."Event"."dateTime" DESC LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."Community"."id", "public"."Community"."name" FROM "public"."Community" WHERE "public"."Community"."id" IN ($1,$2,$3,$4) OFFSET $5
+prisma:query SELECT "public"."Community"."id", "public"."Community"."name", "public"."Community"."slug", "public"."Community"."city", "public"."Community"."state", "public"."Community"."isActive", "public"."Community"."logoUrl", COALESCE("aggr_selection_0_CommunityMember"."_aggr_count_members", 0) AS "_aggr_count_members", COALESCE("aggr_selection_1_Event"."_aggr_count_events", 0) AS "_aggr_count_events" FROM "public"."Community" LEFT JOIN (SELECT "public"."CommunityMember"."communityId", COUNT(*) AS "_aggr_count_members" FROM "public"."CommunityMember" WHERE 1=1 GROUP BY "public"."CommunityMember"."communityId") AS "aggr_selection_0_CommunityMember" ON ("public"."Community"."id" = "aggr_selection_0_CommunityMember"."communityId") LEFT JOIN (SELECT "public"."Event"."communityId", COUNT(*) AS "_aggr_count_events" FROM "public"."Event" WHERE 1=1 GROUP BY "public"."Event"."communityId") AS "aggr_selection_1_Event" ON ("public"."Community"."id" = "aggr_selection_1_Event"."communityId") WHERE "public"."Community"."tenantId" = $1 ORDER BY "public"."Community"."name" ASC LIMIT $2 OFFSET $3
+ GET /api/trpc/event.listAll,community.listAll?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%2C%221%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 494ms (next.js: 283ms, proxy.ts: 15ms, application-code: 195ms)
+ GET /admin/studies 200 in 94ms (next.js: 53ms, proxy.ts: 12ms, application-code: 28ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."StudyMaterial"."id", "public"."StudyMaterial"."title", "public"."StudyMaterial"."materialType"::text, "public"."StudyMaterial"."isPublic", "public"."StudyMaterial"."downloadCount", "public"."StudyMaterial"."createdAt", "public"."StudyMaterial"."categoryId", "public"."StudyMaterial"."uploadedById" FROM "public"."StudyMaterial" WHERE "public"."StudyMaterial"."tenantId" = $1 ORDER BY "public"."StudyMaterial"."createdAt" DESC OFFSET $2
+prisma:query SELECT "public"."StudyCategory"."id", "public"."StudyCategory"."name" FROM "public"."StudyCategory" WHERE "public"."StudyCategory"."id" IN (NULL) OFFSET $1
+prisma:query SELECT "public"."StudyCategory"."id", "public"."StudyCategory"."name", "public"."StudyCategory"."slug", "public"."StudyCategory"."description", "public"."StudyCategory"."order", COALESCE("aggr_selection_0_StudyMaterial"."_aggr_count_materials", 0) AS "_aggr_count_materials" FROM "public"."StudyCategory" LEFT JOIN (SELECT "public"."StudyMaterial"."categoryId", COUNT(*) AS "_aggr_count_materials" FROM "public"."StudyMaterial" WHERE 1=1 GROUP BY "public"."StudyMaterial"."categoryId") AS "aggr_selection_0_StudyMaterial" ON ("public"."StudyCategory"."id" = "aggr_selection_0_StudyMaterial"."categoryId") WHERE ("public"."StudyCategory"."tenantId" = $1 AND "public"."StudyCategory"."isActive" = $2) ORDER BY "public"."StudyCategory"."order" ASC OFFSET $3
+prisma:query SELECT "public"."User"."id", "public"."User"."name" FROM "public"."User" WHERE "public"."User"."id" IN (NULL) OFFSET $1
+ GET /api/trpc/study.listAll,study.categories?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%2C%221%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 151ms (next.js: 16ms, proxy.ts: 6ms, application-code: 130ms)
+ GET /admin/library 200 in 95ms (next.js: 68ms, proxy.ts: 3ms, application-code: 24ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."LibraryItem"."id", "public"."LibraryItem"."title", "public"."LibraryItem"."materialType"::text, "public"."LibraryItem"."isPublic", "public"."LibraryItem"."thumbnailUrl", "public"."LibraryItem"."downloadCount", "public"."LibraryItem"."createdAt", "public"."LibraryItem"."authorId", "public"."LibraryItem"."categoryId" FROM "public"."LibraryItem" WHERE "public"."LibraryItem"."tenantId" = $1 ORDER BY "public"."LibraryItem"."createdAt" DESC OFFSET $2
+prisma:query SELECT "public"."LibraryAuthor"."id", "public"."LibraryAuthor"."name", "public"."LibraryAuthor"."photoUrl", COALESCE("aggr_selection_0_LibraryItem"."_aggr_count_items", 0) AS "_aggr_count_items" FROM "public"."LibraryAuthor" LEFT JOIN (SELECT "public"."LibraryItem"."authorId", COUNT(*) AS "_aggr_count_items" FROM "public"."LibraryItem" WHERE 1=1 GROUP BY "public"."LibraryItem"."authorId") AS "aggr_selection_0_LibraryItem" ON ("public"."LibraryAuthor"."id" = "aggr_selection_0_LibraryItem"."authorId") WHERE "public"."LibraryAuthor"."tenantId" = $1 ORDER BY "public"."LibraryAuthor"."name" ASC OFFSET $2
+prisma:query SELECT "public"."LibraryCategory"."id", "public"."LibraryCategory"."name", "public"."LibraryCategory"."slug", "public"."LibraryCategory"."description", COALESCE("aggr_selection_0_LibraryItem"."_aggr_count_items", 0) AS "_aggr_count_items" FROM "public"."LibraryCategory" LEFT JOIN (SELECT "public"."LibraryItem"."categoryId", COUNT(*) AS "_aggr_count_items" FROM "public"."LibraryItem" WHERE 1=1 GROUP BY "public"."LibraryItem"."categoryId") AS "aggr_selection_0_LibraryItem" ON ("public"."LibraryCategory"."id" = "aggr_selection_0_LibraryItem"."categoryId") WHERE "public"."LibraryCategory"."tenantId" = $1 ORDER BY "public"."LibraryCategory"."order" ASC OFFSET $2
+prisma:query SELECT "public"."LibraryAuthor"."id", "public"."LibraryAuthor"."name" FROM "public"."LibraryAuthor" WHERE "public"."LibraryAuthor"."id" IN ($1,$2,$3,$4) OFFSET $5
+prisma:query SELECT "public"."LibraryCategory"."id", "public"."LibraryCategory"."name" FROM "public"."LibraryCategory" WHERE "public"."LibraryCategory"."id" IN ($1,$2,$3,$4) OFFSET $5
+ GET /api/trpc/library.listAll,library.categories,library.authors?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%2C%221%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%2C%222%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 119ms (next.js: 18ms, proxy.ts: 9ms, application-code: 92ms)
+ GET /admin/news 200 in 99ms (next.js: 64ms, proxy.ts: 8ms, application-code: 27ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."NewsArticle"."id", "public"."NewsArticle"."title", "public"."NewsArticle"."slug", "public"."NewsArticle"."status"::text, "public"."NewsArticle"."isFeatured", "public"."NewsArticle"."publishedAt", "public"."NewsArticle"."createdAt", "public"."NewsArticle"."authorId", "public"."NewsArticle"."categoryId" FROM "public"."NewsArticle" WHERE "public"."NewsArticle"."tenantId" = $1 ORDER BY "public"."NewsArticle"."createdAt" DESC OFFSET $2
+prisma:query SELECT "public"."NewsCategory"."id", "public"."NewsCategory"."name", "public"."NewsCategory"."slug", "public"."NewsCategory"."color", COALESCE("aggr_selection_0_NewsArticle"."_aggr_count_articles", 0) AS "_aggr_count_articles" FROM "public"."NewsCategory" LEFT JOIN (SELECT "public"."NewsArticle"."categoryId", COUNT(*) AS "_aggr_count_articles" FROM "public"."NewsArticle" WHERE 1=1 GROUP BY "public"."NewsArticle"."categoryId") AS "aggr_selection_0_NewsArticle" ON ("public"."NewsCategory"."id" = "aggr_selection_0_NewsArticle"."categoryId") WHERE "public"."NewsCategory"."tenantId" = $1 ORDER BY "public"."NewsCategory"."name" ASC OFFSET $2
+prisma:query SELECT "public"."User"."id", "public"."User"."name" FROM "public"."User" WHERE "public"."User"."id" IN ($1,$2,$3,$4) OFFSET $5
+prisma:query SELECT "public"."NewsCategory"."id", "public"."NewsCategory"."name" FROM "public"."NewsCategory" WHERE "public"."NewsCategory"."id" IN ($1,$2,$3,$4) OFFSET $5
+ GET /api/trpc/news.listAll,news.categories?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%2C%221%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 67ms (next.js: 16ms, proxy.ts: 13ms, application-code: 37ms)
+ GET /admin/banners 200 in 81ms (next.js: 44ms, proxy.ts: 9ms, application-code: 27ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."Banner"."id", "public"."Banner"."title", "public"."Banner"."subtitle", "public"."Banner"."imageUrl", "public"."Banner"."linkUrl", "public"."Banner"."position"::text, "public"."Banner"."order", "public"."Banner"."isActive", "public"."Banner"."startAt", "public"."Banner"."endAt" FROM "public"."Banner" WHERE "public"."Banner"."tenantId" = $1 ORDER BY "public"."Banner"."order" ASC OFFSET $2
+ GET /api/trpc/banner.list?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 68ms (next.js: 32ms, proxy.ts: 7ms, application-code: 30ms)
+ GET /uploads/banner-conferencia.jpg 404 in 278ms (next.js: 33ms, application-code: 245ms)
+ GET /uploads/banner-estudos.jpg 404 in 275ms (next.js: 199ms, application-code: 77ms)
+ GET /uploads/banner-tzedaka.jpg 404 in 277ms (next.js: 166ms, application-code: 112ms)
+ GET /uploads/banner-conferencia.jpg 404 in 57ms (next.js: 12ms, application-code: 45ms)
+ GET /admin/tzedaka 200 in 101ms (next.js: 68ms, proxy.ts: 9ms, application-code: 24ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."TzedakaCampaign"."id", "public"."TzedakaCampaign"."title", "public"."TzedakaCampaign"."description", "public"."TzedakaCampaign"."goalAmount", "public"."TzedakaCampaign"."currentAmount", "public"."TzedakaCampaign"."currency", "public"."TzedakaCampaign"."status"::text, "public"."TzedakaCampaign"."coverUrl", "public"."TzedakaCampaign"."startDate", "public"."TzedakaCampaign"."endDate", "public"."TzedakaCampaign"."isPublic", "public"."TzedakaCampaign"."createdAt", COALESCE("aggr_selection_0_TzedakaDonation"."_aggr_count_donations", 0) AS "_aggr_count_donations" FROM "public"."TzedakaCampaign" LEFT JOIN (SELECT "public"."TzedakaDonation"."campaignId", COUNT(*) AS "_aggr_count_donations" FROM "public"."TzedakaDonation" WHERE 1=1 GROUP BY "public"."TzedakaDonation"."campaignId") AS "aggr_selection_0_TzedakaDonation" ON ("public"."TzedakaCampaign"."id" = "aggr_selection_0_TzedakaDonation"."campaignId") WHERE "public"."TzedakaCampaign"."tenantId" = $1 ORDER BY "public"."TzedakaCampaign"."createdAt" DESC OFFSET $2
+ GET /api/trpc/tzedaka.list?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 113ms (next.js: 27ms, proxy.ts: 7ms, application-code: 79ms)
+ GET /admin/rabbi 200 in 110ms (next.js: 66ms, proxy.ts: 9ms, application-code: 34ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."RabbiProfile"."id", "public"."RabbiProfile"."name", "public"."RabbiProfile"."title", "public"."RabbiProfile"."bio", "public"."RabbiProfile"."photoUrl", "public"."RabbiProfile"."email", "public"."RabbiProfile"."isPublic", "public"."RabbiProfile"."createdAt", COALESCE("aggr_selection_0_RabbiAnswer"."_aggr_count_answers", 0) AS "_aggr_count_answers" FROM "public"."RabbiProfile" LEFT JOIN (SELECT "public"."RabbiAnswer"."rabbiId", COUNT(*) AS "_aggr_count_answers" FROM "public"."RabbiAnswer" WHERE 1=1 GROUP BY "public"."RabbiAnswer"."rabbiId") AS "aggr_selection_0_RabbiAnswer" ON ("public"."RabbiProfile"."id" = "aggr_selection_0_RabbiAnswer"."rabbiId") WHERE "public"."RabbiProfile"."tenantId" = $1 ORDER BY "public"."RabbiProfile"."createdAt" DESC OFFSET $2
+prisma:query SELECT "public"."RabbiQuestion"."id", "public"."RabbiQuestion"."title", "public"."RabbiQuestion"."question", "public"."RabbiQuestion"."category", "public"."RabbiQuestion"."status"::text, "public"."RabbiQuestion"."isPublic", "public"."RabbiQuestion"."createdAt", "public"."RabbiQuestion"."userId" FROM "public"."RabbiQuestion" WHERE "public"."RabbiQuestion"."tenantId" = $1 ORDER BY "public"."RabbiQuestion"."createdAt" DESC LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."RabbiAnswer"."id", "public"."RabbiAnswer"."answer", "public"."RabbiAnswer"."createdAt", "public"."RabbiAnswer"."rabbiId", "public"."RabbiAnswer"."questionId" FROM "public"."RabbiAnswer" WHERE "public"."RabbiAnswer"."questionId" IN (NULL) OFFSET $1
+prisma:query SELECT "public"."RabbiProfile"."id", "public"."RabbiProfile"."name" FROM "public"."RabbiProfile" WHERE "public"."RabbiProfile"."id" IN (NULL) OFFSET $1
+prisma:query SELECT "public"."User"."id", "public"."User"."name" FROM "public"."User" WHERE "public"."User"."id" IN (NULL) OFFSET $1
+ GET /api/trpc/rabbi.listAll,rabbi.listQuestions?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%2C%221%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 117ms (next.js: 17ms, proxy.ts: 14ms, application-code: 85ms)
+ GET /admin/pages 200 in 104ms (next.js: 71ms, proxy.ts: 7ms, application-code: 26ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."Page"."id", "public"."Page"."slug", "public"."Page"."title", "public"."Page"."body", "public"."Page"."metaTitle", "public"."Page"."metaDescription", "public"."Page"."isPublished", "public"."Page"."createdAt", "public"."Page"."updatedAt" FROM "public"."Page" WHERE "public"."Page"."tenantId" = $1 ORDER BY "public"."Page"."updatedAt" DESC OFFSET $2
+ GET /api/trpc/cms.list?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 63ms (next.js: 18ms, proxy.ts: 9ms, application-code: 37ms)
+ GET /ai 200 in 75ms (next.js: 35ms, proxy.ts: 13ms, application-code: 28ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."tenantId" = $1 AND "public"."AIConversation"."userId" = $2) ORDER BY "public"."AIConversation"."updatedAt" DESC OFFSET $3
+ GET /api/trpc/ai.listConversations?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 59ms (next.js: 24ms, proxy.ts: 8ms, application-code: 27ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query INSERT INTO "public"."AIConversation" ("id","tenantId","userId","title","model","createdAt","updatedAt") VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt"
+ POST /api/trpc/ai.createConversation?batch=1 200 in 62ms (next.js: 27ms, proxy.ts: 9ms, application-code: 27ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."tenantId" = $1 AND "public"."AIConversation"."userId" = $2) ORDER BY "public"."AIConversation"."updatedAt" DESC OFFSET $3
+ GET /api/trpc/ai.listConversations?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 49ms (next.js: 12ms, proxy.ts: 3ms, application-code: 33ms)
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."AIMessage"."id", "public"."AIMessage"."conversationId", "public"."AIMessage"."role", "public"."AIMessage"."content", "public"."AIMessage"."tokenCount", "public"."AIMessage"."createdAt" FROM "public"."AIMessage" WHERE "public"."AIMessage"."conversationId" = $1 ORDER BY "public"."AIMessage"."createdAt" ASC OFFSET $2
+ GET /api/trpc/ai.getConversation?batch=1&input=%7B%220%22%3A%7B%22json%22%3A%7B%22conversationId%22%3A%22cmrwpsh5z0002wsuu7va8g0sb%22%7D%7D%7D 200 in 56ms (next.js: 22ms, proxy.ts: 3ms, application-code: 31ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query INSERT INTO "public"."AIMessage" ("id","conversationId","role","content","createdAt") VALUES ($1,$2,$3,$4,$5) RETURNING "public"."AIMessage"."id", "public"."AIMessage"."conversationId", "public"."AIMessage"."role", "public"."AIMessage"."content", "public"."AIMessage"."tokenCount", "public"."AIMessage"."createdAt"
+prisma:query SELECT "public"."AIConfig"."id", "public"."AIConfig"."tenantId", "public"."AIConfig"."apiKey", "public"."AIConfig"."model", "public"."AIConfig"."systemPrompt", "public"."AIConfig"."maxTokens", "public"."AIConfig"."temperature", "public"."AIConfig"."isEnabled", "public"."AIConfig"."createdAt", "public"."AIConfig"."updatedAt" FROM "public"."AIConfig" WHERE ("public"."AIConfig"."tenantId" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query INSERT INTO "public"."AIMessage" ("id","conversationId","role","content","createdAt") VALUES ($1,$2,$3,$4,$5) RETURNING "public"."AIMessage"."id", "public"."AIMessage"."conversationId", "public"."AIMessage"."role", "public"."AIMessage"."content", "public"."AIMessage"."tokenCount", "public"."AIMessage"."createdAt"
+prisma:query UPDATE "public"."AIConversation" SET "updatedAt" = $1 WHERE ("public"."AIConversation"."id" = $2 AND 1=1) RETURNING "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt"
+ POST /api/trpc/ai.sendMessage?batch=1 200 in 71ms (next.js: 15ms, proxy.ts: 5ms, application-code: 51ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."AIMessage"."id", "public"."AIMessage"."conversationId", "public"."AIMessage"."role", "public"."AIMessage"."content", "public"."AIMessage"."tokenCount", "public"."AIMessage"."createdAt" FROM "public"."AIMessage" WHERE "public"."AIMessage"."conversationId" = $1 ORDER BY "public"."AIMessage"."createdAt" ASC OFFSET $2
+ GET /api/trpc/ai.getConversation?batch=1&input=%7B%220%22%3A%7B%22json%22%3A%7B%22conversationId%22%3A%22cmrwpsh5z0002wsuu7va8g0sb%22%7D%7D%7D 200 in 30ms (next.js: 8ms, proxy.ts: 3ms, application-code: 19ms)
+  Reload env: .env
+ GET /ai 200 in 205ms (next.js: 90ms, proxy.ts: 45ms, application-code: 70ms)
+ HEAD / 200 in 252ms (next.js: 23ms, proxy.ts: 5ms, application-code: 224ms)
+ GET /login 200 in 200ms (next.js: 72ms, proxy.ts: 7ms, application-code: 121ms)
+ GET /api/branding 200 in 78ms (next.js: 59ms, proxy.ts: 9ms, application-code: 11ms)
+ GET /api/auth/session 200 in 191ms (next.js: 148ms, proxy.ts: 8ms, application-code: 35ms)
+ GET /api/auth/session 200 in 31ms (next.js: 10ms, proxy.ts: 5ms, application-code: 16ms)
+prisma:query SELECT "public"."User"."id", "public"."User"."name", "public"."User"."email", "public"."User"."emailVerified", "public"."User"."image", "public"."User"."phone", "public"."User"."bio", "public"."User"."passwordHash", "public"."User"."isActive", "public"."User"."lastLoginAt", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+[31m[auth][error][0m CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at Module.callback (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:11710:30)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async AuthInternal (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12558:24)
+    at async Auth (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12780:34)
+    at async signIn (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:20999:17)
+    at async loginAction (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__1e019_3._.js:199:9)
+    at async executeActionAndPrepareForRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:5248)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:1986
+    at async handleAction (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:62:25687)
+    at async renderToHTMLOrFlightImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:69:55695)
+    at async doRender (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4537:28)
+    at async AppPageRouteModule.handleResponse (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:71:66429)
+    at async handleResponse (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4848:32)
+    at async Module.handler (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:5254:20)
+    at async DevServer.renderToResponseWithComponentsImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1462:9)
+    at async DevServer.renderPageComponent (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1514:24)
+    at async DevServer.renderToResponseImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1564:32)
+    at async DevServer.pipeImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1044:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\next-server.js:338:17)
+    at async DevServer.handleRequestImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:935:17)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:394:20
+    at async Span.traceAsyncFn (C:\Projetos\DERECH_NOACH\node_modules\next\dist\trace\trace.js:164:20)
+    at async DevServer.handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:390:24)
+    at async invokeRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:266:21)
+    at async handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:465:24)
+    at async requestHandlerImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:514:13)
+    at async Server.requestListener (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\start-server.js:225:13)
+ POST /login 200 in 113ms (next.js: 13ms, proxy.ts: 8ms, application-code: 92ms)
+  └─ ƒ loginAction({"error":""}, {}) in 50ms src/app/(auth)/login/actions.ts
+prisma:query SELECT "public"."User"."id", "public"."User"."name", "public"."User"."email", "public"."User"."emailVerified", "public"."User"."image", "public"."User"."phone", "public"."User"."bio", "public"."User"."passwordHash", "public"."User"."isActive", "public"."User"."lastLoginAt", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+[31m[auth][error][0m CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at Module.callback (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:11710:30)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async AuthInternal (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12558:24)
+    at async Auth (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12780:34)
+    at async signIn (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:20999:17)
+    at async loginAction (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__1e019_3._.js:199:9)
+    at async executeActionAndPrepareForRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:5248)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:1986
+    at async handleAction (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:62:25687)
+    at async renderToHTMLOrFlightImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:69:55695)
+    at async doRender (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4537:28)
+    at async AppPageRouteModule.handleResponse (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:71:66429)
+    at async handleResponse (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4848:32)
+    at async Module.handler (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:5254:20)
+    at async DevServer.renderToResponseWithComponentsImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1462:9)
+    at async DevServer.renderPageComponent (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1514:24)
+    at async DevServer.renderToResponseImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1564:32)
+    at async DevServer.pipeImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1044:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\next-server.js:338:17)
+    at async DevServer.handleRequestImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:935:17)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:394:20
+    at async Span.traceAsyncFn (C:\Projetos\DERECH_NOACH\node_modules\next\dist\trace\trace.js:164:20)
+    at async DevServer.handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:390:24)
+    at async invokeRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:266:21)
+    at async handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:465:24)
+    at async requestHandlerImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:514:13)
+    at async Server.requestListener (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\start-server.js:225:13)
+ POST /login 200 in 40ms (next.js: 9ms, proxy.ts: 10ms, application-code: 21ms)
+  └─ ƒ loginAction({"error":"E-mail ou senha incorretos."}, {}) in 8ms src/app/(auth)/login/actions.ts
+prisma:query SELECT "public"."User"."id", "public"."User"."name", "public"."User"."email", "public"."User"."emailVerified", "public"."User"."image", "public"."User"."phone", "public"."User"."bio", "public"."User"."passwordHash", "public"."User"."isActive", "public"."User"."lastLoginAt", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+[31m[auth][error][0m CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at Module.callback (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:11710:30)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async AuthInternal (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12558:24)
+    at async Auth (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12780:34)
+    at async signIn (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:20999:17)
+    at async loginAction (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__1e019_3._.js:199:9)
+    at async executeActionAndPrepareForRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:5248)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:1986
+    at async handleAction (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:62:25687)
+    at async renderToHTMLOrFlightImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:69:55695)
+    at async doRender (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4537:28)
+    at async AppPageRouteModule.handleResponse (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:71:66429)
+    at async handleResponse (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4848:32)
+    at async Module.handler (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:5254:20)
+    at async DevServer.renderToResponseWithComponentsImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1462:9)
+    at async DevServer.renderPageComponent (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1514:24)
+    at async DevServer.renderToResponseImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1564:32)
+    at async DevServer.pipeImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1044:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\next-server.js:338:17)
+    at async DevServer.handleRequestImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:935:17)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:394:20
+    at async Span.traceAsyncFn (C:\Projetos\DERECH_NOACH\node_modules\next\dist\trace\trace.js:164:20)
+    at async DevServer.handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:390:24)
+    at async invokeRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:266:21)
+    at async handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:465:24)
+    at async requestHandlerImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:514:13)
+    at async Server.requestListener (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\start-server.js:225:13)
+ POST /login 200 in 101ms (next.js: 14ms, proxy.ts: 9ms, application-code: 78ms)
+  └─ ƒ loginAction({"error":"E-mail ou senha incorretos."}, {}) in 64ms src/app/(auth)/login/actions.ts
+prisma:query SELECT "public"."User"."id", "public"."User"."name", "public"."User"."email", "public"."User"."emailVerified", "public"."User"."image", "public"."User"."phone", "public"."User"."bio", "public"."User"."passwordHash", "public"."User"."isActive", "public"."User"."lastLoginAt", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+[31m[auth][error][0m CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at Module.callback (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:11710:30)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async AuthInternal (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12558:24)
+    at async Auth (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12780:34)
+    at async signIn (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:20999:17)
+    at async loginAction (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__1e019_3._.js:199:9)
+    at async executeActionAndPrepareForRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:5248)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:1986
+    at async handleAction (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:62:25687)
+    at async renderToHTMLOrFlightImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:69:55695)
+    at async doRender (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4537:28)
+    at async AppPageRouteModule.handleResponse (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:71:66429)
+    at async handleResponse (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4848:32)
+    at async Module.handler (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:5254:20)
+    at async DevServer.renderToResponseWithComponentsImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1462:9)
+    at async DevServer.renderPageComponent (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1514:24)
+    at async DevServer.renderToResponseImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1564:32)
+    at async DevServer.pipeImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1044:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\next-server.js:338:17)
+    at async DevServer.handleRequestImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:935:17)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:394:20
+    at async Span.traceAsyncFn (C:\Projetos\DERECH_NOACH\node_modules\next\dist\trace\trace.js:164:20)
+    at async DevServer.handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:390:24)
+    at async invokeRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:266:21)
+    at async handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:465:24)
+    at async requestHandlerImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:514:13)
+    at async Server.requestListener (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\start-server.js:225:13)
+ POST /login 200 in 52ms (next.js: 10ms, proxy.ts: 10ms, application-code: 32ms)
+  └─ ƒ loginAction({"error":"E-mail ou senha incorretos."}, {}) in 20ms src/app/(auth)/login/actions.ts
+prisma:query SELECT "public"."User"."id", "public"."User"."name", "public"."User"."email", "public"."User"."emailVerified", "public"."User"."image", "public"."User"."phone", "public"."User"."bio", "public"."User"."passwordHash", "public"."User"."isActive", "public"."User"."lastLoginAt", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+[31m[auth][error][0m CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at Module.callback (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:11710:30)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async AuthInternal (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12558:24)
+    at async Auth (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12780:34)
+    at async signIn (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:20999:17)
+    at async loginAction (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__1e019_3._.js:199:9)
+    at async executeActionAndPrepareForRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:5248)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:1986
+    at async handleAction (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:62:25687)
+    at async renderToHTMLOrFlightImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:69:55695)
+    at async doRender (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4537:28)
+    at async AppPageRouteModule.handleResponse (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:71:66429)
+    at async handleResponse (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4848:32)
+    at async Module.handler (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:5254:20)
+    at async DevServer.renderToResponseWithComponentsImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1462:9)
+    at async DevServer.renderPageComponent (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1514:24)
+    at async DevServer.renderToResponseImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1564:32)
+    at async DevServer.pipeImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1044:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\next-server.js:338:17)
+    at async DevServer.handleRequestImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:935:17)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:394:20
+    at async Span.traceAsyncFn (C:\Projetos\DERECH_NOACH\node_modules\next\dist\trace\trace.js:164:20)
+    at async DevServer.handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:390:24)
+    at async invokeRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:266:21)
+    at async handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:465:24)
+    at async requestHandlerImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:514:13)
+    at async Server.requestListener (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\start-server.js:225:13)
+ POST /login 200 in 50ms (next.js: 6ms, proxy.ts: 8ms, application-code: 36ms)
+  └─ ƒ loginAction({"error":"E-mail ou senha incorretos."}, {}) in 21ms src/app/(auth)/login/actions.ts
+prisma:query SELECT "public"."User"."id", "public"."User"."name", "public"."User"."email", "public"."User"."emailVerified", "public"."User"."image", "public"."User"."phone", "public"."User"."bio", "public"."User"."passwordHash", "public"."User"."isActive", "public"."User"."lastLoginAt", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+[31m[auth][error][0m CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at Module.callback (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:11710:30)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async AuthInternal (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12558:24)
+    at async Auth (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12780:34)
+    at async signIn (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:20999:17)
+    at async loginAction (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__1e019_3._.js:199:9)
+    at async executeActionAndPrepareForRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:5248)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:1986
+    at async handleAction (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:62:25687)
+    at async renderToHTMLOrFlightImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:69:55695)
+    at async doRender (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4537:28)
+    at async AppPageRouteModule.handleResponse (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:71:66429)
+    at async handleResponse (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4848:32)
+    at async Module.handler (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:5254:20)
+    at async DevServer.renderToResponseWithComponentsImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1462:9)
+    at async DevServer.renderPageComponent (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1514:24)
+    at async DevServer.renderToResponseImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1564:32)
+    at async DevServer.pipeImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1044:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\next-server.js:338:17)
+    at async DevServer.handleRequestImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:935:17)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:394:20
+    at async Span.traceAsyncFn (C:\Projetos\DERECH_NOACH\node_modules\next\dist\trace\trace.js:164:20)
+    at async DevServer.handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:390:24)
+    at async invokeRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:266:21)
+    at async handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:465:24)
+    at async requestHandlerImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:514:13)
+    at async Server.requestListener (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\start-server.js:225:13)
+ POST /login 200 in 50ms (next.js: 8ms, proxy.ts: 9ms, application-code: 33ms)
+  └─ ƒ loginAction({"error":"E-mail ou senha incorretos."}, {}) in 18ms src/app/(auth)/login/actions.ts
+ GET / 200 in 257ms (next.js: 68ms, proxy.ts: 21ms, application-code: 169ms)
+ GET /api/branding 200 in 29ms (next.js: 9ms, proxy.ts: 9ms, application-code: 11ms)
+ GET /api/auth/session 200 in 85ms (next.js: 51ms, proxy.ts: 14ms, application-code: 20ms)
+ GET /api/auth/session 200 in 454ms (next.js: 15ms, proxy.ts: 5ms, application-code: 435ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."Notification"."id" FROM "public"."Notification" WHERE ("public"."Notification"."userId" = $1 AND "public"."Notification"."isRead" = $2) OFFSET $3) AS "sub"
+ GET /api/trpc/notification.unreadCount?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 463ms (next.js: 359ms, proxy.ts: 13ms, application-code: 91ms)
+ GET /api/auth/session 200 in 57ms (next.js: 26ms, proxy.ts: 13ms, application-code: 18ms)
+ GET /api/auth/session 200 in 25ms (next.js: 7ms, proxy.ts: 4ms, application-code: 13ms)
+ GET /ai 200 in 48ms (next.js: 11ms, proxy.ts: 7ms, application-code: 29ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."tenantId" = $1 AND "public"."AIConversation"."userId" = $2) ORDER BY "public"."AIConversation"."updatedAt" DESC OFFSET $3
+ GET /api/trpc/ai.listConversations?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 97ms (next.js: 17ms, proxy.ts: 6ms, application-code: 74ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query INSERT INTO "public"."AIConversation" ("id","tenantId","userId","title","model","createdAt","updatedAt") VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt"
+ POST /api/trpc/ai.createConversation?batch=1 200 in 55ms (next.js: 16ms, proxy.ts: 6ms, application-code: 34ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."tenantId" = $1 AND "public"."AIConversation"."userId" = $2) ORDER BY "public"."AIConversation"."updatedAt" DESC OFFSET $3
+ GET /api/trpc/ai.listConversations?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 52ms (next.js: 8ms, proxy.ts: 3ms, application-code: 41ms)
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."AIMessage"."id", "public"."AIMessage"."conversationId", "public"."AIMessage"."role", "public"."AIMessage"."content", "public"."AIMessage"."tokenCount", "public"."AIMessage"."createdAt" FROM "public"."AIMessage" WHERE "public"."AIMessage"."conversationId" = $1 ORDER BY "public"."AIMessage"."createdAt" ASC OFFSET $2
+ GET /api/trpc/ai.getConversation?batch=1&input=%7B%220%22%3A%7B%22json%22%3A%7B%22conversationId%22%3A%22cmrwqcyge0005wsuuh3457dde%22%7D%7D%7D 200 in 46ms (next.js: 11ms, proxy.ts: 4ms, application-code: 31ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query INSERT INTO "public"."AIMessage" ("id","conversationId","role","content","createdAt") VALUES ($1,$2,$3,$4,$5) RETURNING "public"."AIMessage"."id", "public"."AIMessage"."conversationId", "public"."AIMessage"."role", "public"."AIMessage"."content", "public"."AIMessage"."tokenCount", "public"."AIMessage"."createdAt"
+prisma:query SELECT "public"."AIConfig"."id", "public"."AIConfig"."tenantId", "public"."AIConfig"."apiKey", "public"."AIConfig"."model", "public"."AIConfig"."systemPrompt", "public"."AIConfig"."maxTokens", "public"."AIConfig"."temperature", "public"."AIConfig"."isEnabled", "public"."AIConfig"."createdAt", "public"."AIConfig"."updatedAt" FROM "public"."AIConfig" WHERE ("public"."AIConfig"."tenantId" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."AIMessage"."id", "public"."AIMessage"."conversationId", "public"."AIMessage"."role", "public"."AIMessage"."content", "public"."AIMessage"."tokenCount", "public"."AIMessage"."createdAt" FROM "public"."AIMessage" WHERE "public"."AIMessage"."conversationId" = $1 ORDER BY "public"."AIMessage"."createdAt" ASC LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."Notification"."id" FROM "public"."Notification" WHERE ("public"."Notification"."userId" = $1 AND "public"."Notification"."isRead" = $2) OFFSET $3) AS "sub"
+ GET /api/trpc/notification.unreadCount?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 69ms (next.js: 26ms, proxy.ts: 7ms, application-code: 36ms)
+OpenAI API error: Error: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.
+    at async (src\server\trpc\routers\ai.ts:126:30)
+  124 |           ];
+  125 |
+> 126 |           const completion = await openai.chat.completions.create({
+      |                              ^
+  127 |             model,
+  128 |             messages,
+  129 |             max_tokens: maxTokens, {
+  status: 429,
+  headers: Headers {
+    date: 'Wed, 22 Jul 2026 23:45:36 GMT',
+    'content-type': 'application/json; charset=utf-8',
+    'content-length': '337',
+    connection: 'keep-alive',
+    'cf-ray': 'a1f651eaaa35f1ce-GRU',
+    'cf-cache-status': 'DYNAMIC',
+    server: 'cloudflare',
+    'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+    vary: 'Origin',
+    'access-control-expose-headers': 'CF-Ray, CF-Ray',
+    'x-content-type-options': 'nosniff',
+    'x-openai-proxy-wasm': 'v0.1',
+    'x-request-id': 'req_c73a2229dd46424c9badf3b272437572',
+    'set-cookie': '__cf_bm=uJkXUW051TcwjDRJp0cTzjrdMAnvscLMWnUZ521qoPc-1784763936.427034-1.0.1.1-iPxyiwLXQYejqTw7T7d90XCWjh.1K5EJd.QiYDC3LkncSk_50yW_2v9kxbVHuG1HJyrFsaKfdvXIKlH_KRnoWZxYc4MYW8BiqRPtgJLACwzlExAJaIf1i.pMi96NExKj; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Thu, 23 Jul 2026 00:15:36 GMT',
+    'alt-svc': 'h3=":443"; ma=86400'
+  },
+  requestID: 'req_c73a2229dd46424c9badf3b272437572',
+  error: {
+    message: 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.',
+    type: 'insufficient_quota',
+    param: null,
+    code: 'insufficient_quota'
+  },
+  code: 'insufficient_quota',
+  param: null,
+  type: 'insufficient_quota'
+}
+prisma:query INSERT INTO "public"."AIUsageLog" ("id","tenantId","userId","conversationId","model","inputTokens","outputTokens","totalTokens","latencyMs","success","errorMessage","createdAt") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING "public"."AIUsageLog"."id", "public"."AIUsageLog"."tenantId", "public"."AIUsageLog"."userId", "public"."AIUsageLog"."conversationId", "public"."AIUsageLog"."model", "public"."AIUsageLog"."inputTokens", "public"."AIUsageLog"."outputTokens", "public"."AIUsageLog"."totalTokens", "public"."AIUsageLog"."latencyMs", "public"."AIUsageLog"."success", "public"."AIUsageLog"."errorMessage", "public"."AIUsageLog"."createdAt"
+prisma:query INSERT INTO "public"."AIMessage" ("id","conversationId","role","content","createdAt") VALUES ($1,$2,$3,$4,$5) RETURNING "public"."AIMessage"."id", "public"."AIMessage"."conversationId", "public"."AIMessage"."role", "public"."AIMessage"."content", "public"."AIMessage"."tokenCount", "public"."AIMessage"."createdAt"
+prisma:query UPDATE "public"."AIConversation" SET "updatedAt" = $1 WHERE ("public"."AIConversation"."id" = $2 AND 1=1) RETURNING "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt"
+ POST /api/trpc/ai.sendMessage?batch=1 200 in 3.4s (next.js: 12ms, proxy.ts: 7ms, application-code: 3.4s)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."AIMessage"."id", "public"."AIMessage"."conversationId", "public"."AIMessage"."role", "public"."AIMessage"."content", "public"."AIMessage"."tokenCount", "public"."AIMessage"."createdAt" FROM "public"."AIMessage" WHERE "public"."AIMessage"."conversationId" = $1 ORDER BY "public"."AIMessage"."createdAt" ASC OFFSET $2
+ GET /api/trpc/ai.getConversation?batch=1&input=%7B%220%22%3A%7B%22json%22%3A%7B%22conversationId%22%3A%22cmrwqcyge0005wsuuh3457dde%22%7D%7D%7D 200 in 59ms (next.js: 9ms, proxy.ts: 4ms, application-code: 46ms)
+ HEAD / 200 in 91ms (next.js: 6ms, proxy.ts: 4ms, application-code: 81ms)
+ GET /api/auth/session 200 in 54ms (next.js: 24ms, proxy.ts: 9ms, application-code: 21ms)
+ GET /api/auth/session 200 in 27ms (next.js: 10ms, proxy.ts: 4ms, application-code: 12ms)
+ GET /api/auth/session 200 in 71ms (next.js: 24ms, proxy.ts: 7ms, application-code: 40ms)
+ GET /api/auth/session 200 in 24ms (next.js: 8ms, proxy.ts: 4ms, application-code: 12ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."Notification"."id" FROM "public"."Notification" WHERE ("public"."Notification"."userId" = $1 AND "public"."Notification"."isRead" = $2) OFFSET $3) AS "sub"
+ GET /api/trpc/notification.unreadCount?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 123ms (next.js: 36ms, proxy.ts: 7ms, application-code: 81ms)
+✓ Compiled in 290ms
+ GET /ai 200 in 50ms (next.js: 6ms, proxy.ts: 6ms, application-code: 38ms)
+✓ Compiled in 1407ms
+ GET /ai 200 in 345ms (next.js: 87ms, proxy.ts: 49ms, application-code: 209ms)
+ GET /ai 200 in 170ms (next.js: 8ms, proxy.ts: 5ms, application-code: 156ms)
+ GET /ai 200 in 101ms (next.js: 12ms, proxy.ts: 6ms, application-code: 82ms)
+ GET /ai 200 in 99ms (next.js: 42ms, proxy.ts: 6ms, application-code: 51ms)
+ GET /ai 200 in 189ms (next.js: 88ms, proxy.ts: 20ms, application-code: 82ms)
+ GET /ai 200 in 45ms (next.js: 7ms, proxy.ts: 10ms, application-code: 28ms)
+ GET /ai 200 in 174ms (next.js: 85ms, proxy.ts: 15ms, application-code: 73ms)
+ GET /ai 200 in 40ms (next.js: 7ms, proxy.ts: 3ms, application-code: 30ms)
+✓ Compiled in 357ms
+ GET /ai 200 in 208ms (next.js: 87ms, proxy.ts: 15ms, application-code: 106ms)
+ GET /ai 200 in 69ms (next.js: 17ms, proxy.ts: 7ms, application-code: 46ms)
+ GET /ai 200 in 180ms (next.js: 90ms, proxy.ts: 17ms, application-code: 73ms)
+ GET /ai 200 in 39ms (next.js: 8ms, proxy.ts: 4ms, application-code: 26ms)
+✓ Compiled in 302ms
+ GET /ai 200 in 191ms (next.js: 93ms, proxy.ts: 18ms, application-code: 80ms)
+ GET /ai 200 in 39ms (next.js: 8ms, proxy.ts: 4ms, application-code: 28ms)
+ GET /ai 200 in 215ms (next.js: 115ms, proxy.ts: 20ms, application-code: 80ms)
+ GET /ai 200 in 42ms (next.js: 6ms, proxy.ts: 5ms, application-code: 31ms)
+✓ Compiled in 364ms
+ GET /ai 200 in 185ms (next.js: 90ms, proxy.ts: 17ms, application-code: 77ms)
+ GET /ai 200 in 41ms (next.js: 5ms, proxy.ts: 5ms, application-code: 31ms)
+✓ Compiled in 386ms
+ GET /ai 200 in 442ms (next.js: 7ms, proxy.ts: 6ms, application-code: 429ms)
+ GET /ai 200 in 277ms (next.js: 99ms, proxy.ts: 21ms, application-code: 157ms)
+ GET /ai 200 in 169ms (next.js: 9ms, proxy.ts: 4ms, application-code: 156ms)
+ GET /ai 200 in 116ms (next.js: 14ms, proxy.ts: 9ms, application-code: 93ms)
+ GET /ai 200 in 114ms (next.js: 69ms, proxy.ts: 8ms, application-code: 38ms)
+ GET /ai 200 in 228ms (next.js: 91ms, proxy.ts: 18ms, application-code: 119ms)
+ GET /ai 200 in 111ms (next.js: 11ms, proxy.ts: 4ms, application-code: 96ms)
+ GET /ai 200 in 75ms (next.js: 9ms, proxy.ts: 6ms, application-code: 60ms)
+ GET /ai 200 in 74ms (next.js: 38ms, proxy.ts: 5ms, application-code: 31ms)
+ GET /ai 200 in 277ms (next.js: 90ms, proxy.ts: 18ms, application-code: 169ms)
+ GET /ai 200 in 131ms (next.js: 10ms, proxy.ts: 7ms, application-code: 115ms)
+ GET /ai 200 in 64ms (next.js: 8ms, proxy.ts: 6ms, application-code: 50ms)
+ GET / 200 in 530ms (next.js: 180ms, proxy.ts: 11ms, application-code: 339ms)
+ GET /grid.svg 404 in 122ms (next.js: 32ms, application-code: 90ms)
+ GET /api/branding 200 in 86ms (next.js: 62ms, proxy.ts: 11ms, application-code: 12ms)
+ GET /api/auth/session 200 in 201ms (next.js: 163ms, proxy.ts: 10ms, application-code: 29ms)
+ GET /api/auth/session 200 in 31ms (next.js: 11ms, proxy.ts: 4ms, application-code: 16ms)
+ GET /api/auth/session 200 in 281ms (next.js: 12ms, proxy.ts: 7ms, application-code: 262ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."Notification"."id" FROM "public"."Notification" WHERE ("public"."Notification"."userId" = $1 AND "public"."Notification"."isRead" = $2) OFFSET $3) AS "sub"
+ GET /api/trpc/notification.unreadCount?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 348ms (next.js: 247ms, proxy.ts: 5ms, application-code: 96ms)
+ GET /api/auth/session 200 in 47ms (next.js: 21ms, proxy.ts: 8ms, application-code: 19ms)
+ GET /api/auth/session 200 in 22ms (next.js: 7ms, proxy.ts: 3ms, application-code: 12ms)
+ GET /api/auth/session 200 in 24ms (next.js: 6ms, proxy.ts: 5ms, application-code: 12ms)
+ GET /about 200 in 150ms (next.js: 109ms, proxy.ts: 5ms, application-code: 36ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."Notification"."id" FROM "public"."Notification" WHERE ("public"."Notification"."userId" = $1 AND "public"."Notification"."isRead" = $2) OFFSET $3) AS "sub"
+ GET /api/trpc/notification.unreadCount?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 98ms (next.js: 16ms, proxy.ts: 3ms, application-code: 79ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."Notification"."id" FROM "public"."Notification" WHERE ("public"."Notification"."userId" = $1 AND "public"."Notification"."isRead" = $2) OFFSET $3) AS "sub"
+ GET /api/trpc/notification.unreadCount?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 100ms (next.js: 29ms, proxy.ts: 8ms, application-code: 63ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."Notification"."id" FROM "public"."Notification" WHERE ("public"."Notification"."userId" = $1 AND "public"."Notification"."isRead" = $2) OFFSET $3) AS "sub"
+ GET /api/trpc/notification.unreadCount?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 118ms (next.js: 29ms, proxy.ts: 9ms, application-code: 80ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."Notification"."id" FROM "public"."Notification" WHERE ("public"."Notification"."userId" = $1 AND "public"."Notification"."isRead" = $2) OFFSET $3) AS "sub"
+ GET /api/trpc/notification.unreadCount?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 103ms (next.js: 18ms, proxy.ts: 9ms, application-code: 75ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."Notification"."id" FROM "public"."Notification" WHERE ("public"."Notification"."userId" = $1 AND "public"."Notification"."isRead" = $2) OFFSET $3) AS "sub"
+ GET /api/trpc/notification.unreadCount?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 102ms (next.js: 18ms, proxy.ts: 9ms, application-code: 74ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."Notification"."id" FROM "public"."Notification" WHERE ("public"."Notification"."userId" = $1 AND "public"."Notification"."isRead" = $2) OFFSET $3) AS "sub"
+ GET /api/trpc/notification.unreadCount?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 105ms (next.js: 24ms, proxy.ts: 11ms, application-code: 70ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."Notification"."id" FROM "public"."Notification" WHERE ("public"."Notification"."userId" = $1 AND "public"."Notification"."isRead" = $2) OFFSET $3) AS "sub"
+ GET /api/trpc/notification.unreadCount?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 94ms (next.js: 20ms, proxy.ts: 6ms, application-code: 67ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."Notification"."id" FROM "public"."Notification" WHERE ("public"."Notification"."userId" = $1 AND "public"."Notification"."isRead" = $2) OFFSET $3) AS "sub"
+ GET /api/trpc/notification.unreadCount?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 96ms (next.js: 26ms, proxy.ts: 6ms, application-code: 63ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."Notification"."id" FROM "public"."Notification" WHERE ("public"."Notification"."userId" = $1 AND "public"."Notification"."isRead" = $2) OFFSET $3) AS "sub"
+ GET /api/trpc/notification.unreadCount?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 103ms (next.js: 19ms, proxy.ts: 7ms, application-code: 78ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."Notification"."id" FROM "public"."Notification" WHERE ("public"."Notification"."userId" = $1 AND "public"."Notification"."isRead" = $2) OFFSET $3) AS "sub"
+ GET /api/trpc/notification.unreadCount?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 96ms (next.js: 24ms, proxy.ts: 7ms, application-code: 65ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."Notification"."id" FROM "public"."Notification" WHERE ("public"."Notification"."userId" = $1 AND "public"."Notification"."isRead" = $2) OFFSET $3) AS "sub"
+ GET /api/trpc/notification.unreadCount?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 93ms (next.js: 24ms, proxy.ts: 6ms, application-code: 63ms)
+ GET /api/auth/session 200 in 100ms (next.js: 55ms, proxy.ts: 23ms, application-code: 22ms)
+ GET /api/auth/session 200 in 69ms (next.js: 21ms, proxy.ts: 6ms, application-code: 41ms)
+ GET /api/auth/session 200 in 54ms (next.js: 24ms, proxy.ts: 6ms, application-code: 23ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."Notification"."id" FROM "public"."Notification" WHERE ("public"."Notification"."userId" = $1 AND "public"."Notification"."isRead" = $2) OFFSET $3) AS "sub"
+ GET /api/trpc/notification.unreadCount?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 98ms (next.js: 14ms, proxy.ts: 4ms, application-code: 80ms)
+ GET /communities 200 in 216ms (next.js: 152ms, proxy.ts: 5ms, application-code: 59ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."Community"."id", "public"."Community"."name", "public"."Community"."slug", "public"."Community"."description", "public"."Community"."city", "public"."Community"."state", "public"."Community"."logoUrl", "public"."Community"."coverImageUrl", "public"."Community"."phone", "public"."Community"."email", "public"."Community"."whatsappLink", "public"."Community"."meetingSchedule", COALESCE("aggr_selection_0_CommunityMember"."_aggr_count_members", 0) AS "_aggr_count_members", COALESCE("aggr_selection_1_Event"."_aggr_count_events", 0) AS "_aggr_count_events", COALESCE("aggr_selection_2_StudyMaterial"."_aggr_count_studies", 0) AS "_aggr_count_studies" FROM "public"."Community" LEFT JOIN (SELECT "public"."CommunityMember"."communityId", COUNT(*) AS "_aggr_count_members" FROM "public"."CommunityMember" WHERE 1=1 GROUP BY "public"."CommunityMember"."communityId") AS "aggr_selection_0_CommunityMember" ON ("public"."Community"."id" = "aggr_selection_0_CommunityMember"."communityId") LEFT JOIN (SELECT "public"."Event"."communityId", COUNT(*) AS "_aggr_count_events" FROM "public"."Event" WHERE 1=1 GROUP BY "public"."Event"."communityId") AS "aggr_selection_1_Event" ON ("public"."Community"."id" = "aggr_selection_1_Event"."communityId") LEFT JOIN (SELECT "public"."StudyMaterial"."communityId", COUNT(*) AS "_aggr_count_studies" FROM "public"."StudyMaterial" WHERE 1=1 GROUP BY "public"."StudyMaterial"."communityId") AS "aggr_selection_2_StudyMaterial" ON ("public"."Community"."id" = "aggr_selection_2_StudyMaterial"."communityId") WHERE ("public"."Community"."tenantId" = $1 AND "public"."Community"."isActive" = $2) ORDER BY "public"."Community"."name" ASC OFFSET $3
+ GET /api/trpc/community.list?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 87ms (next.js: 26ms, proxy.ts: 10ms, application-code: 51ms)
+ GET /events 200 in 95ms (next.js: 62ms, proxy.ts: 4ms, application-code: 29ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."Event"."id", "public"."Event"."title", "public"."Event"."description", "public"."Event"."dateTime", "public"."Event"."endTime", "public"."Event"."location", "public"."Event"."imageUrl", "public"."Event"."eventType"::text, "public"."Event"."isLiveStream", "public"."Event"."maxAttendees", "public"."Event"."communityId", COALESCE("aggr_selection_0_EventRegistration"."_aggr_count_registrations", 0) AS "_aggr_count_registrations" FROM "public"."Event" LEFT JOIN (SELECT "public"."EventRegistration"."eventId", COUNT(*) AS "_aggr_count_registrations" FROM "public"."EventRegistration" WHERE 1=1 GROUP BY "public"."EventRegistration"."eventId") AS "aggr_selection_0_EventRegistration" ON ("public"."Event"."id" = "aggr_selection_0_EventRegistration"."eventId") WHERE ("public"."Event"."tenantId" = $1 AND "public"."Event"."isActive" = $2 AND "public"."Event"."dateTime" >= $3) ORDER BY "public"."Event"."dateTime" ASC LIMIT $4 OFFSET $5
+prisma:query SELECT "public"."Community"."id", "public"."Community"."name", "public"."Community"."slug" FROM "public"."Community" WHERE "public"."Community"."id" IN ($1,$2,$3) OFFSET $4
+ GET /api/trpc/event.list?batch=1&input=%7B%220%22%3A%7B%22json%22%3A%7B%22upcoming%22%3Atrue%2C%22limit%22%3A30%7D%7D%7D 200 in 70ms (next.js: 20ms, proxy.ts: 9ms, application-code: 42ms)
+ GET /studies 200 in 161ms (next.js: 114ms, proxy.ts: 3ms, application-code: 43ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."StudyCategory"."id", "public"."StudyCategory"."name", "public"."StudyCategory"."slug", "public"."StudyCategory"."description", "public"."StudyCategory"."order", COALESCE("aggr_selection_0_StudyMaterial"."_aggr_count_materials", 0) AS "_aggr_count_materials" FROM "public"."StudyCategory" LEFT JOIN (SELECT "public"."StudyMaterial"."categoryId", COUNT(*) AS "_aggr_count_materials" FROM "public"."StudyMaterial" WHERE 1=1 GROUP BY "public"."StudyMaterial"."categoryId") AS "aggr_selection_0_StudyMaterial" ON ("public"."StudyCategory"."id" = "aggr_selection_0_StudyMaterial"."categoryId") WHERE ("public"."StudyCategory"."tenantId" = $1 AND "public"."StudyCategory"."isActive" = $2) ORDER BY "public"."StudyCategory"."order" ASC OFFSET $3
+prisma:query SELECT "public"."StudyMaterial"."id", "public"."StudyMaterial"."title", "public"."StudyMaterial"."description", "public"."StudyMaterial"."materialType"::text, "public"."StudyMaterial"."thumbnailUrl", "public"."StudyMaterial"."duration", "public"."StudyMaterial"."downloadCount", "public"."StudyMaterial"."createdAt", "public"."StudyMaterial"."categoryId", "public"."StudyMaterial"."uploadedById" FROM "public"."StudyMaterial" WHERE ("public"."StudyMaterial"."tenantId" = $1 AND "public"."StudyMaterial"."isPublic" = $2) ORDER BY "public"."StudyMaterial"."createdAt" DESC LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."User"."id", "public"."User"."name" FROM "public"."User" WHERE "public"."User"."id" IN (NULL) OFFSET $1
+prisma:query SELECT "public"."StudyCategory"."id", "public"."StudyCategory"."name", "public"."StudyCategory"."slug" FROM "public"."StudyCategory" WHERE "public"."StudyCategory"."id" IN (NULL) OFFSET $1
+ GET /api/trpc/study.categories,study.list?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%2C%221%22%3A%7B%22json%22%3A%7B%22limit%22%3A50%7D%7D%7D 200 in 141ms (next.js: 28ms, proxy.ts: 7ms, application-code: 107ms)
+ GET /ai 200 in 42ms (next.js: 7ms, proxy.ts: 6ms, application-code: 29ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."tenantId" = $1 AND "public"."AIConversation"."userId" = $2) ORDER BY "public"."AIConversation"."updatedAt" DESC OFFSET $3
+ GET /api/trpc/ai.listConversations?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 62ms (next.js: 18ms, proxy.ts: 7ms, application-code: 36ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query DELETE FROM "public"."AIMessage" WHERE "public"."AIMessage"."conversationId" = $1
+prisma:query DELETE FROM "public"."AIConversation" WHERE ("public"."AIConversation"."id" = $1 AND 1=1) RETURNING "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt"
+ POST /api/trpc/ai.deleteConversation?batch=1 200 in 76ms (next.js: 15ms, proxy.ts: 4ms, application-code: 57ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."tenantId" = $1 AND "public"."AIConversation"."userId" = $2) ORDER BY "public"."AIConversation"."updatedAt" DESC OFFSET $3
+ GET /api/trpc/ai.listConversations?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 44ms (next.js: 11ms, proxy.ts: 4ms, application-code: 29ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query DELETE FROM "public"."AIMessage" WHERE "public"."AIMessage"."conversationId" = $1
+prisma:query DELETE FROM "public"."AIConversation" WHERE ("public"."AIConversation"."id" = $1 AND 1=1) RETURNING "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt"
+ POST /api/trpc/ai.deleteConversation?batch=1 200 in 57ms (next.js: 6ms, proxy.ts: 4ms, application-code: 47ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."tenantId" = $1 AND "public"."AIConversation"."userId" = $2) ORDER BY "public"."AIConversation"."updatedAt" DESC OFFSET $3
+ GET /api/trpc/ai.listConversations?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 45ms (next.js: 7ms, proxy.ts: 4ms, application-code: 34ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."Notification"."id" FROM "public"."Notification" WHERE ("public"."Notification"."userId" = $1 AND "public"."Notification"."isRead" = $2) OFFSET $3) AS "sub"
+ GET /api/trpc/notification.unreadCount?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 67ms (next.js: 26ms, proxy.ts: 7ms, application-code: 34ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query INSERT INTO "public"."AIConversation" ("id","tenantId","userId","title","model","createdAt","updatedAt") VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt"
+ POST /api/trpc/ai.createConversation?batch=1 200 in 44ms (next.js: 7ms, proxy.ts: 4ms, application-code: 33ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."tenantId" = $1 AND "public"."AIConversation"."userId" = $2) ORDER BY "public"."AIConversation"."updatedAt" DESC OFFSET $3
+ GET /api/trpc/ai.listConversations?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 57ms (next.js: 18ms, proxy.ts: 4ms, application-code: 35ms)
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."AIMessage"."id", "public"."AIMessage"."conversationId", "public"."AIMessage"."role", "public"."AIMessage"."content", "public"."AIMessage"."tokenCount", "public"."AIMessage"."createdAt" FROM "public"."AIMessage" WHERE "public"."AIMessage"."conversationId" = $1 ORDER BY "public"."AIMessage"."createdAt" ASC OFFSET $2
+ GET /api/trpc/ai.getConversation?batch=1&input=%7B%220%22%3A%7B%22json%22%3A%7B%22conversationId%22%3A%22cmrwud6y50009wsuuqeaqtt8x%22%7D%7D%7D 200 in 57ms (next.js: 21ms, proxy.ts: 5ms, application-code: 31ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query INSERT INTO "public"."AIMessage" ("id","conversationId","role","content","createdAt") VALUES ($1,$2,$3,$4,$5) RETURNING "public"."AIMessage"."id", "public"."AIMessage"."conversationId", "public"."AIMessage"."role", "public"."AIMessage"."content", "public"."AIMessage"."tokenCount", "public"."AIMessage"."createdAt"
+prisma:query SELECT "public"."AIConfig"."id", "public"."AIConfig"."tenantId", "public"."AIConfig"."apiKey", "public"."AIConfig"."model", "public"."AIConfig"."systemPrompt", "public"."AIConfig"."maxTokens", "public"."AIConfig"."temperature", "public"."AIConfig"."isEnabled", "public"."AIConfig"."createdAt", "public"."AIConfig"."updatedAt" FROM "public"."AIConfig" WHERE ("public"."AIConfig"."tenantId" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."AIMessage"."id", "public"."AIMessage"."conversationId", "public"."AIMessage"."role", "public"."AIMessage"."content", "public"."AIMessage"."tokenCount", "public"."AIMessage"."createdAt" FROM "public"."AIMessage" WHERE "public"."AIMessage"."conversationId" = $1 ORDER BY "public"."AIMessage"."createdAt" ASC LIMIT $2 OFFSET $3
+OpenAI API error: Error: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.
+    at async (src\server\trpc\routers\ai.ts:126:30)
+  124 |           ];
+  125 |
+> 126 |           const completion = await openai.chat.completions.create({
+      |                              ^
+  127 |             model,
+  128 |             messages,
+  129 |             max_tokens: maxTokens, {
+  status: 429,
+  headers: Headers {
+    date: 'Thu, 23 Jul 2026 01:37:40 GMT',
+    'content-type': 'application/json; charset=utf-8',
+    'content-length': '337',
+    connection: 'keep-alive',
+    'cf-ray': 'a1f6f6115ca1d833-GRU',
+    'cf-cache-status': 'DYNAMIC',
+    server: 'cloudflare',
+    'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+    vary: 'Origin',
+    'access-control-expose-headers': 'CF-Ray, CF-Ray',
+    'x-content-type-options': 'nosniff',
+    'x-openai-proxy-wasm': 'v0.1',
+    'x-request-id': 'req_8f70dc72b7d44f43ae9b64b779a18b93',
+    'set-cookie': '__cf_bm=zI2jAju35_VgSCeEq0zIYXdPuVEqfvd69u9.rrbvPpU-1784770660.0551856-1.0.1.1-5B_X6Ppm45jbbBj9zTZ510_GmEhDjk5ZJQPN6.keiesjnkrSIIRvUnbR6yuOXp1vaPCzF3ZcB.qybYURX4RYczatR0_I3OwmqU3C9fR5xnAsQW4Q1_VG2LnFD5O3wsxs; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Thu, 23 Jul 2026 02:07:40 GMT',
+    'alt-svc': 'h3=":443"; ma=86400'
+  },
+  requestID: 'req_8f70dc72b7d44f43ae9b64b779a18b93',
+  error: {
+    message: 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.',
+    type: 'insufficient_quota',
+    param: null,
+    code: 'insufficient_quota'
+  },
+  code: 'insufficient_quota',
+  param: null,
+  type: 'insufficient_quota'
+}
+prisma:query INSERT INTO "public"."AIUsageLog" ("id","tenantId","userId","conversationId","model","inputTokens","outputTokens","totalTokens","latencyMs","success","errorMessage","createdAt") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING "public"."AIUsageLog"."id", "public"."AIUsageLog"."tenantId", "public"."AIUsageLog"."userId", "public"."AIUsageLog"."conversationId", "public"."AIUsageLog"."model", "public"."AIUsageLog"."inputTokens", "public"."AIUsageLog"."outputTokens", "public"."AIUsageLog"."totalTokens", "public"."AIUsageLog"."latencyMs", "public"."AIUsageLog"."success", "public"."AIUsageLog"."errorMessage", "public"."AIUsageLog"."createdAt"
+prisma:query INSERT INTO "public"."AIMessage" ("id","conversationId","role","content","createdAt") VALUES ($1,$2,$3,$4,$5) RETURNING "public"."AIMessage"."id", "public"."AIMessage"."conversationId", "public"."AIMessage"."role", "public"."AIMessage"."content", "public"."AIMessage"."tokenCount", "public"."AIMessage"."createdAt"
+prisma:query UPDATE "public"."AIConversation" SET "updatedAt" = $1 WHERE ("public"."AIConversation"."id" = $2 AND 1=1) RETURNING "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt"
+ POST /api/trpc/ai.sendMessage?batch=1 200 in 3.3s (next.js: 15ms, proxy.ts: 11ms, application-code: 3.3s)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."AIMessage"."id", "public"."AIMessage"."conversationId", "public"."AIMessage"."role", "public"."AIMessage"."content", "public"."AIMessage"."tokenCount", "public"."AIMessage"."createdAt" FROM "public"."AIMessage" WHERE "public"."AIMessage"."conversationId" = $1 ORDER BY "public"."AIMessage"."createdAt" ASC OFFSET $2
+ GET /api/trpc/ai.getConversation?batch=1&input=%7B%220%22%3A%7B%22json%22%3A%7B%22conversationId%22%3A%22cmrwud6y50009wsuuqeaqtt8x%22%7D%7D%7D 200 in 75ms (next.js: 18ms, proxy.ts: 7ms, application-code: 50ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query DELETE FROM "public"."AIMessage" WHERE "public"."AIMessage"."conversationId" = $1
+prisma:query DELETE FROM "public"."AIConversation" WHERE ("public"."AIConversation"."id" = $1 AND 1=1) RETURNING "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt"
+ POST /api/trpc/ai.deleteConversation?batch=1 200 in 112ms (next.js: 21ms, proxy.ts: 8ms, application-code: 83ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."tenantId" = $1 AND "public"."AIConversation"."userId" = $2) ORDER BY "public"."AIConversation"."updatedAt" DESC OFFSET $3
+ GET /api/trpc/ai.listConversations?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 49ms (next.js: 10ms, proxy.ts: 6ms, application-code: 33ms)
+ GET / 200 in 47ms (next.js: 9ms, proxy.ts: 6ms, application-code: 32ms)
+ GET / 200 in 24ms (next.js: 9ms, proxy.ts: 5ms, application-code: 9ms)
+ GET / 200 in 27ms (next.js: 5ms, proxy.ts: 3ms, application-code: 19ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."Notification"."id" FROM "public"."Notification" WHERE ("public"."Notification"."userId" = $1 AND "public"."Notification"."isRead" = $2) OFFSET $3) AS "sub"
+ GET /api/trpc/notification.unreadCount?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 51ms (next.js: 20ms, proxy.ts: 7ms, application-code: 23ms)
+ GET /login 200 in 88ms (next.js: 56ms, proxy.ts: 8ms, application-code: 24ms)
+prisma:query SELECT "public"."User"."id", "public"."User"."name", "public"."User"."email", "public"."User"."emailVerified", "public"."User"."image", "public"."User"."phone", "public"."User"."bio", "public"."User"."passwordHash", "public"."User"."isActive", "public"."User"."lastLoginAt", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+[31m[auth][error][0m CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at Module.callback (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:11710:30)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async AuthInternal (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12558:24)
+    at async Auth (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12780:34)
+    at async signIn (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:20999:17)
+    at async loginAction (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__1e019_3._.js:199:9)
+    at async executeActionAndPrepareForRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:5248)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:1986
+    at async handleAction (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:62:25687)
+    at async renderToHTMLOrFlightImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:69:55695)
+    at async doRender (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4537:28)
+    at async AppPageRouteModule.handleResponse (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:71:66429)
+    at async handleResponse (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4848:32)
+    at async Module.handler (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:5254:20)
+    at async DevServer.renderToResponseWithComponentsImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1462:9)
+    at async DevServer.renderPageComponent (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1514:24)
+    at async DevServer.renderToResponseImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1564:32)
+    at async DevServer.pipeImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1044:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\next-server.js:338:17)
+    at async DevServer.handleRequestImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:935:17)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:394:20
+    at async Span.traceAsyncFn (C:\Projetos\DERECH_NOACH\node_modules\next\dist\trace\trace.js:164:20)
+    at async DevServer.handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:390:24)
+    at async invokeRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:266:21)
+    at async handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:465:24)
+    at async requestHandlerImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:514:13)
+    at async Server.requestListener (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\start-server.js:225:13)
+ POST /login 200 in 99ms (next.js: 7ms, proxy.ts: 6ms, application-code: 86ms)
+  └─ ƒ loginAction({"error":""}, {}) in 48ms src/app/(auth)/login/actions.ts
+prisma:query SELECT "public"."User"."id", "public"."User"."name", "public"."User"."email", "public"."User"."emailVerified", "public"."User"."image", "public"."User"."phone", "public"."User"."bio", "public"."User"."passwordHash", "public"."User"."isActive", "public"."User"."lastLoginAt", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+[31m[auth][error][0m CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at Module.callback (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:11710:30)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async AuthInternal (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12558:24)
+    at async Auth (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12780:34)
+    at async signIn (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:20999:17)
+    at async loginAction (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__1e019_3._.js:199:9)
+    at async executeActionAndPrepareForRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:5248)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:1986
+    at async handleAction (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:62:25687)
+    at async renderToHTMLOrFlightImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:69:55695)
+    at async doRender (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4537:28)
+    at async AppPageRouteModule.handleResponse (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:71:66429)
+    at async handleResponse (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4848:32)
+    at async Module.handler (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:5254:20)
+    at async DevServer.renderToResponseWithComponentsImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1462:9)
+    at async DevServer.renderPageComponent (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1514:24)
+    at async DevServer.renderToResponseImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1564:32)
+    at async DevServer.pipeImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1044:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\next-server.js:338:17)
+    at async DevServer.handleRequestImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:935:17)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:394:20
+    at async Span.traceAsyncFn (C:\Projetos\DERECH_NOACH\node_modules\next\dist\trace\trace.js:164:20)
+    at async DevServer.handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:390:24)
+    at async invokeRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:266:21)
+    at async handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:465:24)
+    at async requestHandlerImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:514:13)
+    at async Server.requestListener (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\start-server.js:225:13)
+ POST /login 200 in 85ms (next.js: 9ms, proxy.ts: 10ms, application-code: 66ms)
+  └─ ƒ loginAction({"error":"E-mail ou senha incorretos."}, {}) in 50ms src/app/(auth)/login/actions.ts
+prisma:query SELECT "public"."User"."id", "public"."User"."name", "public"."User"."email", "public"."User"."emailVerified", "public"."User"."image", "public"."User"."phone", "public"."User"."bio", "public"."User"."passwordHash", "public"."User"."isActive", "public"."User"."lastLoginAt", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+[31m[auth][error][0m CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at Module.callback (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:11710:30)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async AuthInternal (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12558:24)
+    at async Auth (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12780:34)
+    at async signIn (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:20999:17)
+    at async loginAction (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__1e019_3._.js:199:9)
+    at async executeActionAndPrepareForRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:5248)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:1986
+    at async handleAction (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:62:25687)
+    at async renderToHTMLOrFlightImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:69:55695)
+    at async doRender (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4537:28)
+    at async AppPageRouteModule.handleResponse (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:71:66429)
+    at async handleResponse (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4848:32)
+    at async Module.handler (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:5254:20)
+    at async DevServer.renderToResponseWithComponentsImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1462:9)
+    at async DevServer.renderPageComponent (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1514:24)
+    at async DevServer.renderToResponseImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1564:32)
+    at async DevServer.pipeImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1044:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\next-server.js:338:17)
+    at async DevServer.handleRequestImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:935:17)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:394:20
+    at async Span.traceAsyncFn (C:\Projetos\DERECH_NOACH\node_modules\next\dist\trace\trace.js:164:20)
+    at async DevServer.handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:390:24)
+    at async invokeRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:266:21)
+    at async handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:465:24)
+    at async requestHandlerImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:514:13)
+    at async Server.requestListener (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\start-server.js:225:13)
+ POST /login 200 in 33ms (next.js: 9ms, proxy.ts: 10ms, application-code: 15ms)
+  └─ ƒ loginAction({"error":"E-mail ou senha incorretos."}, {}) in 6ms src/app/(auth)/login/actions.ts
+prisma:query SELECT "public"."User"."id", "public"."User"."name", "public"."User"."email", "public"."User"."emailVerified", "public"."User"."image", "public"."User"."phone", "public"."User"."bio", "public"."User"."passwordHash", "public"."User"."isActive", "public"."User"."lastLoginAt", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+[31m[auth][error][0m CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at Module.callback (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:11710:30)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async AuthInternal (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12558:24)
+    at async Auth (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12780:34)
+    at async signIn (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:20999:17)
+    at async loginAction (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__1e019_3._.js:199:9)
+    at async executeActionAndPrepareForRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:5248)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:1986
+    at async handleAction (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:62:25687)
+    at async renderToHTMLOrFlightImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:69:55695)
+    at async doRender (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4537:28)
+    at async AppPageRouteModule.handleResponse (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:71:66429)
+    at async handleResponse (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4848:32)
+    at async Module.handler (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:5254:20)
+    at async DevServer.renderToResponseWithComponentsImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1462:9)
+    at async DevServer.renderPageComponent (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1514:24)
+    at async DevServer.renderToResponseImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1564:32)
+    at async DevServer.pipeImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1044:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\next-server.js:338:17)
+    at async DevServer.handleRequestImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:935:17)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:394:20
+    at async Span.traceAsyncFn (C:\Projetos\DERECH_NOACH\node_modules\next\dist\trace\trace.js:164:20)
+    at async DevServer.handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:390:24)
+    at async invokeRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:266:21)
+    at async handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:465:24)
+    at async requestHandlerImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:514:13)
+    at async Server.requestListener (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\start-server.js:225:13)
+ POST /login 200 in 94ms (next.js: 8ms, proxy.ts: 7ms, application-code: 78ms)
+  └─ ƒ loginAction({"error":"E-mail ou senha incorretos."}, {}) in 68ms src/app/(auth)/login/actions.ts
+prisma:query SELECT "public"."User"."id", "public"."User"."name", "public"."User"."email", "public"."User"."emailVerified", "public"."User"."image", "public"."User"."phone", "public"."User"."bio", "public"."User"."passwordHash", "public"."User"."isActive", "public"."User"."lastLoginAt", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+[31m[auth][error][0m CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at Module.callback (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:11710:30)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async AuthInternal (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12558:24)
+    at async Auth (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:12780:34)
+    at async signIn (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__0fhdlyl._.js:20999:17)
+    at async loginAction (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\[root-of-the-server]__1e019_3._.js:199:9)
+    at async executeActionAndPrepareForRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:5248)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:64:1986
+    at async handleAction (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:62:25687)
+    at async renderToHTMLOrFlightImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:69:55695)
+    at async doRender (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4537:28)
+    at async AppPageRouteModule.handleResponse (C:\Projetos\DERECH_NOACH\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js:71:66429)
+    at async handleResponse (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:4848:32)
+    at async Module.handler (C:\Projetos\DERECH_NOACH\.next\dev\server\chunks\ssr\node_modules_0gw-d_z._.js:5254:20)
+    at async DevServer.renderToResponseWithComponentsImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1462:9)
+    at async DevServer.renderPageComponent (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1514:24)
+    at async DevServer.renderToResponseImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1564:32)
+    at async DevServer.pipeImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:1044:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\next-server.js:338:17)
+    at async DevServer.handleRequestImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\base-server.js:935:17)
+    at async C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:394:20
+    at async Span.traceAsyncFn (C:\Projetos\DERECH_NOACH\node_modules\next\dist\trace\trace.js:164:20)
+    at async DevServer.handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\dev\next-dev-server.js:390:24)
+    at async invokeRender (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:266:21)
+    at async handleRequest (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:465:24)
+    at async requestHandlerImpl (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\router-server.js:514:13)
+    at async Server.requestListener (C:\Projetos\DERECH_NOACH\node_modules\next\dist\server\lib\start-server.js:225:13)
+ POST /login 200 in 46ms (next.js: 9ms, proxy.ts: 10ms, application-code: 27ms)
+  └─ ƒ loginAction({"error":"E-mail ou senha incorretos."}, {}) in 12ms src/app/(auth)/login/actions.ts
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+ GET /api/auth/session 200 in 80ms (next.js: 28ms, proxy.ts: 7ms, application-code: 45ms)
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."Notification"."id" FROM "public"."Notification" WHERE ("public"."Notification"."userId" = $1 AND "public"."Notification"."isRead" = $2) OFFSET $3) AS "sub"
+ GET /api/trpc/notification.unreadCount?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 88ms (next.js: 43ms, proxy.ts: 11ms, application-code: 34ms)
+ GET /api/auth/session 200 in 29ms (next.js: 12ms, proxy.ts: 6ms, application-code: 11ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+❌ tRPC failed on ai.deleteConversation: Conversa não encontrada.
+ POST /api/trpc/ai.deleteConversation?batch=1 500 in 67ms (next.js: 20ms, proxy.ts: 8ms, application-code: 39ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+❌ tRPC failed on ai.deleteConversation: Conversa não encontrada.
+ POST /api/trpc/ai.deleteConversation?batch=1 500 in 50ms (next.js: 18ms, proxy.ts: 9ms, application-code: 22ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+❌ tRPC failed on ai.deleteConversation: Conversa não encontrada.
+ POST /api/trpc/ai.deleteConversation?batch=1 500 in 32ms (next.js: 6ms, proxy.ts: 3ms, application-code: 22ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+❌ tRPC failed on ai.deleteConversation: Conversa não encontrada.
+ POST /api/trpc/ai.deleteConversation?batch=1 500 in 50ms (next.js: 21ms, proxy.ts: 10ms, application-code: 20ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+❌ tRPC failed on ai.deleteConversation: Conversa não encontrada.
+ POST /api/trpc/ai.deleteConversation?batch=1 500 in 40ms (next.js: 9ms, proxy.ts: 7ms, application-code: 24ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+❌ tRPC failed on ai.deleteConversation: Conversa não encontrada.
+ POST /api/trpc/ai.deleteConversation?batch=1 500 in 40ms (next.js: 8ms, proxy.ts: 4ms, application-code: 28ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."slug", "public"."Tenant"."isActive" FROM "public"."Tenant" WHERE ("public"."Tenant"."slug" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."TenantMember"."id", "public"."TenantMember"."role"::text FROM "public"."TenantMember" WHERE (("public"."TenantMember"."tenantId" = $1 AND "public"."TenantMember"."userId" = $2) AND 1=1) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."AIConversation"."id", "public"."AIConversation"."tenantId", "public"."AIConversation"."userId", "public"."AIConversation"."title", "public"."AIConversation"."model", "public"."AIConversation"."createdAt", "public"."AIConversation"."updatedAt" FROM "public"."AIConversation" WHERE ("public"."AIConversation"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+❌ tRPC failed on ai.deleteConversation: Conversa não encontrada.
+ POST /api/trpc/ai.deleteConversation?batch=1 500 in 37ms (next.js: 6ms, proxy.ts: 3ms, application-code: 28ms)

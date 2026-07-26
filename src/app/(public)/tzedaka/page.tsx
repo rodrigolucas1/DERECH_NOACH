@@ -3,6 +3,9 @@
 import { Suspense } from "react";
 import { trpc } from "@/client/lib/trpc";
 import { HandHeart, Users } from "lucide-react";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/client/components/motion";
+import { AnimatedCard } from "@/client/components/motion/AnimatedCard";
+import { AnimatedCounter } from "@/client/components/motion/AnimatedCounter";
 
 function formatCurrency(value: number) {
   return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -31,10 +34,10 @@ function TzedakaContent() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-      <div className="mb-8">
+      <FadeIn className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Tzedaká</h1>
         <p className="mt-2 text-gray-600">Ajude a comunidade com suas doações</p>
-      </div>
+      </FadeIn>
 
       {isLoading ? (
         <div className="space-y-4">
@@ -48,54 +51,54 @@ function TzedakaContent() {
           <p className="mt-4 text-gray-500">Nenhuma campanha de Tzedaká disponível no momento.</p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <StaggerContainer className="space-y-6">
           {activeCampaigns.map((c) => {
             const current = Number(c.currentAmount ?? 0);
             const goal = Number(c.goalAmount ?? 0);
             const progress = goal > 0 ? Math.min((current / goal) * 100, 100) : 0;
 
             return (
-              <div
-                key={c.id}
-                className="rounded-lg border bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
-              >
-                {c.coverUrl && (
-                  <img
-                    src={c.coverUrl}
-                    alt={c.title}
-                    className="mb-4 h-48 w-full rounded-md object-cover"
-                  />
-                )}
-
-                <h2 className="text-xl font-semibold text-gray-900">{c.title}</h2>
-
-                {c.description && (
-                  <p className="mt-2 text-sm text-gray-600">{c.description}</p>
-                )}
-
-                <div className="mt-4">
-                  <div className="flex items-center justify-between text-sm text-gray-600 mb-1">
-                    <span>{formatCurrency(current)}</span>
-                    <span>{goal > 0 ? formatCurrency(goal) : "Sem meta definida"}</span>
-                  </div>
-                  {c.goalAmount && (
-                    <div className="h-2.5 w-full overflow-hidden rounded-full bg-gray-200">
-                      <div
-                        className="h-full rounded-full bg-green-500 transition-all"
-                        style={{ width: `${progress}%` }}
-                      />
-                    </div>
+              <StaggerItem key={c.id}>
+                <AnimatedCard className="rounded-xl border bg-white p-6 shadow-sm overflow-hidden">
+                  {c.coverUrl && (
+                    <img
+                      src={c.coverUrl}
+                      alt={c.title}
+                      className="mb-4 h-48 w-full rounded-lg object-cover"
+                    />
                   )}
-                </div>
 
-                <div className="mt-3 flex items-center gap-1 text-xs text-gray-400">
-                  <Users className="h-3.5 w-3.5" />
-                  {c._count.donations} {c._count.donations === 1 ? "doador" : "doadores"}
-                </div>
-              </div>
+                  <h2 className="text-xl font-semibold text-gray-900">{c.title}</h2>
+
+                  {c.description && (
+                    <p className="mt-2 text-sm text-gray-600">{c.description}</p>
+                  )}
+
+                  <div className="mt-4">
+                    <div className="flex items-center justify-between text-sm text-gray-600 mb-1">
+                      <span className="font-medium">{formatCurrency(current)}</span>
+                      <span>{goal > 0 ? formatCurrency(goal) : "Sem meta definida"}</span>
+                    </div>
+                    {c.goalAmount && (
+                      <div className="h-3 w-full overflow-hidden rounded-full bg-gray-200">
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-green-500 to-emerald-400 transition-all duration-1000"
+                          style={{ width: `${progress}%` }}
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="mt-3 flex items-center gap-1 text-xs text-gray-400">
+                    <Users className="h-3.5 w-3.5" />
+                    <AnimatedCounter target={c._count.donations} className="font-medium" />
+                    {c._count.donations === 1 ? "doador" : "doadores"}
+                  </div>
+                </AnimatedCard>
+              </StaggerItem>
             );
           })}
-        </div>
+        </StaggerContainer>
       )}
     </div>
   );

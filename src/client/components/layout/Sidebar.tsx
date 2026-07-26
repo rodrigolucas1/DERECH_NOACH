@@ -24,6 +24,7 @@ import {
   Award,
   Brain,
   Plug,
+  Home,
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -37,6 +38,7 @@ interface NavigationItem {
 
 const navigation: NavigationItem[] = [
   { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard, roles: ["ADMIN", "LEADER"] },
+  { name: "Página Inicial", href: "/", icon: Home, roles: ["ADMIN", "LEADER"] },
   { name: "Usuários", href: "/admin/users", icon: Users, roles: ["ADMIN"] },
   { name: "Comunidades", href: "/admin/communities", icon: MapPin, roles: ["ADMIN", "LEADER"] },
   { name: "Eventos", href: "/admin/events", icon: Calendar, roles: ["ADMIN", "LEADER"] },
@@ -91,7 +93,10 @@ export function Sidebar({ role }: SidebarProps) {
 
       <nav className="flex-1 space-y-1 px-2">
         {filteredNav.map((item) => {
-          const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+          const isActive =
+            item.href === "/"
+              ? pathname === "/"
+              : pathname === item.href || pathname.startsWith(item.href + "/");
           return (
             <Link
               key={item.name}
@@ -103,6 +108,7 @@ export function Sidebar({ role }: SidebarProps) {
                   : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
               )}
               title={collapsed ? item.name : undefined}
+              target={item.href === "/" ? "_blank" : undefined}
             >
               <item.icon className="h-5 w-5 shrink-0" />
               {!collapsed && <span>{item.name}</span>}
@@ -110,15 +116,6 @@ export function Sidebar({ role }: SidebarProps) {
           );
         })}
       </nav>
-
-      <div className="border-t p-4">
-        <Link
-          href="/"
-          className="text-xs text-gray-500 hover:text-gray-700"
-        >
-          {collapsed ? "←" : "← Voltar ao site"}
-        </Link>
-      </div>
     </aside>
   );
 }

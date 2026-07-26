@@ -1,30 +1,67 @@
 "use client";
 
-import { Suspense, useActionState, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { Suspense, useState, useCallback } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { loginAction } from "./actions";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 function LoginForm() {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/";
-  const error = searchParams.get("error");
+  const router = useRouter();
+  const errorParam = searchParams.get("error");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [state, formAction, isPending] = useActionState(
-    async (_prev: { error: string } | null, formData: FormData) => {
-      const result = await loginAction(_prev, formData);
-      if (!result.error) {
-        window.location.href = callbackUrl;
+  const [error, setError] = useState(
+    errorParam ? "Credenciais inválidas. Tente novamente." : ""
+  );
+  const [isPending, setIsPending] = useState(false);
+
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      setError("");
+      setIsPending(true);
+
+      try {
+        const result = await signIn("credentials", {
+          email,
+          password,
+          redirect: false,
+        });
+
+        if (result?.error) {
+          setError("E-mail ou senha incorretos.");
+          setIsPending(false);
+          return;
+        }
+
+        const meRes = await fetch("/api/auth/session");
+        const session = await meRes.json();
+        const role = session?.user?.role;
+
+        if (role === "ADMIN" || role === "LEADER") {
+          router.push("/admin/dashboard");
+        } else {
+          router.push("/");
+        }
+      } catch {
+        setError("Erro ao conectar. Tente novamente.");
+        setIsPending(false);
       }
-      return result;
     },
-    { error: error ? "Credenciais inválidas. Tente novamente." : "" }
+    [email, password, router]
   );
 
   return (
@@ -36,11 +73,11 @@ function LoginForm() {
             Acesse sua conta no Portal Bnei Noach
           </CardDescription>
         </CardHeader>
-        <form action={formAction}>
+        <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
-            {state.error && (
+            {error && (
               <div className="rounded-md bg-red-50 p-3 text-sm text-red-600">
-                {state.error}
+                {error}
               </div>
             )}
             <div className="space-y-2">
@@ -66,7 +103,7 @@ function LoginForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                autoComplete="new-password"
+                autoComplete="current-password"
               />
             </div>
             <div className="flex items-center justify-end">

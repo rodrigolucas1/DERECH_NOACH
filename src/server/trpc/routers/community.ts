@@ -10,7 +10,7 @@ const communityInput = z.object({
   city: z.string().min(1),
   state: z.string().min(2).max(2),
   phone: z.string().optional(),
-  email: z.string().email().optional(),
+  email: z.preprocess((v) => v === "" || v === null ? undefined : v, z.string().email().optional()),
   whatsappLink: z.string().url().optional(),
   meetingSchedule: z.string().optional(),
   latitude: z.number().optional(),

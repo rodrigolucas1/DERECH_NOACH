@@ -4,7 +4,16 @@ import { useState } from "react";
 import { trpc } from "@/client/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Brain, Plus, Trash2, Send } from "lucide-react";
+import { Plus, Trash2, Send } from "lucide-react";
+
+function StarOfDavid({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <polygon points="12,2 22,19 2,19" />
+      <polygon points="12,22 2,5 22,5" />
+    </svg>
+  );
+}
 
 export default function AIChatPage() {
   const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
@@ -159,7 +168,7 @@ export default function AIChatPage() {
           </>
         ) : (
           <div className="flex flex-1 flex-col items-center justify-center gap-4">
-            <Brain className="h-16 w-16 text-blue-300" />
+            <StarOfDavid className="h-16 w-16 text-blue-500" />
             <h2 className="text-xl font-semibold text-gray-700">Assistente IA</h2>
             <p className="text-center text-gray-500">
               Crie uma nova conversa ou selecione uma existente para começar.

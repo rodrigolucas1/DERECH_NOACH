@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { motion } from "framer-motion";
 import {
   Heart,
   Users,
@@ -14,7 +17,11 @@ import {
   Sparkles,
   Target,
   Globe,
+  ExternalLink,
+  ArrowRight,
 } from "lucide-react";
+import { FadeIn, SlideUp, StaggerContainer, StaggerItem } from "@/client/components/motion";
+import { AnimatedCard } from "@/client/components/motion/AnimatedCard";
 
 const features = [
   {
@@ -103,19 +110,29 @@ const values = [
 export default function AboutPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-      <section className="rounded-lg bg-gradient-to-br from-blue-900 to-blue-800 px-8 py-16 text-center text-white sm:px-16">
-        <Globe className="mx-auto mb-6 h-12 w-12 text-blue-300" />
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-          Sobre o Portal Bnei Noach
-        </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-lg text-blue-200">
-          Uma plataforma dedicada a fortalecer e unir a comunidade Bnei Noach
-          em todo o Brasil, promovendo estudo, fraternidade e compromisso com os
-          Sete Mandamentos Noéticos.
-        </p>
-      </section>
+      <FadeIn>
+        <section className="rounded-2xl bg-gradient-to-br from-blue-900 to-blue-800 px-8 py-16 text-center text-white sm:px-16 relative overflow-hidden">
+          <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
+          <motion.div
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="relative"
+          >
+            <Globe className="mx-auto mb-6 h-12 w-12 text-blue-300" />
+          </motion.div>
+          <h1 className="relative text-3xl font-bold tracking-tight sm:text-4xl">
+            Sobre o Portal Bnei Noach
+          </h1>
+          <p className="relative mx-auto mt-4 max-w-2xl text-lg text-blue-200">
+            Uma plataforma dedicada a fortalecer e unir a comunidade Bnei Noach
+            em todo o Brasil, promovendo estudo, fraternidade e compromisso com os
+            Sete Mandamentos Noéticos.
+          </p>
+        </section>
+      </FadeIn>
 
-      <section className="mt-16">
+      <SlideUp className="mt-16">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="text-2xl font-bold text-gray-900">Nossa Missão</h2>
           <p className="mt-4 leading-relaxed text-gray-600">
@@ -129,34 +146,39 @@ export default function AboutPage() {
             Nosso objetivo é oferecer um espaço seguro e acessível onde cada
             pessoa possa aprofundar seu conhecimento, participar de eventos,
             contribuir com projetos de caridade e caminhar junto com outros
-            naobservância dos Sete Mandamentos Noéticos.
+            na observância dos Sete Mandamentos Noéticos.
           </p>
         </div>
-      </section>
+      </SlideUp>
 
-      <section className="mt-16">
+      <div className="mt-16">
         <h2 className="text-center text-2xl font-bold text-gray-900">
           O que oferecemos
         </h2>
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <StaggerContainer className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((feature) => (
-            <div
-              key={feature.title}
-              className="rounded-lg border bg-white p-6 shadow-sm"
-            >
-              <feature.icon className="h-8 w-8 text-blue-900" />
-              <h3 className="mt-4 text-lg font-semibold text-gray-900">
-                {feature.title}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-gray-600">
-                {feature.description}
-              </p>
-            </div>
+            <StaggerItem key={feature.title}>
+              <AnimatedCard className="rounded-xl border bg-white p-6 shadow-sm h-full">
+                <motion.div
+                  whileHover={{ rotate: [0, -10, 10, -10, 0] }}
+                  transition={{ duration: 0.5 }}
+                  className="inline-flex rounded-lg bg-blue-50 p-3"
+                >
+                  <feature.icon className="h-6 w-6 text-blue-900" />
+                </motion.div>
+                <h3 className="mt-4 text-lg font-semibold text-gray-900">
+                  {feature.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-gray-600">
+                  {feature.description}
+                </p>
+              </AnimatedCard>
+            </StaggerItem>
           ))}
-        </div>
-      </section>
+        </StaggerContainer>
+      </div>
 
-      <section className="mt-16">
+      <div className="mt-16">
         <h2 className="text-center text-2xl font-bold text-gray-900">
           Nossos Valores
         </h2>
@@ -165,30 +187,63 @@ export default function AboutPage() {
           judaica, foram transmitidos a toda humanidade através de Noé e seus
           filhos.
         </p>
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <StaggerContainer className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {values.map((value) => (
-            <div
-              key={value.title}
-              className="flex items-start gap-4 rounded-lg border bg-white p-6 shadow-sm"
-            >
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-50">
-                <value.icon className="h-5 w-5 text-blue-900" />
-              </div>
-              <div>
-                <h3 className="text-base font-semibold text-gray-900">
-                  {value.title}
-                </h3>
-                <p className="mt-1 text-sm leading-relaxed text-gray-600">
-                  {value.description}
-                </p>
-              </div>
-            </div>
+            <StaggerItem key={value.title}>
+              <AnimatedCard className="flex items-start gap-4 rounded-xl border bg-white p-6 shadow-sm h-full">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-50">
+                  <value.icon className="h-5 w-5 text-blue-900" />
+                </div>
+                <div>
+                  <h3 className="text-base font-semibold text-gray-900">
+                    {value.title}
+                  </h3>
+                  <p className="mt-1 text-sm leading-relaxed text-gray-600">
+                    {value.description}
+                  </p>
+                </div>
+              </AnimatedCard>
+            </StaggerItem>
           ))}
-        </div>
-      </section>
+        </StaggerContainer>
+      </div>
 
-      <section className="mt-16 text-center">
-        <div className="rounded-lg border bg-white p-8 shadow-sm">
+      <SlideUp className="mt-16">
+        <div className="rounded-xl border bg-gradient-to-r from-blue-50 to-white p-8 text-center shadow-sm">
+          <h2 className="text-2xl font-bold text-gray-900">
+            Nossos Parceiros
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-gray-600">
+            Conheça os sites e iniciativas que fazem parte da nossa rede.
+          </p>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            {[
+              { name: "Bnei Noach Brasil", url: "https://www.bneinoach.org.br", description: "Portal oficial da comunidade" },
+              { name: "Rabbi Iacov", url: "https://www.rabinoiacov.com", description: "Ensinos e conteúdos do Rabino" },
+              { name: "Loja Bnei Noach", url: "https://www.lojabneinoach.com", description: "Produtos e materiais comunitários" },
+              { name: "Brooklyn 770", url: "https://www.brooklin770.com.br", description: "Centro judaico e comunitário" },
+            ].map((site) => (
+              <a
+                key={site.url}
+                href={site.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-3 rounded-lg border bg-white p-4 text-left transition-all hover:shadow-md hover:border-blue-200"
+              >
+                <Globe className="h-5 w-5 text-blue-900 shrink-0 group-hover:text-blue-600 transition-colors" />
+                <div className="flex-1">
+                  <p className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors">{site.name}</p>
+                  <p className="text-xs text-gray-500">{site.description}</p>
+                </div>
+                <ExternalLink className="h-4 w-4 text-gray-400 shrink-0 group-hover:text-blue-600 transition-colors" />
+              </a>
+            ))}
+          </div>
+        </div>
+      </SlideUp>
+
+      <SlideUp className="mt-16">
+        <div className="rounded-xl border bg-gradient-to-r from-blue-50 to-white p-8 text-center shadow-sm">
           <h2 className="text-2xl font-bold text-gray-900">
             Junte-se à comunidade
           </h2>
@@ -200,19 +255,20 @@ export default function AboutPage() {
           <div className="mt-6 flex items-center justify-center gap-4">
             <Link
               href="/register"
-              className="rounded-md bg-blue-900 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-800 dark:bg-blue-700 dark:hover:bg-blue-600"
+              className="rounded-md bg-blue-900 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-800 transition-all hover:scale-105 active:scale-95"
             >
               Cadastrar-se
             </Link>
             <Link
               href="/"
-              className="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-100"
+              className="group text-sm font-semibold leading-6 text-gray-900 flex items-center gap-1"
             >
-              Voltar ao início <span aria-hidden="true">&rarr;</span>
+              Voltar ao início
+              <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
         </div>
-      </section>
+      </SlideUp>
     </div>
   );
 }

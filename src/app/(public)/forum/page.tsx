@@ -4,6 +4,8 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { trpc } from "@/client/lib/trpc";
 import { MessageCircle } from "lucide-react";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/client/components/motion";
+import { AnimatedCard } from "@/client/components/motion/AnimatedCard";
 
 function ForumSkeleton() {
   return (
@@ -26,10 +28,10 @@ function ForumContent() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-      <div className="mb-8">
+      <FadeIn className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Fórum</h1>
         <p className="mt-2 text-gray-600">Participe das discussões da comunidade</p>
-      </div>
+      </FadeIn>
 
       {isLoading ? (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -43,25 +45,25 @@ function ForumContent() {
           <p className="mt-4 text-gray-500">Nenhuma categoria disponível.</p>
         </div>
       ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <StaggerContainer className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {categories.map((cat) => (
-            <Link
-              key={cat.id}
-              href={`/forum/${cat.slug}`}
-              className="group rounded-lg border bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
-            >
-              <h2 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600">
-                {cat.name}
-              </h2>
-              {cat.description && (
-                <p className="mt-1 line-clamp-2 text-sm text-gray-600">{cat.description}</p>
-              )}
-              <p className="mt-4 text-xs text-gray-400">
-                {cat._count.topics} {cat._count.topics === 1 ? "tópico" : "tópicos"}
-              </p>
-            </Link>
+            <StaggerItem key={cat.id}>
+              <AnimatedCard className="h-full rounded-lg border bg-white p-6 shadow-sm">
+                <Link href={`/forum/${cat.slug}`} className="block">
+                  <h2 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600">
+                    {cat.name}
+                  </h2>
+                  {cat.description && (
+                    <p className="mt-1 line-clamp-2 text-sm text-gray-600">{cat.description}</p>
+                  )}
+                  <p className="mt-4 text-xs text-gray-400">
+                    {cat._count.topics} {cat._count.topics === 1 ? "tópico" : "tópicos"}
+                  </p>
+                </Link>
+              </AnimatedCard>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       )}
     </div>
   );

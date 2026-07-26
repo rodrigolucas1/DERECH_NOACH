@@ -2,6 +2,8 @@ import { auth } from "@/server/auth";
 import { redirect } from "next/navigation";
 import { db } from "@/server/db/client";
 import { Sidebar } from "@/client/components/layout/Sidebar";
+import { Header } from "@/client/components/layout/Header";
+import { ContextBar } from "@/client/components/layout/ContextBar";
 
 const ADMIN_ROLES = ["ADMIN", "LEADER"];
 
@@ -26,11 +28,15 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      <Sidebar role={member.role} />
-      <main className="flex-1 overflow-y-auto bg-gray-50">
-        <div className="mx-auto max-w-7xl p-6">{children}</div>
-      </main>
+    <div className="flex h-screen flex-col overflow-hidden">
+      <Header />
+      <ContextBar />
+      <div className="flex flex-1 overflow-hidden">
+        <Sidebar role={member.role} />
+        <main className="flex-1 overflow-y-auto bg-gray-50">
+          <div className="mx-auto max-w-7xl p-6">{children}</div>
+        </main>
+      </div>
     </div>
   );
 }

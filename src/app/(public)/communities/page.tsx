@@ -4,6 +4,8 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { trpc } from "@/client/lib/trpc";
 import { MapPin, Users, Calendar } from "lucide-react";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/client/components/motion";
+import { AnimatedCard } from "@/client/components/motion/AnimatedCard";
 
 function CommunitiesSkeleton() {
   return (
@@ -26,10 +28,10 @@ function CommunitiesContent() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-      <div className="mb-8">
+      <FadeIn className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Comunidades</h1>
         <p className="mt-2 text-gray-600">Encontre comunidades Bnei Noach perto de você</p>
-      </div>
+      </FadeIn>
 
       {isLoading ? (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -43,28 +45,30 @@ function CommunitiesContent() {
           <p className="mt-4 text-gray-500">Nenhuma comunidade encontrada.</p>
         </div>
       ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <StaggerContainer className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {communities.map((c) => (
-            <Link
-              key={c.id}
-              href={`/communities/${c.slug}`}
-              className="group rounded-lg border bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
-            >
-              {c.coverImageUrl && (
-                <img src={c.coverImageUrl} alt={c.name} className="mb-4 h-32 w-full rounded object-cover" />
-              )}
-              <h2 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600">{c.name}</h2>
-              <p className="mt-1 flex items-center gap-1 text-sm text-gray-500">
-                <MapPin className="h-4 w-4" />{c.city}, {c.state}
-              </p>
-              {c.description && <p className="mt-2 line-clamp-2 text-sm text-gray-600">{c.description}</p>}
-              <div className="mt-4 flex gap-4 text-xs text-gray-400">
-                <span className="flex items-center gap-1"><Users className="h-3 w-3" />{c._count.members} membros</span>
-                <span className="flex items-center gap-1"><Calendar className="h-3 w-3" />{c._count.events} eventos</span>
-              </div>
-            </Link>
+            <StaggerItem key={c.id}>
+              <AnimatedCard className="h-full overflow-hidden rounded-lg border bg-white shadow-sm">
+                <Link href={`/communities/${c.slug}`} className="block">
+                  {c.coverImageUrl && (
+                    <img src={c.coverImageUrl} alt={c.name} className="h-32 w-full object-cover" />
+                  )}
+                  <div className="p-6">
+                    <h2 className="text-lg font-semibold text-gray-900">{c.name}</h2>
+                    <p className="mt-1 flex items-center gap-1 text-sm text-gray-500">
+                      <MapPin className="h-4 w-4" />{c.city}, {c.state}
+                    </p>
+                    {c.description && <p className="mt-2 line-clamp-2 text-sm text-gray-600">{c.description}</p>}
+                    <div className="mt-4 flex gap-4 text-xs text-gray-400">
+                      <span className="flex items-center gap-1"><Users className="h-3 w-3" />{c._count.members} membros</span>
+                      <span className="flex items-center gap-1"><Calendar className="h-3 w-3" />{c._count.events} eventos</span>
+                    </div>
+                  </div>
+                </Link>
+              </AnimatedCard>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       )}
     </div>
   );
